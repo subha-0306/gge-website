@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+body {
+  @apply bg-softwhite text-primary font-sans;
+}
+.testimonial-swiper .swiper-button-next,
+.testimonial-swiper .swiper-button-prev {
+  color: #d4af37;
+}
+
+.testimonial-swiper .swiper-pagination-bullet {
+  background: #d1d5db;
+}
+
+.testimonial-swiper .swiper-pagination-bullet-active {
+  background: #d4af37;
+}
