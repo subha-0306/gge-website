@@ -12,23 +12,19 @@ function Navbar() {
   ];
 
   return (
-    <nav className="bg-[#151515] text-white border-b border-gold/30 shadow-lg shadow-black/20">
-
-  {/* Edge Gold Tint */}
- 
-
-  <div className="relative max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
-
+    <nav className="bg-black text-white border-b border-white/10 shadow-sm z-50 relative">
+      <div className="relative max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl font-semibold tracking-wide text-gold"
+          className="flex items-center gap-3 text-2xl font-semibold tracking-wide text-white"
         >
-          Golden Globe Enterprises
+          <img src="/logo-icon.png" alt="GGE Logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#cca740] to-[#b59235]">Golden Globe Enterprises</span>
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden md:flex space-x-10 text-sm uppercase tracking-wider">
+        <div className="hidden md:flex space-x-10 text-sm uppercase tracking-wider font-semibold">
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -38,15 +34,15 @@ function Navbar() {
               <span
                 className={`transition-colors duration-300 ${
                   location.pathname === link.path
-                    ? "text-gold"
-                    : "text-white group-hover:text-gold"
+                    ? "text-[#cca740]"
+                    : "text-gray-300 group-hover:text-[#cca740]"
                 }`}
               >
                 {link.name}
               </span>
 
               <span
-                className={`absolute left-0 -bottom-2 h-[2px] bg-gold transition-all duration-300 ${
+                className={`absolute left-0 -bottom-2 h-[2px] bg-[#cca740] transition-all duration-300 ${
                   location.pathname === link.path
                     ? "w-full"
                     : "w-0 group-hover:w-full"

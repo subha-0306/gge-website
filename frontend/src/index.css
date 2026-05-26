@@ -6,6 +6,7 @@
 body {
   @apply bg-softwhite text-primary font-sans;
 }
+
 .testimonial-swiper .swiper-button-next,
 .testimonial-swiper .swiper-button-prev {
   color: #d4af37;
@@ -13,6 +14,10 @@ body {
 
 .testimonial-swiper .swiper-pagination-bullet {
   background: #d1d5db;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .testimonial-swiper .swiper-pagination-bullet-active {
