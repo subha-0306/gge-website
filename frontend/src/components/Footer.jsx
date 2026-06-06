@@ -213,10 +213,22 @@ export default function Footer() {
         }
         .footer-inner {
           position: relative; z-index: 1;
-          max-width: 1280px; margin: 0 auto; padding: 0 2.5rem 3.5rem;
+          max-width: 1100px; margin: 0 auto; padding: 0 2.5rem 3.5rem;
           display: grid;
           grid-template-columns: 1.5fr 1fr 1fr 1.4fr;
           gap: 3rem;
+        }
+        @media (min-width: 1101px) {
+          .footer-inner {
+            gap: 0;
+          }
+          .footer-brand {
+            padding-right: 2.5rem;
+          }
+          .footer-col {
+            border-left: 1px solid rgba(212,175,55,0.08);
+            padding-left: 2.5rem;
+          }
         }
         @media (max-width: 1100px) {
           .footer-inner { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
@@ -232,39 +244,42 @@ export default function Footer() {
         .footer-logo-img { width: 48px; height: 48px; object-fit: contain; }
         .footer-brand-name {
           font-family: 'Playfair Display', serif;
-          font-size: 1.1rem; font-weight: 700;
+          font-size: 1.3rem; font-weight: 700;
           background: linear-gradient(135deg, #d4af37, #f0d060, #b59235);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
           line-height: 1.2;
         }
         .footer-brand-sub {
-          font-size: 0.72rem; font-weight: 500; color: rgba(212,175,55,0.6);
+          font-size: 0.85rem; font-weight: 500; color: rgba(212,175,55,0.6);
           letter-spacing: 0.12em; text-transform: uppercase;
         }
         .footer-brand-desc {
-          font-size: 0.85rem; color: rgba(255,255,255,0.45);
+          font-size: 0.95rem; color: rgba(255,255,255,0.45);
           line-height: 1.8; margin-bottom: 1.5rem;
         }
         .footer-trust { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
         .footer-trust-badge {
-          font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em;
+          font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
           color: #d4af37; border: 1px solid rgba(212,175,55,0.25);
           background: rgba(212,175,55,0.06); padding: 4px 10px; border-radius: 4px;
         }
         .footer-wa-btn {
           display: inline-flex; align-items: center; gap: 8px;
-          padding: 10px 20px; border-radius: 6px;
+          padding: 10px 20px; border-radius: 8px;
           background: #25D366; color: #fff;
-          font-size: 0.8rem; font-weight: 700; text-decoration: none;
+          font-size: 0.95rem; font-weight: 700; text-decoration: none;
           box-shadow: 0 4px 16px rgba(37,211,102,0.3);
-          transition: all 0.3s;
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .footer-wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.45); }
+        .footer-wa-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(37,211,102,0.45), 0 0 12px rgba(37,211,102,0.2);
+        }
 
         /* ─ Generic column ─ */
         .footer-col { }
         .footer-col-title {
-          font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em;
+          font-size: 0.8rem; font-weight: 700; letter-spacing: 0.2em;
           text-transform: uppercase; color: #d4af37;
           margin-bottom: 1.5rem; padding-bottom: 0.75rem;
           border-bottom: 1px solid rgba(212,175,55,0.15);
@@ -272,7 +287,7 @@ export default function Footer() {
         .footer-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
         .footer-link {
           display: flex; align-items: center; gap: 7px;
-          font-size: 0.87rem; color: rgba(255,255,255,0.5);
+          font-size: 1rem; color: rgba(255,255,255,0.5);
           text-decoration: none; padding: 5px 0;
           transition: all 0.25s;
         }
@@ -287,14 +302,14 @@ export default function Footer() {
           border: 1px solid rgba(212,175,55,0.15); border-radius: 8px;
         }
         .footer-hours-title {
-          font-size: 0.62rem; font-weight: 700; letter-spacing: 0.15em;
+          font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em;
           text-transform: uppercase; color: #d4af37; margin-bottom: 0.6rem;
         }
         .footer-hours-row {
-          font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-bottom: 3px;
+          font-size: 0.95rem; color: rgba(255,255,255,0.55); margin-bottom: 3px;
         }
         .footer-hours-closed {
-          font-size: 0.78rem; color: rgba(255,255,255,0.25); margin-top: 4px;
+          font-size: 0.95rem; color: rgba(255,255,255,0.25); margin-top: 4px;
         }
 
         /* ─ Contact items ─ */
@@ -319,16 +334,16 @@ export default function Footer() {
         }
         .footer-contact-item:hover .fc-icon { background: rgba(212,175,55,0.15); }
         .fc-tag {
-          display: block; font-size: 0.55rem; font-weight: 700;
+          display: block; font-size: 0.65rem; font-weight: 700;
           letter-spacing: 0.1em; text-transform: uppercase;
           color: rgba(212,175,55,0.6); margin-bottom: 2px;
         }
         .fc-value {
-          display: block; font-size: 0.83rem; font-weight: 500;
+          display: block; font-size: 0.95rem; font-weight: 500;
           color: rgba(255,255,255,0.7); line-height: 1.5;
           transition: color 0.2s;
         }
-        .fc-email { font-size: 0.75rem; word-break: break-all; }
+        .fc-email { font-size: 0.9rem; word-break: break-all; }
         .footer-contact-item:hover .fc-value { color: #d4af37; }
 
         /* ─ Bottom bar ─ */
@@ -339,19 +354,19 @@ export default function Footer() {
         }
         .footer-bottom {
           position: relative; z-index: 1;
-          max-width: 1280px; margin: 0 auto; padding: 1.5rem 2.5rem 2rem;
+          max-width: 1100px; margin: 0 auto; padding: 1.5rem 2.5rem 2rem;
           display: flex; align-items: center; justify-content: space-between;
           flex-wrap: wrap; gap: 12px;
         }
-        .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+        .footer-copy { font-size: 0.85rem; color: rgba(255,255,255,0.3); }
         .footer-bottom-links { display: flex; align-items: center; gap: 10px; }
         .footer-bottom-link {
-          font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.35);
+          font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.35);
           text-decoration: none; transition: color 0.2s;
         }
         .footer-bottom-link:hover { color: #d4af37; }
-        .footer-dot { color: rgba(255,255,255,0.2); font-size: 0.7rem; }
-        .footer-made { font-size: 0.72rem; color: rgba(255,255,255,0.25); }
+        .footer-dot { color: rgba(255,255,255,0.2); font-size: 0.85rem; }
+        .footer-made { font-size: 0.85rem; color: rgba(255,255,255,0.25); }
 
         @media (max-width: 768px) {
           .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }

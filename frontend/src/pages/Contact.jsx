@@ -39,11 +39,11 @@ function useReveal() {
 }
 
 /* ── Data ── */
-const PHONE_PRIMARY   = { display: "+91 75500 14333", tel: "+917550014333" };
+const PHONE_PRIMARY = { display: "+91 75500 14333", tel: "+917550014333" };
 const PHONE_SECONDARY = { display: "+91 98410 98167", tel: "+919841098167" };
-const EMAIL_PRIMARY   = "tridentcapitalservices@gmail.com";
+const EMAIL_PRIMARY = "tridentcapitalservices@gmail.com";
 const EMAIL_SECONDARY = "naliniprabhu2017@gmail.com";
-const WHATSAPP_NUM    = "917550014333";
+const WHATSAPP_NUM = "917550014333";
 
 const INFO_CARDS = [
   {
@@ -51,10 +51,10 @@ const INFO_CARDS = [
     label: "Call Us",
     accentColor: "#d4af37",
     items: [
-      { text: PHONE_PRIMARY.display,   href: `tel:${PHONE_PRIMARY.tel}`,   tag: "Primary" },
+      { text: PHONE_PRIMARY.display, href: `tel:${PHONE_PRIMARY.tel}`, tag: "Primary" },
       { text: PHONE_SECONDARY.display, href: `tel:${PHONE_SECONDARY.tel}`, tag: "Support" },
     ],
-    note: "Mon – Sat  ·  9 AM – 7 PM",
+    note: "Mon – Fri  9 AM – 7 PM  ·  Sat 9 AM – 2 PM",
     action: { label: "Tap to Call", href: `tel:${PHONE_PRIMARY.tel}` },
   },
   {
@@ -62,7 +62,7 @@ const INFO_CARDS = [
     label: "Email Us",
     accentColor: "#b59235",
     items: [
-      { text: EMAIL_PRIMARY,   href: `mailto:${EMAIL_PRIMARY}`,   tag: "General" },
+      { text: EMAIL_PRIMARY, href: `mailto:${EMAIL_PRIMARY}`, tag: "General" },
       { text: EMAIL_SECONDARY, href: `mailto:${EMAIL_SECONDARY}`, tag: "Alt" },
     ],
     note: "We reply within 2 business hours",
@@ -81,6 +81,7 @@ const INFO_CARDS = [
     action: {
       label: "Get Directions",
       href: "https://maps.google.com/maps?q=CSI+Ewart+School+Anna+Nagar+West+Extension+Chennai",
+      external: true,
     },
   },
   {
@@ -98,36 +99,92 @@ const INFO_CARDS = [
 ];
 
 const SCHEDULE = [
-  { day: "Monday",    short: "Mon", time: "9:00 AM – 7:00 PM", open: true  },
-  { day: "Tuesday",   short: "Tue", time: "9:00 AM – 7:00 PM", open: true  },
-  { day: "Wednesday", short: "Wed", time: "9:00 AM – 7:00 PM", open: true  },
-  { day: "Thursday",  short: "Thu", time: "9:00 AM – 7:00 PM", open: true  },
-  { day: "Friday",    short: "Fri", time: "9:00 AM – 7:00 PM", open: true  },
-  { day: "Saturday",  short: "Sat", time: "9:00 AM – 2:00 PM", open: true  },
-  { day: "Sunday",    short: "Sun", time: "Closed",              open: false },
+  { day: "Monday", short: "Mon", time: "9:00 AM – 7:00 PM", open: true },
+  { day: "Tuesday", short: "Tue", time: "9:00 AM – 7:00 PM", open: true },
+  { day: "Wednesday", short: "Wed", time: "9:00 AM – 7:00 PM", open: true },
+  { day: "Thursday", short: "Thu", time: "9:00 AM – 7:00 PM", open: true },
+  { day: "Friday", short: "Fri", time: "9:00 AM – 7:00 PM", open: true },
+  { day: "Saturday", short: "Sat", time: "9:00 AM – 2:00 PM", open: true },
+  { day: "Sunday", short: "Sun", time: "Closed", open: false },
 ];
-const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-/* ════════════════════════════════════ */
+function getCurrentStatus(today) {
+  const now = new Date();
+  const currentDayName = today;
+  const todaySchedule = SCHEDULE.find(s => s.day === currentDayName);
+
+  if (!todaySchedule || !todaySchedule.open) {
+    return { text: "Closed Now", isColorGreen: false, details: "Opens Monday at 9:00 AM" };
+  }
+
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const currentTimeInMinutes = hours * 60 + minutes;
+
+  const openTime = 9 * 60; // 9:00 AM
+  const closeTime = (currentDayName === "Saturday") ? 14 * 60 : 19 * 60; // 2:00 PM or 7:00 PM
+  const closeDisplay = (currentDayName === "Saturday") ? "2:00 PM" : "7:00 PM";
+
+  if (currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime) {
+    return { text: "Open Now", isColorGreen: true, details: `Closes at ${closeDisplay}` };
+  } else if (currentTimeInMinutes < openTime) {
+    return { text: "Closed Now", isColorGreen: false, details: `Opens today at 9:00 AM` };
+  } else {
+    const details = (currentDayName === "Saturday") ? "Opens Monday at 9:00 AM" : "Opens tomorrow at 9:00 AM";
+    return { text: "Closed Now", isColorGreen: false, details };
+  }
+}
+
+/* ──────────────────────────────────── */
 export default function Contact() {
   useReveal();
   const mousePos = useMouseTracking();
   const today = DAY_NAMES[new Date().getDay()];
 
-  const [form, setForm]           = useState({ name:"", phone:"", email:"", service:"", message:"" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", service: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors]       = useState({});
-  const [step, setStep]           = useState(1);
+  const [errors, setErrors] = useState({});
+  const [step, setStep] = useState(1);
+  const [hoursExpanded, setHoursExpanded] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.title = "Contact Us | Golden Globe Enterprises — Private Finance & Business Loans";
+  }, []);
 
   const validate = () => {
     const e = {};
     if (step === 1) {
-      if (!form.name.trim())  e.name  = "Name is required";
-      if (!form.phone.trim()) e.phone = "Phone number is required";
+      if (!form.name.trim()) {
+        e.name = "Name is required";
+      } else if (form.name.trim().length < 2) {
+        e.name = "Name must be at least 2 characters";
+      }
+
+      if (!form.phone.trim()) {
+        e.phone = "Phone number is required";
+      } else {
+        const phoneRegex = /^[+]?[0-9\s\-()]{10,18}$/;
+        if (!phoneRegex.test(form.phone.trim())) {
+          e.phone = "Please enter a valid phone number";
+        }
+      }
     } else if (step === 2) {
-      if (!form.email.trim()) e.email = "Email is required";
+      if (!form.email.trim()) {
+        e.email = "Email is required";
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email.trim())) {
+          e.email = "Please enter a valid email address";
+        }
+      }
     } else {
-      if (!form.message.trim()) e.message = "Please describe your requirement";
+      if (!form.message.trim()) {
+        e.message = "Please describe your requirement";
+      } else if (form.message.trim().length < 10) {
+        e.message = "Please provide a bit more detail (minimum 10 characters)";
+      }
     }
     return e;
   };
@@ -138,11 +195,17 @@ export default function Contact() {
     if (step < 3) setStep(step + 1);
   };
   const prev = () => { if (step > 1) setStep(step - 1); };
+
   const submit = () => {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
-    setSubmitted(true);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1200);
   };
+
   const set = (k, v) => {
     setForm(f => ({ ...f, [k]: v }));
     setErrors(e => ({ ...e, [k]: undefined }));
@@ -181,7 +244,7 @@ export default function Contact() {
             }}
           >
             Let's Talk About <br />
-            <span className="contact-hero-gold">Your Funding Needs.</span>
+            <span className="contact-hero-gold">Your Funding Needs</span>
           </h1>
 
           <p
@@ -198,9 +261,9 @@ export default function Contact() {
           {/* Quick action pills */}
           <div className="contact-hero-pills">
             <a href={`https://wa.me/${WHATSAPP_NUM}?text=Hi%20Golden%20Globe%20team%2C%20I%20need%20help%20with%20funding.`}
-               target="_blank" rel="noopener noreferrer" className="pill-wa">
+              target="_blank" rel="noopener noreferrer" className="pill-wa">
               <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor">
-                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z"/>
+                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
               </svg>
               WhatsApp Us
             </a>
@@ -257,7 +320,12 @@ export default function Contact() {
                   <p className="info-card-note">{card.note}</p>
 
                   {card.action && (
-                    <a href={card.action.href} className="info-card-action">
+                    <a
+                      href={card.action.href}
+                      className="info-card-action"
+                      {...(card.action.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      aria-label={card.action.label}
+                    >
                       {card.action.label}
                       <ArrowRight size={13} className="info-card-arrow" />
                     </a>
@@ -312,7 +380,16 @@ export default function Contact() {
                   <CheckCircle2 size={40} style={{ color: "#d4af37" }} />
                 </div>
                 <h3>Message Received!</h3>
-                <p>Thank you for reaching out. A specialist will contact you shortly.</p>
+                <p>Thank you for reaching out. A specialist will contact you within 2 hours on business days.</p>
+                <div className="form-success-actions">
+                  <a href={`https://wa.me/${WHATSAPP_NUM}?text=Hi%20Golden%20Globe%2C%20I%20just%20submitted%20an%20enquiry.`} target="_blank" rel="noopener noreferrer" className="form-success-wa">
+                    <svg viewBox="0 0 32 32" width="15" height="15" fill="currentColor"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" /></svg>
+                    Chat on WhatsApp Instead
+                  </a>
+                  <button onClick={() => { setSubmitted(false); setStep(1); setForm({ name: "", phone: "", email: "", service: "", message: "" }); setErrors({}); }} className="form-success-reset">
+                    Submit Another Enquiry
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="form-body">
@@ -322,26 +399,30 @@ export default function Contact() {
                     <h3 className="step-title">Step 1 — Basic Information</h3>
                     <div className="form-row-2">
                       <div className="form-field">
-                        <label className="form-label">Full Name <span className="req">*</span></label>
+                        <label className="form-label" htmlFor="inp-name">Full Name <span className="req">*</span></label>
                         <input
+                          id="inp-name"
                           type="text"
                           placeholder="Your full name"
                           value={form.name}
                           onChange={(e) => set("name", e.target.value)}
                           className={`form-input ${errors.name ? "err" : ""}`}
+                          autoComplete="name"
                         />
-                        {errors.name && <p className="form-error">{errors.name}</p>}
+                        {errors.name && <p className="form-error" role="alert">{errors.name}</p>}
                       </div>
                       <div className="form-field">
-                        <label className="form-label">Phone Number <span className="req">*</span></label>
+                        <label className="form-label" htmlFor="inp-phone">Phone Number <span className="req">*</span></label>
                         <input
+                          id="inp-phone"
                           type="tel"
                           placeholder="+91 00000 00000"
                           value={form.phone}
                           onChange={(e) => set("phone", e.target.value)}
                           className={`form-input ${errors.phone ? "err" : ""}`}
+                          autoComplete="tel"
                         />
-                        {errors.phone && <p className="form-error">{errors.phone}</p>}
+                        {errors.phone && <p className="form-error" role="alert">{errors.phone}</p>}
                       </div>
                     </div>
                   </div>
@@ -352,19 +433,22 @@ export default function Contact() {
                   <div className="form-step">
                     <h3 className="step-title">Step 2 — Funding Details</h3>
                     <div className="form-field">
-                      <label className="form-label">Email Address <span className="req">*</span></label>
+                      <label className="form-label" htmlFor="inp-email">Email Address <span className="req">*</span></label>
                       <input
+                        id="inp-email"
                         type="email"
                         placeholder="your@email.com"
                         value={form.email}
                         onChange={(e) => set("email", e.target.value)}
                         className={`form-input ${errors.email ? "err" : ""}`}
+                        autoComplete="email"
                       />
-                      {errors.email && <p className="form-error">{errors.email}</p>}
+                      {errors.email && <p className="form-error" role="alert">{errors.email}</p>}
                     </div>
                     <div className="form-field">
-                      <label className="form-label">Service Interested In</label>
+                      <label className="form-label" htmlFor="inp-service">Service Interested In</label>
                       <select
+                        id="inp-service"
                         value={form.service}
                         onChange={(e) => set("service", e.target.value)}
                         className="form-input form-select"
@@ -387,35 +471,44 @@ export default function Contact() {
                   <div className="form-step">
                     <h3 className="step-title">Step 3 — Your Requirement</h3>
                     <div className="form-field">
-                      <label className="form-label">Describe Your Needs <span className="req">*</span></label>
+                      <div className="form-label-row">
+                        <label className="form-label" htmlFor="inp-message">Describe Your Needs <span className="req">*</span></label>
+                        <span className={`char-count ${form.message.length > 480 ? "char-count-warn" : ""}`}>{form.message.length}/500</span>
+                      </div>
                       <textarea
+                        id="inp-message"
                         rows={5}
+                        maxLength={500}
                         placeholder="Briefly describe your business and funding requirement..."
                         value={form.message}
                         onChange={(e) => set("message", e.target.value)}
                         className={`form-input form-textarea ${errors.message ? "err" : ""}`}
                       />
-                      {errors.message && <p className="form-error">{errors.message}</p>}
+                      {errors.message && <p className="form-error" role="alert">{errors.message}</p>}
                     </div>
                   </div>
                 )}
 
                 <div className="form-nav">
                   {step > 1 && (
-                    <button onClick={prev} className="btn-prev">← Back</button>
+                    <button onClick={prev} className="btn-prev" type="button">← Back</button>
                   )}
                   {step < 3 ? (
-                    <button onClick={next} className="btn-next">
+                    <button onClick={next} className="btn-next" type="button">
                       Continue <ArrowRight size={15} />
                     </button>
                   ) : (
-                    <button onClick={submit} className="btn-next">
-                      <Send size={15} /> Send Message
+                    <button onClick={submit} className="btn-next" type="button" disabled={loading} aria-busy={loading}>
+                      {loading ? (
+                        <><span className="btn-spinner" aria-hidden="true" /> Sending…</>
+                      ) : (
+                        <><Send size={15} /> Send Message</>
+                      )}
                     </button>
                   )}
                 </div>
                 <p className="form-disclaimer">
-                  🔒 All enquiries are strictly confidential. No spam, ever.
+                  All enquiries are strictly confidential. No spam, ever.
                 </p>
               </div>
             )}
@@ -457,7 +550,7 @@ export default function Contact() {
                 >
                   <span className="qc-link-left">
                     <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor">
-                      <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z"/>
+                      <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
                     </svg>
                     WhatsApp — Priority Support
                   </span>
@@ -466,7 +559,7 @@ export default function Contact() {
 
                 {/* Calls */}
                 {[
-                  { label: PHONE_PRIMARY.display,   href: `tel:${PHONE_PRIMARY.tel}`,   sub: "Primary" },
+                  { label: PHONE_PRIMARY.display, href: `tel:${PHONE_PRIMARY.tel}`, sub: "Primary" },
                   { label: PHONE_SECONDARY.display, href: `tel:${PHONE_SECONDARY.tel}`, sub: "Support" },
                 ].map((item, i) => (
                   <a key={i} href={item.href} className="qc-link">
@@ -483,7 +576,7 @@ export default function Contact() {
 
                 {/* Emails */}
                 {[
-                  { label: EMAIL_PRIMARY,   sub: "General" },
+                  { label: EMAIL_PRIMARY, sub: "General" },
                   { label: EMAIL_SECONDARY, sub: "Alternate" },
                 ].map((item, i) => (
                   <a key={i} href={`mailto:${item.label}`} className="qc-link">
@@ -518,32 +611,69 @@ export default function Contact() {
               We're here six days a week to help you navigate your funding journey.
               Walk-ins welcome Monday to Friday during business hours.
             </p>
-            <div className="hours-today-badge">
-              <span className="today-dot" />
-              <span>
-                Today ({today}): <strong>
-                  {SCHEDULE.find(s => s.day === today)?.open
-                    ? SCHEDULE.find(s => s.day === today)?.time
-                    : "Closed"}
-                </strong>
-              </span>
-            </div>
+
+            {/* Prominent Current Status Badge */}
+            {(() => {
+              const status = getCurrentStatus(today);
+              return (
+                <div className="hours-today-status-badge" style={{
+                  borderColor: status.isColorGreen ? "rgba(34,197,94,0.3)" : "rgba(220,100,100,0.3)",
+                  background: status.isColorGreen ? "rgba(34,197,94,0.06)" : "rgba(220,100,100,0.06)"
+                }}>
+                  <span className="today-dot" style={{
+                    background: status.isColorGreen ? "#22c55e" : "#ef4444",
+                    boxShadow: status.isColorGreen ? "0 0 0 4px rgba(34,197,94,0.2)" : "0 0 0 4px rgba(220,100,100,0.2)",
+                    animationName: status.isColorGreen ? "pulse-green" : "pulse-red"
+                  }} />
+                  <span className="hours-today-status-text">
+                    {status.text} <span className="hours-today-status-sep">—</span> <strong className="hours-today-status-details">{status.details}</strong>
+                  </span>
+                </div>
+              );
+            })()}
           </div>
 
-          <div className="hours-right">
-            {SCHEDULE.map((s) => (
-              <div key={s.day} className={`hours-row ${s.day === today ? "today" : ""} ${!s.open ? "closed" : ""}`}>
-                <div className="hours-row-left">
-                  <span className={`hours-dot-small ${s.day === today ? "active" : ""}`} />
-                  <span className="hours-day-name">{s.short}</span>
-                  <span className="hours-day-full">{s.day}</span>
-                </div>
-                <div className="hours-row-right">
-                  <span className={`hours-time ${!s.open ? "closed-text" : ""}`}>{s.time}</span>
-                  {s.day === today && <span className="today-pill">Today</span>}
+          <div className="hours-right-column">
+            <div className="hours-compact-card">
+              <div className="hours-compact-info">
+                <Clock size={20} style={{ color: "#d4af37" }} strokeWidth={1.8} />
+                <div>
+                  <span className="hours-compact-label">Today's Schedule</span>
+                  <span className="hours-compact-value">
+                    {SCHEDULE.find(s => s.day === today)?.open
+                      ? SCHEDULE.find(s => s.day === today)?.time
+                      : "Closed"}
+                  </span>
                 </div>
               </div>
-            ))}
+              <button
+                onClick={() => setHoursExpanded(!hoursExpanded)}
+                className="hours-toggle-btn"
+                type="button"
+                aria-expanded={hoursExpanded}
+              >
+                <span>{hoursExpanded ? "Hide Schedule" : "Expand for Full Schedule"}</span>
+                <ChevronRight size={14} style={{ transform: hoursExpanded ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)" }} />
+              </button>
+            </div>
+
+            <div className={`hours-expandable-container ${hoursExpanded ? "expanded" : ""}`}>
+              <div className="hours-rows-container">
+                {SCHEDULE.map((s) => (
+                  <div key={s.day} className={`hours-row ${s.day === today ? "today" : ""} ${!s.open ? "closed" : ""}`}>
+                    <div className="hours-row-left">
+                      <span className={`hours-dot-small ${s.day === today ? "active" : ""}`} />
+                      <span className="hours-day-name">{s.short}</span>
+                      <span className="hours-day-full">{s.day}</span>
+                    </div>
+                    <div className="hours-row-right">
+                      <span className={`hours-time ${!s.open ? "closed-text" : ""}`}>{s.time}</span>
+                      {s.day === today && <span className="today-pill">Today</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -568,7 +698,7 @@ export default function Contact() {
               className="cta-wa"
             >
               <svg viewBox="0 0 32 32" width="15" height="15" fill="currentColor">
-                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z"/>
+                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
               </svg>
               WhatsApp
             </a>
@@ -588,7 +718,7 @@ export default function Contact() {
         aria-label="Chat on WhatsApp"
       >
         <svg viewBox="0 0 32 32" width="28" height="28" fill="#fff">
-          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z"/>
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
         </svg>
         <span className="wa-tooltip">Chat on WhatsApp</span>
       </a>
@@ -661,14 +791,14 @@ export default function Contact() {
         .contact-hero-pills { display: flex; gap: 12px; flex-wrap: wrap; }
         .pill-wa, .pill-call {
           display: inline-flex; align-items: center; gap: 8px;
-          padding: 11px 22px; border-radius: 4px;
+          padding: 11px 22px; border-radius: 8px;
           font-size: 0.82rem; font-weight: 600; text-decoration: none;
-          transition: all 0.3s;
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .pill-wa  { background: #25D366; color: #fff; box-shadow: 0 6px 20px rgba(37,211,102,0.35); }
-        .pill-wa:hover  { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,0.5); }
+        .pill-wa  { background: #25D366; color: #fff; box-shadow: 0 4px 14px rgba(37,211,102,0.25); }
+        .pill-wa:hover  { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(37,211,102,0.45), 0 0 12px rgba(37,211,102,0.2); }
         .pill-call { background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.4); color: #d4af37; }
-        .pill-call:hover { background: #d4af37; color: #000; transform: translateY(-2px); }
+        .pill-call:hover { background: #d4af37; color: #000; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(212,175,55,0.25), 0 0 12px rgba(212,175,55,0.15); }
 
         /* ═══════════ CARDS SECTION ═══════════ */
         .cards-section {
@@ -781,11 +911,11 @@ export default function Contact() {
           font-size: 1.02rem; font-weight: 500; color: #374151; line-height: 1.55;
         }
         .info-card-tag {
-          display: inline-block; font-size: 0.55rem; font-weight: 700;
+          display: inline-block; font-size: 0.55rem; font-weight: 600;
           letter-spacing: 0.1em; text-transform: uppercase;
-          background: rgba(212,175,55,0.12); color: #BF953F;
-          border: 1px solid rgba(212,175,55,0.25);
-          padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+          background: rgba(0, 0, 0, 0.05); color: #6b7280;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          padding: 2px 6px; border-radius: 4px; white-space: nowrap;
         }
         .info-card-note {
           font-size: 0.85rem; color: #6b7280; font-weight: 400;
@@ -911,29 +1041,81 @@ export default function Contact() {
           padding: 13px 28px; border-radius: 8px; border: none;
           background: linear-gradient(135deg, #BF953F, #d4af37, #AA771C);
           color: #000; font-size: 0.88rem; font-weight: 700; cursor: pointer;
-          box-shadow: 0 6px 20px rgba(191,149,63,0.35);
+          box-shadow: 0 4px 14px rgba(191,149,63,0.25);
           transition: all 0.3s;
         }
-        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(191,149,63,0.45); }
+        .btn-next:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(191,149,63,0.45), 0 0 12px rgba(191,149,63,0.25); }
+        .btn-next:disabled { opacity: 0.75; cursor: not-allowed; transform: none; }
+        
+        /* Loading spinner */
+        @keyframes btn-spin {
+          to { transform: rotate(360deg); }
+        }
+        .btn-spinner {
+          display: inline-block; width: 14px; height: 14px;
+          border: 2px solid rgba(0,0,0,0.2); border-top-color: #000;
+          border-radius: 50%;
+          animation: btn-spin 0.65s linear infinite;
+          flex-shrink: 0;
+        }
+        
+        /* Char counter for textarea */
+        .form-label-row {
+          display: flex; align-items: center; justify-content: space-between;
+          margin-bottom: 6px;
+        }
+        .form-label-row .form-label { margin-bottom: 0; }
+        .char-count {
+          font-size: 0.68rem; font-weight: 600; color: #9ca3af;
+          letter-spacing: 0.04em; transition: color 0.2s;
+        }
+        .char-count-warn { color: #f59e0b; }
+        
         .form-disclaimer { font-size: 0.72rem; color: #9ca3af; text-align: center; margin-top: 1rem; }
+        
+        /* Success State */
         .form-success {
-          text-align: center; padding: 4rem 2rem;
+          text-align: center; padding: 3.5rem 2rem 3rem;
           border: 1px solid rgba(212,175,55,0.25);
-          background: #fff;
+          background: linear-gradient(135deg, #fff 0%, #fdfaf0 100%);
           box-shadow: 0 10px 40px rgba(212,175,55,0.08);
           border-radius: 16px;
         }
         .form-success-icon {
           width: 80px; height: 80px; border-radius: 50%;
-          background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05));
+          background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.05));
           display: flex; align-items: center; justify-content: center;
           margin: 0 auto 1.5rem; border: 1px solid rgba(212,175,55,0.2);
         }
         .form-success h3 {
           font-family: 'Playfair Display', serif;
-          font-size: 2rem; font-weight: 700; color: #111; margin-bottom: 0.75rem;
+          font-size: 1.9rem; font-weight: 700; color: #111; margin-bottom: 0.75rem;
         }
-        .form-success p { font-size: 1.05rem; color: #6b7280; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+        .form-success > p { font-size: 0.95rem; color: #6b7280; line-height: 1.65; max-width: 300px; margin: 0 auto 1.75rem; }
+        
+        /* Success action buttons */
+        .form-success-actions {
+          display: flex; gap: 10px; flex-wrap: wrap;
+          justify-content: center; margin-top: 0.5rem;
+        }
+        .form-success-wa {
+          display: inline-flex; align-items: center; gap: 7px;
+          padding: 11px 20px; border-radius: 8px;
+          background: #25D366; color: #fff;
+          font-size: 0.82rem; font-weight: 700; text-decoration: none;
+          box-shadow: 0 4px 14px rgba(37,211,102,0.25);
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .form-success-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
+        .form-success-reset {
+          display: inline-flex; align-items: center; gap: 7px;
+          padding: 11px 20px; border-radius: 8px;
+          background: transparent; color: #6b7280;
+          border: 1.5px solid #e5e7eb;
+          font-size: 0.82rem; font-weight: 600; cursor: pointer;
+          transition: all 0.3s;
+        }
+        .form-success-reset:hover { border-color: #d4af37; color: #d4af37; background: rgba(212,175,55,0.04); }
 
         /* Map */
         .map-wrap {
@@ -942,70 +1124,96 @@ export default function Contact() {
           box-shadow: 0 8px 30px rgba(0,0,0,0.08);
           margin-bottom: 1.5rem;
         }
+        .map-wrap iframe {
+          border: 0;
+        }
 
         /* Quick Connect */
         .quick-connect {
-          background: linear-gradient(135deg, #faf9f0 0%, #f5eecc 100%);
-          border: 1px solid rgba(212,175,55,0.25);
-          border-radius: 14px;
-          padding: 1.75rem;
-          box-shadow: 0 8px 30px rgba(180,140,30,0.1);
+          background: linear-gradient(135deg, #ffffff 0%, #fdf5d3 100%);
+          border: 2px solid #111;
+          border-radius: 16px;
+          padding: 2.75rem 2.5rem;
+          box-shadow: 0 15px 40px rgba(180,140,30,0.15);
+          position: relative; overflow: hidden;
         }
-        .qc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; }
+        .quick-connect::before {
+          content: ''; position: absolute; inset: 0; pointer-events: none;
+          background: radial-gradient(circle at top right, rgba(212,175,55,0.15), transparent 60%);
+        }
+        .qc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; position: relative; z-index: 1; }
         .qc-title {
-          font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em;
-          text-transform: uppercase; color: #BF953F;
+          font-size: 0.75rem; font-weight: 800; letter-spacing: 0.18em;
+          text-transform: uppercase; color: #111;
         }
-        .qc-sub { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.25rem; }
-        .qc-links { display: flex; flex-direction: column; gap: 10px; }
+        .qc-sub { font-size: 0.9rem; color: #4b5563; margin-bottom: 1.5rem; position: relative; z-index: 1; line-height: 1.6; }
+        .qc-links { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
         .qc-link {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 13px 16px; border-radius: 8px;
-          background: rgba(255,255,255,0.85); border: 1px solid rgba(212,175,55,0.2);
-          text-decoration: none; color: #1f2937;
-          font-size: 0.85rem; font-weight: 600;
-          transition: all 0.3s;
+          padding: 16px 20px; border-radius: 12px;
+          background: rgba(255,255,255,0.92); border: 1px solid rgba(17,17,17,0.12);
+          text-decoration: none; color: #111;
+          font-size: 0.9rem; font-weight: 600;
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
           position: relative; overflow: hidden;
         }
         .qc-link::before {
           content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+          background: linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent);
           transition: left 0.5s;
         }
-        .qc-link:hover { border-color: #d4af37; color: #d4af37; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,175,55,0.18); }
+        .qc-link:hover { border-color: #111; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(212,175,55,0.25); }
         .qc-link:hover::before { left: 100%; }
-        .qc-wa { background: rgba(37,211,102,0.06); border-color: rgba(37,211,102,0.3); color: #15803d; }
-        .qc-wa:hover { background: #25D366; color: #fff; border-color: #25D366; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
-        .qc-link-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-        .qc-email { font-size: 0.75rem; word-break: break-word; display: block; line-height: 1.2; margin-bottom: 2px; }
+        .qc-wa { background: rgba(37,211,102,0.08); border-color: rgba(37,211,102,0.3); color: #15803d; }
+        .qc-wa:hover { background: #25D366; color: #fff; border-color: #25D366; box-shadow: 0 8px 25px rgba(37,211,102,0.3); }
+        .qc-link-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .qc-email { font-size: 0.85rem; word-break: break-word; display: inline-block; line-height: 1.2; vertical-align: middle; }
         .qc-tag {
-          font-size: 0.55rem; font-weight: 700; font-style: normal;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: #BF953F; display: block;
+          font-size: 0.58rem; font-weight: 600; font-style: normal;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          color: #6b7280; display: inline-block;
+          background: rgba(0, 0, 0, 0.05);
+          padding: 2px 6px; border-radius: 4px;
+          margin-left: 8px; vertical-align: middle;
         }
         .qc-arrow { color: #d1d5db; transition: transform 0.3s; }
-        .qc-link:hover .qc-arrow { transform: translateX(5px); }
+        .qc-link:hover .qc-arrow { transform: translateX(5px); color: #111; }
+        .qc-wa:hover .qc-arrow { color: #fff; }
         .qc-badge {
           display: flex; align-items: center; gap: 8px;
-          margin-top: 1rem; padding: 10px 14px;
-          background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);
-          border-radius: 8px; font-size: 0.78rem; color: #374151;
+          margin-top: 1.5rem; padding: 12px 16px; position: relative; z-index: 1;
+          background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3);
+          border-radius: 8px; font-size: 0.8rem; color: #374151;
         }
-        .qc-badge strong { color: #1a1a1a; }
+        .qc-badge strong { color: #111; }
 
         /* ═══════════ HOURS SECTION ═══════════ */
         .hours-section { padding: 5rem 0; background: #f8f7f2; }
         .hours-inner {
           max-width: 1280px; margin: 0 auto; padding: 0 2.5rem;
-          display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start;
+          display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center;
         }
-        @media (max-width: 900px) { .hours-inner { grid-template-columns: 1fr; gap: 2.5rem; } }
-        .hours-today-badge {
+        @media (max-width: 900px) { 
+          .hours-inner { grid-template-columns: 1fr; gap: 2.5rem; } 
+        }
+        
+        .hours-today-status-badge {
           display: inline-flex; align-items: center; gap: 10px;
-          padding: 10px 18px; border-radius: 50px;
-          background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3);
-          font-size: 0.85rem; color: #374151; margin-top: 1.5rem;
+          padding: 12px 20px; border-radius: 50px;
+          border: 1px solid rgba(212,175,55,0.3);
+          margin-top: 1.5rem;
+          transition: all 0.3s ease;
         }
+        .hours-today-status-text {
+          font-size: 0.95rem; font-weight: 600; color: #111;
+        }
+        .hours-today-status-sep {
+          color: rgba(0,0,0,0.15); margin: 0 2px;
+        }
+        .hours-today-status-details {
+          color: #4b5563; font-weight: 500;
+        }
+        
         .today-dot {
           width: 8px; height: 8px; border-radius: 50%;
           background: #22c55e;
@@ -1017,19 +1225,122 @@ export default function Contact() {
           0%,100% { box-shadow: 0 0 0 4px rgba(34,197,94,0.2); }
           50% { box-shadow: 0 0 0 8px rgba(34,197,94,0.1); }
         }
-        .hours-right { display: flex; flex-direction: column; gap: 4px; }
+        @keyframes pulse-red {
+          0%,100% { box-shadow: 0 0 0 4px rgba(220,100,100,0.2); }
+          50% { box-shadow: 0 0 0 8px rgba(220,100,100,0.1); }
+        }
+        
+        /* Compact Card */
+        .hours-compact-card {
+          background: #fff;
+          border: 1px solid rgba(212,175,55,0.25);
+          border-radius: 14px;
+          padding: 1.5rem 1.75rem;
+          box-shadow: 0 4px 20px rgba(180,140,30,0.05);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          transition: all 0.3s;
+        }
+        .hours-compact-card:hover {
+          border-color: rgba(212,175,55,0.4);
+          box-shadow: 0 6px 24px rgba(180,140,30,0.08);
+        }
+        @media (max-width: 600px) {
+          .hours-compact-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+          }
+          .hours-toggle-btn {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+        
+        .hours-compact-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .hours-compact-label {
+          display: block;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #BF953F;
+          margin-bottom: 2px;
+        }
+        .hours-compact-value {
+          display: block;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #111;
+        }
+        
+        .hours-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 18px;
+          background: rgba(212,175,55,0.08);
+          border: 1px solid rgba(212,175,55,0.25);
+          border-radius: 8px;
+          color: #BF953F;
+          font-size: 0.82rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .hours-toggle-btn:hover {
+          background: #d4af37;
+          color: #000;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(212,175,55,0.25);
+        }
+        
+        /* Expandable Weekly Schedule */
+        .hours-expandable-container {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+          opacity: 0;
+        }
+        .hours-expandable-container.expanded {
+          max-height: 400px;
+          opacity: 1;
+          margin-top: 1rem;
+        }
+        
+        .hours-rows-container {
+          background: #fff;
+          border: 1px solid rgba(212,175,55,0.15);
+          border-radius: 12px;
+          padding: 0.5rem;
+          box-shadow: 0 6px 20px rgba(180,140,30,0.04);
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        
         .hours-row {
-          display: flex; align-items: center; gap: 12px;
-          padding: 12px 16px; border-radius: 10px;
-          font-size: 0.9rem; transition: all 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          border-radius: 10px;
+          font-size: 0.9rem;
+          transition: all 0.3s;
           position: relative;
         }
         .hours-row:hover { background: rgba(212,175,55,0.06); }
-        .hours-row.today { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); }
+        .hours-row.today { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); }
         .hours-row.closed { opacity: 0.55; }
         .hours-row-left { display: flex; align-items: center; gap: 10px; flex: 1; }
         .hours-dot-small {
-          width: 8px; height: 8px; border-radius: 50; flex-shrink: 0;
+          width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
           background: #d1d5db; transition: background 0.3s;
         }
         .hours-dot-small.active { background: #22c55e; }
@@ -1050,15 +1361,16 @@ export default function Contact() {
         }
 
         /* ═══════════ CTA BAND ═══════════ */
-        .cta-band { position: relative; padding: 4rem 0; background: #080a12; overflow: hidden; }
+        .cta-band {
+          position: relative; padding: 4rem 0; overflow: hidden;
+          background: url('/cta-bg.png') center/cover no-repeat;
+        }
         .cta-band-bg {
           position: absolute; inset: 0; pointer-events: none;
-          background:
-            radial-gradient(ellipse 50% 80% at 10% 50%, rgba(212,175,55,0.1), transparent 70%),
-            radial-gradient(ellipse 40% 60% at 90% 50%, rgba(212,175,55,0.07), transparent 70%);
+          background: linear-gradient(135deg, rgba(45, 35, 15, 0.85) 0%, rgba(15, 10, 5, 0.95) 100%);
         }
         .cta-band-inner {
-          max-width: 1280px; margin: 0 auto; padding: 0 2.5rem;
+          max-width: 1100px; margin: 0 auto; padding: 0 2.5rem;
           display: flex; flex-direction: row; align-items: center;
           justify-content: space-between; gap: 2rem; flex-wrap: wrap;
           position: relative; z-index: 1;
@@ -1077,19 +1389,19 @@ export default function Contact() {
         .cta-gold, .cta-wa, .cta-outline {
           display: inline-flex; align-items: center; gap: 8px;
           padding: 13px 24px; font-size: 0.82rem; font-weight: 700;
-          text-decoration: none; border-radius: 6px; transition: all 0.3s;
+          text-decoration: none; border-radius: 8px; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .cta-gold {
           background: linear-gradient(135deg, #BF953F, #d4af37, #AA771C);
-          color: #000; box-shadow: 0 6px 20px rgba(191,149,63,0.4);
+          color: #000; box-shadow: 0 4px 14px rgba(191,149,63,0.25);
         }
-        .cta-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(191,149,63,0.5); }
-        .cta-wa { background: #25D366; color: #fff; box-shadow: 0 6px 20px rgba(37,211,102,0.3); }
-        .cta-wa:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,0.45); }
+        .cta-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(191,149,63,0.45), 0 0 12px rgba(212,175,55,0.25); }
+        .cta-wa { background: #25D366; color: #fff; box-shadow: 0 4px 14px rgba(37,211,102,0.25); }
+        .cta-wa:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(37,211,102,0.45), 0 0 12px rgba(37,211,102,0.2); }
         .cta-outline {
           border: 1.5px solid rgba(212,175,55,0.35); color: #d4af37; background: transparent; cursor: pointer;
         }
-        .cta-outline:hover { background: #d4af37; color: #000; }
+        .cta-outline:hover { background: #d4af37; color: #000; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(212,175,55,0.25), 0 0 12px rgba(212,175,55,0.15); }
 
         /* ═══════════ WhatsApp Float ═══════════ */
         .wa-float {
