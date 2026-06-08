@@ -14,27 +14,24 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import Footer from "../components/Footer";
+import CountUp from "react-countup";
 
-/* ─── Animated counter (optimized using Framer Motion animate) ─────── */
+/* ─── Animated counter (zero re-renders — react-countup) ─────── */
 function AnimCounter({ target, suffix = "", prefix = "", duration = 2 }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, target, {
-      duration: duration,
-      ease: "easeOut",
-      onUpdate: (value) => {
-        setCount(Math.floor(value));
-      },
-    });
-    return () => controls.stop();
-  }, [inView, target, duration]);
-
-  return <span ref={ref}>{prefix}{count}{suffix}</span>;
+  return (
+    <CountUp
+      start={0}
+      end={target}
+      duration={duration}
+      prefix={prefix}
+      suffix={suffix}
+      separator=""
+      enableScrollSpy
+      scrollSpyOnce
+    />
+  );
 }
+
 
 /* ─── Fade variants ───────────────────────────────────────── */
 const fadeUp = {
@@ -107,6 +104,54 @@ function About() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+
+  const containerRef = useRef(null);
+  const hubRef = useRef(null);
+  const iconRefs = useRef([]);
+  const [coords, setCoords] = useState(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateCoords = () => {
+      if (!containerRef.current || !hubRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const hubRect = hubRef.current.getBoundingClientRect();
+
+      const hubX = hubRect.left + hubRect.width / 2 - containerRect.left;
+      const hubY = hubRect.top + hubRect.height / 2 - containerRect.top;
+
+      const newCoords = iconRefs.current.map((iconEl) => {
+        if (!iconEl) return null;
+        const rect = iconEl.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.top + rect.height / 2 - containerRect.top
+        };
+      });
+
+      setCoords({ hub: { x: hubX, y: hubY }, icons: newCoords });
+    };
+
+    updateCoords();
+    window.addEventListener("resize", updateCoords);
+
+    let observer;
+    if (containerRef.current && window.ResizeObserver) {
+      observer = new ResizeObserver(() => {
+        updateCoords();
+      });
+      observer.observe(containerRef.current);
+    }
+
+    const timer = setTimeout(updateCoords, 100);
+
+    return () => {
+      window.removeEventListener("resize", updateCoords);
+      if (observer) observer.disconnect();
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className="about-page font-sans overflow-x-hidden">
@@ -344,7 +389,70 @@ function About() {
       </section>
 
       {/* ══════════════════════ WHY CHOOSE — BENTO GRID ══════════════════════ */}
-      <section className="py-24 relative overflow-hidden bg-cover bg-center" style={{ backgroundImage: "url('/why-choose-bg.jpg')" }}>
+      <section className="py-24 relative overflow-hidden bg-[#FAF8F3]">
+        {/* Soft blurred radial glow behind heading */}
+        <div className="absolute left-1/2 top-16 -translate-x-1/2 w-[500px] h-[250px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 70%)", filter: "blur(24px)", zIndex: 0 }}
+        />
+        {/* Financial Network SVG radiating from the Golden Globe heading */}
+        <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.065, zIndex: 0 }}>
+          <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+            {/* Primary hub: centre of heading ~(720,120) */}
+            <line x1="720" y1="120" x2="550" y2="180" stroke="#BF953F" strokeWidth="1.2"/>
+            <line x1="720" y1="120" x2="890" y2="180" stroke="#BF953F" strokeWidth="1.2"/>
+            <line x1="720" y1="120" x2="720" y2="260" stroke="#BF953F" strokeWidth="1.2"/>
+            <line x1="720" y1="120" x2="610" y2="70" stroke="#BF953F" strokeWidth="1"/>
+            <line x1="720" y1="120" x2="830" y2="70" stroke="#BF953F" strokeWidth="1"/>
+            {/* Secondary nodes — left branch */}
+            <line x1="550" y1="180" x2="380" y2="360" stroke="#BF953F" strokeWidth="1"/>
+            <line x1="550" y1="180" x2="310" y2="560" stroke="#BF953F" strokeWidth="0.9"/>
+            <line x1="380" y1="360" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="310" y1="560" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="220" y1="500" x2="180" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="180" y1="680" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            {/* Secondary nodes — right branch */}
+            <line x1="890" y1="180" x2="1060" y2="360" stroke="#BF953F" strokeWidth="1"/>
+            <line x1="890" y1="180" x2="1130" y2="560" stroke="#BF953F" strokeWidth="0.9"/>
+            <line x1="1060" y1="360" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="1130" y1="560" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="1220" y1="500" x2="1260" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="1260" y1="680" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            {/* Secondary nodes — centre branch */}
+            <line x1="720" y1="260" x2="580" y2="460" stroke="#BF953F" strokeWidth="0.9"/>
+            <line x1="720" y1="260" x2="860" y2="460" stroke="#BF953F" strokeWidth="0.9"/>
+            <line x1="580" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="860" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
+            {/* Far edges */}
+            <line x1="610" y1="70" x2="140" y2="300" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="830" y1="70" x2="1300" y2="300" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="140" y1="300" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="1300" y1="300" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.7"/>
+            {/* Nodes */}
+            <circle cx="720" cy="120" r="7" fill="#BF953F"/>
+            <circle cx="720" cy="120" r="14" fill="none" stroke="#BF953F" strokeWidth="1" strokeDasharray="3 3"/>
+            <circle cx="550" cy="180" r="4.5" fill="#BF953F"/>
+            <circle cx="890" cy="180" r="4.5" fill="#BF953F"/>
+            <circle cx="720" cy="260" r="4.5" fill="#BF953F"/>
+            <circle cx="610" cy="70" r="3.5" fill="#BF953F"/>
+            <circle cx="830" cy="70" r="3.5" fill="#BF953F"/>
+            <circle cx="380" cy="360" r="4" fill="#BF953F"/>
+            <circle cx="310" cy="560" r="3.5" fill="#BF953F"/>
+            <circle cx="220" cy="500" r="4" fill="#BF953F"/>
+            <circle cx="180" cy="680" r="3.5" fill="#BF953F"/>
+            <circle cx="430" cy="680" r="3.5" fill="#BF953F"/>
+            <circle cx="1060" cy="360" r="4" fill="#BF953F"/>
+            <circle cx="1130" cy="560" r="3.5" fill="#BF953F"/>
+            <circle cx="1220" cy="500" r="4" fill="#BF953F"/>
+            <circle cx="1260" cy="680" r="3.5" fill="#BF953F"/>
+            <circle cx="1010" cy="680" r="3.5" fill="#BF953F"/>
+            <circle cx="580" cy="460" r="4" fill="#BF953F"/>
+            <circle cx="860" cy="460" r="4" fill="#BF953F"/>
+            <circle cx="720" cy="680" r="4.5" fill="#BF953F"/>
+            <circle cx="140" cy="300" r="3.5" fill="#BF953F"/>
+            <circle cx="1300" cy="300" r="3.5" fill="#BF953F"/>
+          </svg>
+        </div>
+
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
             className="text-center mb-16">
@@ -352,7 +460,7 @@ function About() {
             <h2 className="about-heading-dark">
               Why Choose <span className="text-gold">Golden Globe?</span>
             </h2>
-            <p className="mt-5 text-gray-500 max-w-xl mx-auto leading-relaxed"
+            <p className="mt-5 text-gray-700 max-w-xl mx-auto leading-relaxed"
               style={{ fontFamily: "'Lato', Helvetica, sans-serif", fontSize: "1rem" }}>
               We combine extensive industry experience with a personalised approach — every client receives a strategy
               built around their specific goals, not a template.
@@ -571,17 +679,14 @@ function About() {
       </section>
 
       {/* ══════════════════════ COMPANY VALUES (Central Hub & Orbit Layout) ══════════════════════ */}
-      <section className="py-24 bg-white overflow-hidden relative">
-        {/* Financial Contour Lines Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.12]" style={{ zIndex: 0 }}>
-          <svg viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full min-w-[1440px]">
-            <path d="M-100,100 C300,50 500,200 900,100 C1200,30 1300,130 1600,70" stroke="#BF953F" strokeWidth="1.5" />
-            <path d="M-100,200 C200,250 600,100 950,230 C1250,330 1350,150 1600,230" stroke="#BF953F" strokeWidth="1.2" />
-            <path d="M-100,330 C400,230 500,430 850,330 C1150,250 1350,370 1600,300" stroke="#BF953F" strokeWidth="1.5" />
-            <path d="M-100,430 C300,500 700,350 1000,440 C1200,500 1400,400 1600,450" stroke="#BF953F" strokeWidth="1.2" />
-            <path d="M-100,530 C400,600 800,450 1100,540 C1300,600 1500,500 1600,550" stroke="#BF953F" strokeWidth="1" />
-          </svg>
-        </div>
+      <section className="py-24 bg-white relative">
+        {/* Soft radial glow behind center hub */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
+          style={{
+            background: "radial-gradient(circle at center, rgba(191,149,63,0.06) 0%, rgba(255,255,255,0) 70%)",
+            zIndex: 0
+          }}
+        />
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           
           {/* Section Header (Centered directly above) */}
@@ -596,23 +701,59 @@ function About() {
           </motion.div>
 
           {/* Hub & Orbits Layout Container */}
-          <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_250px_1fr] gap-12 lg:gap-4 items-center">
+          <div ref={containerRef} className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_200px_1fr] gap-12 lg:gap-8 items-center">
             
             {/* SVG Connecting Lines (desktop only) */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block" style={{ zIndex: 0 }}>
               {/* Lines from Left Column to Center Hub */}
-              <line x1="33%" y1="18%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
-              <line x1="36%" y1="50%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
-              <line x1="33%" y1="82%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
+              <line 
+                x1={coords?.icons[0]?.x ?? "calc(50% - 100px)"} 
+                y1={coords?.icons[0]?.y ?? "7%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
+              <line 
+                x1={coords?.icons[1]?.x ?? "calc(50% - 100px)"} 
+                y1={coords?.icons[1]?.y ?? "43%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
+              <line 
+                x1={coords?.icons[2]?.x ?? "calc(50% - 100px)"} 
+                y1={coords?.icons[2]?.y ?? "79%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
 
               {/* Lines from Right Column to Center Hub */}
-              <line x1="67%" y1="18%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
-              <line x1="64%" y1="50%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
-              <line x1="67%" y1="82%" x2="50%" y2="50%" stroke="rgba(191, 149, 63, 0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
+              <line 
+                x1={coords?.icons[3]?.x ?? "calc(50% + 100px)"} 
+                y1={coords?.icons[3]?.y ?? "7%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
+              <line 
+                x1={coords?.icons[4]?.x ?? "calc(50% + 100px)"} 
+                y1={coords?.icons[4]?.y ?? "43%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
+              <line 
+                x1={coords?.icons[5]?.x ?? "calc(50% + 100px)"} 
+                y1={coords?.icons[5]?.y ?? "79%"} 
+                x2={coords?.hub?.x ?? "50%"} 
+                y2={coords?.hub?.y ?? "50%"} 
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              />
             </svg>
 
             {/* LEFT COLUMN: 3 values - Right-aligned */}
-            <div className="flex flex-col gap-12 lg:gap-20 relative z-10 text-right">
+            <div className="flex flex-col gap-4 lg:gap-8 relative z-10 text-right">
               {[
                 { icon: ShieldCheck, title: "Integrity", desc: "Absolute honesty, transparency, and deep accountability in every single engagement." },
                 { icon: BadgeCheck, title: "Commitment", desc: "Long-term partnership invested in your success from application to final closure." },
@@ -624,11 +765,13 @@ function About() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  className="group relative"
+                  className="core-value-card group relative"
                 >
                   <div className="flex flex-row-reverse items-start gap-4">
                     {/* Icon directly next to title */}
-                    <div className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
+                    <div 
+                      ref={el => iconRefs.current[idx] = el}
+                      className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
                       <val.icon size={18} className="text-gold" strokeWidth={1.5} />
                     </div>
                     <div>
@@ -647,6 +790,7 @@ function About() {
             {/* CENTER COLUMN: Hub */}
             <div className="flex flex-col justify-center items-center relative z-10 h-72">
               <motion.div 
+                ref={hubRef}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -666,7 +810,7 @@ function About() {
             </div>
 
             {/* RIGHT COLUMN: 3 values - Left-aligned */}
-            <div className="flex flex-col gap-12 lg:gap-20 relative z-10 text-left">
+            <div className="flex flex-col gap-4 lg:gap-8 relative z-10 text-left">
               {[
                 { icon: Eye, title: "Transparency", desc: "Every financial structure is explained clearly with all terms disclosed upfront." },
                 { icon: Heart, title: "Customer Focus", desc: "Your business goals define our strategy and our absolute measure of success." },
@@ -678,11 +822,13 @@ function About() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  className="group relative"
+                  className="core-value-card group relative"
                 >
                   <div className="flex items-start gap-4">
                     {/* Icon directly next to title */}
-                    <div className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
+                    <div 
+                      ref={el => iconRefs.current[idx + 3] = el}
+                      className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
                       <val.icon size={18} className="text-gold" strokeWidth={1.5} />
                     </div>
                     <div>
@@ -724,8 +870,12 @@ function About() {
             {TRUST_STATS.map((stat, i) => (
               <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
                 className="group border border-white/8 p-8 text-center hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-300">
-                <div className="text-4xl md:text-5xl font-bold text-gold mb-3"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                <div className="text-4xl md:text-5xl font-bold text-gold mb-3 whitespace-nowrap"
+                  style={{ 
+                    fontFamily: "'Playfair Display', Georgia, serif", 
+                    fontVariantNumeric: "tabular-nums",
+                    fontFeatureSettings: "'tnum'"
+                  }}>
                   <AnimCounter target={stat.val} suffix={stat.suffix} prefix={stat.prefix} />
                 </div>
                 <div className="w-8 h-px bg-gold mx-auto mb-3" />
@@ -757,19 +907,19 @@ function About() {
       </section>
 
       {/* ══════════════════════ TESTIMONIALS ══════════════════════ */}
-      <section className="py-20 bg-[#030303] relative overflow-hidden">
+      <section className="py-10 bg-white relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(212,175,55,0.07),transparent_70%)]" />
-          <div className="absolute top-0 right-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.07),transparent_70%)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-gold/5 via-black/40 to-transparent" />
+          <div className="absolute top-0 left-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(191,149,63,0.04),transparent_70%)]" />
+          <div className="absolute top-0 right-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(191,149,63,0.04),transparent_70%)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-gold/5 via-white/40 to-transparent" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-            className="text-center mb-16">
+            className="text-center mb-6">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold mb-3">Client Stories</p>
-            <h2 className="about-heading-white">Trusted by Businesses</h2>
-            <p className="mt-5 text-gray-400 max-w-xl mx-auto text-base leading-relaxed"
+            <h2 className="about-heading-dark">Trusted by Businesses</h2>
+            <p className="mt-4 text-gray-600 max-w-xl mx-auto text-sm leading-relaxed"
               style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
               From manufacturing to healthcare — businesses across Tamil Nadu rely on Golden Globe for structured funding.
             </p>
@@ -787,11 +937,11 @@ function About() {
           >
             {TESTIMONIALS.map((t, i) => (
               <SwiperSlide key={i}>
-                <div className="testi-card relative bg-[#0a0a0a] border border-white/5 p-8 md:p-10 rounded-2xl h-full flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden">
+                <div className="testi-card relative bg-[#0a0a0a] border border-white/5 p-6 md:p-8 rounded-2xl h-full flex flex-col shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden">
                   <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_30px_rgba(184,134,11,0.05)] pointer-events-none" />
-                  <Award className="w-8 h-8 text-gold mb-6 opacity-90" />
-                  <p className="text-gray-300 text-base leading-relaxed flex-1 font-serif italic">"{t.text}"</p>
-                  <div className="mt-8 pt-6 border-t border-white/10">
+                  <Award className="w-8 h-8 text-gold mb-5 opacity-90" />
+                  <p className="text-gray-300 text-sm leading-relaxed flex-1 font-serif italic">"{t.text}"</p>
+                  <div className="mt-6 pt-5 border-t border-white/10 relative z-10">
                     <p className="text-base font-bold text-white tracking-wide">{t.name}</p>
                     <p className="text-[10px] text-gold mt-1.5 uppercase tracking-[0.15em]">{t.role}</p>
                   </div>
@@ -800,13 +950,13 @@ function About() {
             ))}
           </Swiper>
 
-          <button className="about-testi-prev hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-black/50 text-gold items-center justify-center hover:bg-gold hover:text-black transition-all backdrop-blur-sm shadow-lg">
+          <button className="about-testi-prev hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-black/40 text-gold items-center justify-center hover:bg-gold hover:text-black transition-all backdrop-blur-sm shadow-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
           </button>
-          <button className="about-testi-next hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-black/50 text-gold items-center justify-center hover:bg-gold hover:text-black transition-all backdrop-blur-sm shadow-lg">
+          <button className="about-testi-next hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/10 bg-black/40 text-gold items-center justify-center hover:bg-gold hover:text-black transition-all backdrop-blur-sm shadow-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
           </button>
-          <div className="about-testi-pagination mt-8 flex justify-center items-end h-8 relative z-20" />
+          <div className="about-testi-pagination mt-4 flex justify-center items-end h-8 relative z-20" />
         </div>
       </section>
 
@@ -964,22 +1114,18 @@ function About() {
         .bento-card {
           position: relative;
           padding: 2rem;
-          background: rgba(255, 255, 255, 0.9);
-          border: 1px solid rgba(212,175,55,0.18);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
+          background: #ffffff;
+          border: 1px solid rgba(191, 149, 63, 0.15);
           overflow: hidden;
           min-height: 210px;
-          transition: transform 0.3s cubic-bezier(0.22,1,0.36,1),
-                      box-shadow 0.3s ease,
-                      background-color 0.3s ease,
-                      border-color 0.3s ease;
+          transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
           cursor: default;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
         .bento-card:hover {
-          transform: translateY(-5px) translateZ(0);
-          box-shadow: 0 24px 56px rgba(0,0,0,0.13);
-          border-color: rgba(212,175,55,0.4);
+          transform: translateY(-8px) translateZ(0);
+          box-shadow: 0 20px 40px rgba(191, 149, 63, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+          border-color: rgba(191, 149, 63, 0.45);
         }
         .bento-card:hover .bento-hover-bg { opacity: 1; }
         .bento-card:hover .bento-top-line  { width: 100%; }
@@ -1045,8 +1191,8 @@ function About() {
         }
 
         /* ─── Testimonials cylinder ─── */
-        .testi-cylinder { padding: 0 0 40px 0; perspective: 1200px; }
-        .testi-cylinder .swiper-slide { width: 380px; filter: blur(4px); opacity: 0.4; }
+        .testi-cylinder { padding: 0 0 28px 0; perspective: 1200px; }
+        .testi-cylinder .swiper-slide { width: 320px; filter: blur(4px); opacity: 0.4; }
         .testi-cylinder .swiper-slide-active { filter: blur(0); opacity: 1; }
 
         @keyframes shimmer-flash {

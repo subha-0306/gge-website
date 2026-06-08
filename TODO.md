@@ -1,0 +1,12 @@
+- [ ] Implement premium redesigned Services page sections (1–8) after existing hero in frontend/src/pages/Services.jsx
+- [ ] Add helper components (motion wrappers, counters, reusable UI primitives) inside Services.jsx
+- [ ] Ensure Private Finance section is most prominent with specified benefits
+- [ ] Build all financial services showcase with icons + hover + CTA-ready structure
+- [ ] Add Working Capital ecosystem visual flow section
+- [ ] Replace calculator with dynamic funding/EMI estimator using React state
+- [ ] Add funding journey progress tracker with 4 animated stages
+- [ ] Add Why Choose Us bento-style section
+- [ ] Add conversion CTA with motion + buttons
+- [ ] Verify Tailwind + Framer Motion usage is consistent and mobile/tablet responsive
+- [ ] Run frontend build to catch errors
+
