@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronRight, Clock, ArrowLeft, Phone } from "lucide-react";
+import { ArrowRight, ChevronRight, Clock, ArrowLeft, Phone, Mail } from "lucide-react";
 import { ARTICLES } from "./blogData";
 
 function useReveal() {
@@ -18,37 +18,36 @@ function useReveal() {
     }, []);
 }
 
-/* ── Render content blocks ────────────────────────────────── */
 function ContentBlock({ block }) {
     switch (block.type) {
         case "intro":
             return (
-                <p className="text-base md:text-lg text-gray-700 leading-[1.9] border-l-2 border-gold pl-5 mb-8 italic"
+                <p className="text-lg md:text-xl text-gray-800 leading-[1.8] border-l-3 border-gold pl-6 mb-10 italic"
                     style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
                     {block.text}
                 </p>
             );
         case "h2":
             return (
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4"
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-12 mb-5"
                     style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                     {block.text}
                 </h2>
             );
         case "p":
             return (
-                <p className="text-gray-600 text-sm leading-[1.95] mb-5"
+                <p className="text-gray-700 text-[15.5px] md:text-[17px] leading-[1.85] mb-6"
                     style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
                     {block.text}
                 </p>
             );
         case "ul":
             return (
-                <ul className="mb-6 space-y-3">
+                <ul className="mb-8 space-y-4">
                     {block.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed"
+                        <li key={i} className="flex items-start gap-3 text-[15.5px] md:text-[17px] text-gray-700 leading-relaxed"
                             style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2 flex-shrink-0" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2.5 flex-shrink-0" />
                             {item}
                         </li>
                     ))}
@@ -56,12 +55,12 @@ function ContentBlock({ block }) {
             );
         case "table":
             return (
-                <div className="overflow-x-auto mb-8 border border-gray-100">
+                <div className="overflow-x-auto mb-10 border border-gray-150">
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="bg-[#0f0f0f]">
                                 {block.headers.map((h, i) => (
-                                    <th key={i} className="text-left text-[10px] font-bold uppercase tracking-widest text-gold px-5 py-3.5">
+                                    <th key={i} className="text-left text-xs font-bold uppercase tracking-widest text-gold px-6 py-4">
                                         {h}
                                     </th>
                                 ))}
@@ -71,7 +70,7 @@ function ContentBlock({ block }) {
                             {block.rows.map((row, i) => (
                                 <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-[#faf9f5]"}>
                                     {row.map((cell, j) => (
-                                        <td key={j} className={`px-5 py-3.5 text-xs leading-relaxed border-t border-gray-100 ${j === 0 ? "font-semibold text-gray-800" : "text-gray-500"}`}>
+                                        <td key={j} className={`px-6 py-4 text-xs md:text-sm leading-relaxed border-t border-gray-150 ${j === 0 ? "font-semibold text-gray-800" : "text-gray-500"}`}>
                                             {cell}
                                         </td>
                                     ))}
@@ -121,42 +120,54 @@ function BlogPost() {
             <section className="relative min-h-[380px] flex items-end bg-[#0a0a0a] overflow-hidden">
                 <img
                     src={article.coverPlaceholder} alt=""
-                    className="absolute inset-0 w-full h-full object-cover opacity-30"
+                    className="absolute inset-0 w-full h-full object-cover opacity-65"
                     onError={(e) => (e.target.style.display = "none")}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
 
-                <div className="relative max-w-4xl mx-auto px-8 pb-14 pt-32 w-full">
-                    {/* Breadcrumb */}
-                    <p className="flex items-center gap-2 text-xs text-gray-400 mb-6 flex-wrap">
-                        <a href="/" className="hover:text-gold transition-colors">Home</a>
-                        <ChevronRight size={12} />
-                        <Link to="/blog" className="hover:text-gold transition-colors">Blog</Link>
-                        <ChevronRight size={12} />
-                        <span className="text-gold line-clamp-1">{article.title}</span>
-                    </p>
+                <div className="relative max-w-7xl mx-auto px-8 pb-14 pt-32 w-full flex flex-col items-start text-left">
+                    <div className="max-w-3xl space-y-4">
+                        {/* Breadcrumb */}
+                        <p
+                            className="flex items-center gap-2 text-xs text-gray-200 flex-wrap font-medium"
+                        >
+                            <a href="/" className="hover:text-gold transition-colors">Home</a>
+                            <ChevronRight size={12} />
+                            <Link to="/blog" className="hover:text-gold transition-colors">Blog</Link>
+                            <ChevronRight size={12} />
+                            <span className="text-gold line-clamp-1">{article.title}</span>
+                        </p>
 
-                    <div className="flex items-center gap-3 mb-5 flex-wrap">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-gold px-3 py-1">
-                            {article.category}
-                        </span>
-                        <span className="flex items-center gap-1.5 text-xs text-gray-400">
-                            <Clock size={11} /> {article.readTime}
-                        </span>
-                        <span className="text-xs text-gray-400">{article.date}</span>
+                        <div
+                            className="flex items-center gap-3 flex-wrap"
+                        >
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-gold px-3 py-1">
+                                {article.category}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-xs text-gray-200">
+                                <Clock size={11} /> {article.readTime}
+                            </span>
+                            <span className="text-xs text-gray-200">·</span>
+                            <span className="text-xs text-gray-200">{article.date}</span>
+                        </div>
+
+                        <h1
+                            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg"
+                            style={{
+                                fontFamily: "'Playfair Display', Georgia, serif",
+                                letterSpacing: "-0.01em",
+                            }}
+                        >
+                            {article.title}
+                        </h1>
+
+                        <p className="text-gray-200 text-sm leading-relaxed font-normal drop-shadow-md"
+                            style={{
+                                fontFamily: "'Lato', Helvetica, sans-serif",
+                            }}>
+                            {article.excerpt}
+                        </p>
                     </div>
-
-                    <h1
-                        className="text-3xl md:text-5xl font-bold text-white leading-tight"
-                        style={{ fontFamily: "'Playfair Display', Georgia, serif", letterSpacing: "-0.02em" }}
-                    >
-                        {article.title}
-                    </h1>
-
-                    <p className="mt-5 text-gray-300 text-sm leading-relaxed max-w-2xl"
-                        style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
-                        {article.excerpt}
-                    </p>
                 </div>
             </section>
 
@@ -220,9 +231,9 @@ function BlogPost() {
                                     className="flex items-center justify-center gap-2 w-full bg-gold text-black font-semibold py-3 text-sm hover:opacity-90 transition-all duration-300 hover:-translate-y-0.5 mb-3">
                                     Enquire Now <ArrowRight size={13} />
                                 </Link>
-                                <a href="tel:+919841098167"
+                                <a href="mailto:ggenterprises.fin@gmail.com"
                                     className="flex items-center justify-center gap-2 w-full border border-white/10 text-white font-semibold py-3 text-sm hover:border-gold hover:text-gold transition-all duration-300">
-                                    <Phone size={13} /> +91 98410 98167
+                                    <Mail size={13} /> ggenterprises.fin@gmail.com
                                 </a>
                             </div>
 
@@ -302,7 +313,7 @@ function BlogPost() {
                                 <div className="bg-[#0f0f0f] h-40 relative overflow-hidden flex items-center justify-center flex-shrink-0">
                                     <img
                                         src={rel.coverPlaceholder} alt={rel.title}
-                                        className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-600"
+                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
                                         onError={(e) => (e.target.style.display = "none")}
                                     />
                                     <span className="absolute bottom-3 left-4 text-[9px] font-bold uppercase tracking-widest text-black bg-gold px-2.5 py-0.5">
@@ -330,7 +341,12 @@ function BlogPost() {
             </section>
 
             {/* ══ BOTTOM CTA ══ */}
-            <section className="bg-gold py-12">
+            <section 
+                className="py-12 relative overflow-hidden"
+                style={{ 
+                    background: "linear-gradient(135deg, #d8b872 0%, #fdf7c3 40%, #d1ae5c 70%, #b38e3a 100%)"
+                }}
+            >
                 <div className="max-w-5xl mx-auto px-8 text-center rv">
                     <h2 className="text-xl md:text-2xl font-bold text-black"
                         style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
@@ -344,9 +360,9 @@ function BlogPost() {
                             className="bg-black text-white font-semibold px-7 py-3.5 text-sm hover:bg-[#111] transition-all duration-300 hover:-translate-y-0.5 inline-flex items-center gap-2">
                             Contact Us <ArrowRight size={13} />
                         </Link>
-                        <a href="tel:+919841098167"
+                        <a href="mailto:ggenterprises.fin@gmail.com"
                             className="border border-black/25 text-black font-semibold px-7 py-3.5 text-sm hover:bg-black hover:text-white transition-all duration-300 inline-flex items-center gap-2">
-                            <Phone size={13} /> +91 98410 98167
+                            <Mail size={13} /> ggenterprises.fin@gmail.com
                         </a>
                     </div>
                 </div>

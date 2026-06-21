@@ -40,13 +40,12 @@ export const servicesData = {
     ],
     features: [
       "Bridge Finance: Secure immediate funding to cover gaps before long-term capital is closed.",
-      "Asset-Backed Opportunities: Leverage existing real estate, inventory, or machinery as collateral.",
       "Business Cash Requirements: Smooth out working capital dips or purchase inventory at deep discounts.",
       "Emergency Funding: Protect your company from unexpected operational shortfalls or regulatory demands."
     ],
     eligibility: [
       "Active business operations for a minimum of 2 years.",
-      "Minimum monthly turnover of ₹10 Lakhs.",
+      "Minimum monthly turnover of ₹25 Lakhs.",
       "Clear title on offered collateral (residential, commercial, or select industrial property).",
       "Demonstrated repayment capacity via active business cash flows (bank statements)."
     ],
@@ -59,7 +58,7 @@ export const servicesData = {
     faqs: [
       {
         question: "Is a low CIBIL score a barrier to getting approved for Private Finance?",
-        answer: "No. Our private finance structures prioritize asset collateral, active cash flows, and overall business transaction validity rather than bureau ratings. We evaluate the present and future viability of your business."
+        answer: "No. Our private finance structures prioritize active cash flows and overall business transaction validity rather than bureau ratings. We evaluate the present and future viability of your business."
       },
       {
         question: "What is the typical tenure for these funds?",
@@ -71,7 +70,7 @@ export const servicesData = {
       }
     ],
     whyChooseUs: "GGE specializes in structuring high-value private debt. We maintain absolute discretion, charge transparent rates, and cut through bureaucratic red tape to deliver capital when speed is your primary constraint.",
-    relatedServices: ["business-loans", "check-based-finance", "working-capital-solutions"]
+    relatedServices: ["business-loans", "cheque-based-finance", "working-capital-solutions"]
   },
 
   "business-loans": {
@@ -127,13 +126,13 @@ export const servicesData = {
     relatedServices: ["working-capital-solutions", "machinery-purchase-finance", "private-finance"]
   },
 
-  "check-based-finance": {
-    id: "check-based-finance",
-    title: "Check Based Finance",
+  "cheque-based-finance": {
+    id: "cheque-based-finance",
+    title: "Cheque Based Finance",
     subtitle: "Short-Term Liquidity Against Documented Cash Flow Cycles",
     icon: CreditCard,
     bannerImage: "/cheque-finance-detail.jpeg",
-    overview: "Check Based Finance is a highly specialized transactional lending structure designed to support immediate cash flow requirements. This facility leverages your recurring business receivables and customer transactions, secured through post-dated check frameworks and escrow allocations. It is a highly effective tool for businesses experiencing temporary working capital gaps due to extended credit terms with clients. By converting future check clearances into immediate operational liquidity, you can bridge salary payouts, purchase raw materials, and maintain business momentum without waiting for payment cycles to close.",
+    overview: "Cheque Based Finance is a highly specialized transactional lending structure designed to support immediate cash flow requirements. This facility leverages your recurring business receivables and customer transactions, secured through post-dated cheque frameworks and escrow allocations. It is a highly effective tool for businesses experiencing temporary working capital gaps due to extended credit terms with clients. By converting future cheque clearances into immediate operational liquidity, you can bridge salary payouts, purchase raw materials, and maintain business momentum without waiting for payment cycles to close.",
     meta: {
       highlights: [
         "Immediate liquidity against clearing schedules",
@@ -151,32 +150,32 @@ export const servicesData = {
     ],
     features: [
       "Receivables Discounting: Unlock capital tied up in outstanding customer invoices.",
-      "Cheque Purchase Facility: Present customer checks due in 30-90 days for immediate advance.",
+      "Cheque Purchase Facility: Present customer cheques due in 30-90 days for immediate advance.",
       "Custom Escrow Structures: Secure repayment directly from your business account clearances."
     ],
     eligibility: [
       "Consistent banking transaction history with recurring deposits.",
-      "No history of inward check bounces in the past 12 months.",
+      "No history of inward cheque bounces in the past 12 months.",
       "Minimum business operations of 1 year.",
       "Documented purchase orders or clear customer invoices."
     ],
     howItWorks: [
       { step: 1, title: "Transaction Submission", desc: "Submit details of upcoming clearances, invoices, and bank statements." },
       { step: 2, title: "Velocity Check", desc: "Our credit team assesses the historical clearance rate and buyer profiles." },
-      { step: 3, title: "Cheque Deposit", desc: "Arrange post-dated checks or clear escrow mandates according to the invoice dates." },
+      { step: 3, title: "Cheque Deposit", desc: "Arrange post-dated cheques or clear escrow mandates according to the invoice dates." },
       { step: 4, title: "Capital Advance", desc: "Receive immediate cash advance, typically up to 80-90% of the invoice value." }
     ],
     faqs: [
       {
-        question: "How does check-based finance differ from a standard loan?",
-        answer: "A standard loan is paid back over years from general cash flows. Check-based finance is a transactional advance directly matched to a specific customer invoice or upcoming check clearance date."
+        question: "How does cheque-based finance differ from a standard loan?",
+        answer: "A standard loan is paid back over years from general cash flows. Cheque-based finance is a transactional advance directly matched to a specific customer invoice or upcoming cheque clearance date."
       },
       {
         question: "What happens if a customer delays their payment?",
         answer: "We structure grace periods and alternate repayment options to ensure operational issues are managed smoothly without impacting your primary credit rating."
       }
     ],
-    whyChooseUs: "GGE maintains deep relationships with specialized boutique lenders, offering customized check-discounting facilities that traditional retail banks do not provide.",
+    whyChooseUs: "GGE maintains deep relationships with specialized boutique lenders, offering customized cheque-discounting facilities that traditional retail banks do not provide.",
     relatedServices: ["private-finance", "business-loans", "working-capital-solutions"]
   },
 
@@ -336,7 +335,7 @@ export const servicesData = {
       }
     ],
     whyChooseUs: "We provide door-step document collection, handle all RTO coordination, and complete valuation in hours, making car refinance one of our fastest liquidity options.",
-    relatedServices: ["private-finance", "professional-loans", "check-based-finance"]
+    relatedServices: ["private-finance", "professional-loans", "cheque-based-finance"]
   },
 
   "working-capital-solutions": {

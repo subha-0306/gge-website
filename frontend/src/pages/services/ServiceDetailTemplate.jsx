@@ -109,6 +109,8 @@ export default function ServiceDetailTemplate({ service }) {
   const [activeFaq, setActiveFaq] = useState(null);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", notes: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
 
   // Scroll to top on route change
@@ -116,60 +118,112 @@ export default function ServiceDetailTemplate({ service }) {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [service.id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setFormData({ name: "", phone: "", email: "", notes: "" });
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.name,
+          phoneNumber: formData.phone,
+          email: formData.email,
+          message: formData.notes,
+          serviceType: service.title || "Other / General Enquiry",
+          source: `Service Page - ${service.title}`,
+        }),
+      });
+
+      let data = {};
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json().catch(() => ({}));
+      } else {
+        const text = await res.text().catch(() => "");
+        data = { message: text || `Server error (${res.status})` };
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          data.errors?.map((err) => err.message).join(", ") ||
+          data.message ||
+          "Something went wrong. Please try again."
+        );
+      }
+
+      setIsSubmitted(true);
+      setFormData({ name: "", phone: "", email: "", notes: "" });
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setSubmitError("");
   };
 
   return (
     <div className="services-detail-page bg-white text-gray-900 min-h-screen font-sans selection:bg-[#BF953F] selection:text-black overflow-x-hidden">
       
-      {/* ══ DEDICATED HEADER & BREADCRUMBS - STAYS DARK FOR PREMIUM HERO ══ */}
-      <section className="relative py-28 md:py-36 bg-[#111111] overflow-hidden border-b border-white/5">
-        <DetailBackgroundParticles light={false} />
-        
-        {/* Banner area / background shape */}
-        <div className="absolute right-0 top-0 w-1/2 h-full opacity-10 bg-[radial-gradient(ellipse_at_top_right,rgba(191,149,63,0.3),transparent_70%)] pointer-events-none" />
+      {/* ══ DEDICATED HEADER & BREADCRUMBS - IMAGE HERO ══ */}
+      <section className="relative py-28 md:py-36 overflow-hidden border-b border-white/5">
+        {/* Background image */}
+        <img
+          src="/service-hero-bg.jpeg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center z-0"
+        />
+
+        {/* Multi-layer dark overlay for text legibility */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/85 via-black/65 to-black/30" />
+        <div className="absolute inset-0 z-[2] bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+        {/* Gold accent glow — top right */}
+        <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-[#BF953F]/10 blur-[120px] rounded-full pointer-events-none z-[3]" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           {/* Back button */}
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold tracking-wide text-gray-400 hover:text-[#BF953F] transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold tracking-wide text-white/70 hover:text-[#BF953F] transition-colors mb-8 group"
           >
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
             Back to All Services
           </Link>
 
           {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400 mb-6 font-medium">
+          <div className="flex items-center gap-2 text-xs md:text-sm text-white/50 mb-6 font-medium">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight size={12} className="text-gray-600" />
+            <ChevronRight size={12} className="text-white/30" />
             <Link to="/services" className="hover:text-white transition-colors">Services</Link>
-            <ChevronRight size={12} className="text-gray-600" />
-            <span className="text-[#BF953F] font-semibold">{service.title}</span>
+            <ChevronRight size={12} className="text-white/30" />
+            <span className="text-[#D4AF37] font-semibold">{service.title}</span>
           </div>
 
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 border border-white/15 mb-6 backdrop-blur-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-              <span className="text-xs uppercase tracking-wider font-bold text-gray-300">GGE Capital Solutions</span>
+              <span className="text-xs uppercase tracking-widest font-bold text-[#D4AF37]/90">GGE Capital Solutions</span>
             </div>
-            
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-[1.1] font-serif">
+
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-5 leading-[1.1] drop-shadow-lg"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
               {service.title}
             </h1>
-            
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed font-light max-w-3xl">
+
+            <p className="text-base md:text-lg text-white/75 leading-relaxed font-light max-w-2xl drop-shadow">
               {service.subtitle}
             </p>
           </div>
@@ -283,79 +337,111 @@ export default function ServiceDetailTemplate({ service }) {
         </div>
       </section>
 
-      {/* ══ HOW IT WORKS (TIMELINE JOURNEY) - STAYS DARK FOR DRAMATIC CONTRAST ══ */}
-      <section className="py-20 bg-[#111111] relative border-t border-b border-white/5">
-        <DetailBackgroundParticles light={false} />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-[#BF953F]">The Blueprint</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-white mt-2 font-serif">
+      {/* ══ HOW IT WORKS ══ */}
+      <section className="py-14 bg-[#0d0d0d] relative border-t border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6">
+
+          {/* Section header */}
+          <div className="text-center mb-8">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#BF953F]">The Blueprint</span>
+            <h2 className="text-xl md:text-2xl font-bold text-white mt-1" style={{ fontFamily: "'Inter', sans-serif" }}>
               Process Timeline
             </h2>
-            <p className="text-sm md:text-base text-gray-400 mt-3 leading-relaxed">
-              Our structured process ensures transparent, step-by-step progress with minimal operational lag.
-            </p>
           </div>
 
-          <div className="relative">
-            {/* Connecting Pipeline SVG */}
-            <div className="hidden lg:block absolute top-[44px] left-[12%] right-[12%] h-1 pointer-events-none z-0">
-              <svg className="w-full h-full overflow-visible">
-                <line x1="0%" y1="2" x2="100%" y2="2" stroke="rgba(255,255,255,0.08)" strokeWidth="2" />
-                <motion.line 
-                  x1="0%" y1="2" x2="100%" y2="2" 
-                  stroke="url(#detailTimelineGoldGradient)" 
-                  strokeWidth="2"
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                />
-                <defs>
-                  <linearGradient id="detailTimelineGoldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#BF953F" />
-                    <stop offset="100%" stopColor="#D4AF37" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-              {service.howItWorks.map((step, idx) => {
-                const isActive = activeStep === idx;
-                return (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    onMouseEnter={() => setActiveStep(idx)}
-                    className={`relative rounded-2xl border p-6 transition-all cursor-pointer z-10 ${
-                      isActive 
-                        ? "border-[#BF953F]/60 shadow-[0_10px_30px_rgba(191,149,63,0.08)] opacity-100" 
-                        : "border-white/5 opacity-60 hover:opacity-100"
-                    }`}
+          {/* Cards grid — no connector line */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {service.howItWorks.map((step, idx) => {
+              const isActive = activeStep === idx;
+              const stepNum = String(step.step || idx + 1).padStart(2, "0");
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  onMouseEnter={() => setActiveStep(idx)}
+                  className="relative rounded-xl border cursor-pointer overflow-hidden group"
+                  style={{
+                    border: isActive ? "1px solid rgba(191,149,63,0.45)" : "1px solid rgba(255,255,255,0.07)",
+                    background: "#111111",
+                    transition: "border-color 0.4s ease, box-shadow 0.4s ease",
+                    boxShadow: isActive ? "0 8px 32px rgba(191,149,63,0.08)" : "none",
+                  }}
+                >
+                  {/* Gold shimmer that slides across on hover */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: isActive 
-                        ? "radial-gradient(circle at center, rgba(191,149,63,0.08) 0%, rgba(17,17,17,0.95) 100%)" 
-                        : "rgba(255,255,255,0.01)",
-                      transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                      transitionDuration: "500ms"
+                      background: "linear-gradient(105deg, transparent 30%, rgba(191,149,63,0.08) 50%, transparent 70%)",
+                      transform: isActive ? "translateX(0%)" : "translateX(-100%)",
+                      transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
                     }}
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#BF953F]/10 border border-[#BF953F]/20 text-sm font-bold text-[#BF953F] font-serif transform transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}>
-                        0{step.step || idx + 1}
+                  />
+
+                  {/* Top gold accent line */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[2px]"
+                    style={{
+                      background: isActive
+                        ? "linear-gradient(90deg, #BF953F, #D4AF37, transparent)"
+                        : "transparent",
+                      transition: "background 0.4s ease",
+                    }}
+                  />
+
+                  <div className="relative z-10 p-5">
+                    {/* Badge row */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center text-[13px] font-bold text-[#BF953F] border border-[#BF953F]/20 shrink-0"
+                        style={{
+                          background: "#0d0d0d",
+                          fontFamily: "'Inter', sans-serif",
+                          transition: "box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1)",
+                          boxShadow: isActive ? "0 0 14px rgba(191,149,63,0.2)" : "none",
+                          transform: isActive ? "scale(1.08)" : "scale(1)",
+                        }}
+                      >
+                        {stepNum}
+                      </div>
+                      <span
+                        className="text-[9px] uppercase tracking-[0.22em] font-semibold"
+                        style={{
+                          color: isActive ? "#BF953F" : "rgba(255,255,255,0.25)",
+                          transition: "color 0.35s ease",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Stage {stepNum}
                       </span>
-                      <span className="text-[10px] tracking-widest uppercase font-extrabold text-gray-500">Stage</span>
                     </div>
-                    <h3 className="text-base md:text-lg font-bold text-white mb-2">{step.title}</h3>
-                    <p className="text-xs md:text-sm text-gray-400 leading-relaxed font-light">{step.desc}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
+
+                    {/* Title */}
+                    <h3
+                      className="text-[14.5px] font-semibold text-white mb-2 leading-snug"
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      {step.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p
+                      className="text-[12.5px] leading-[1.6]"
+                      style={{
+                        color: isActive ? "#9A9A9A" : "#5A5A5A",
+                        transition: "color 0.35s ease",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      {step.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -462,14 +548,14 @@ export default function ServiceDetailTemplate({ service }) {
 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
                   <a
-                    href="tel:+919999999999"
+                    href="tel:+919843693697"
                     className="flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black px-6 py-3.5 text-sm font-extrabold hover:bg-opacity-95 shadow-[0_12px_24px_rgba(191,149,63,0.15)] transition"
                   >
                     <Phone size={16} />
                     Call Advisory Desk
                   </a>
                   <a
-                    href="mailto:advisor@ggefinance.com"
+                    href="mailto:ggenterprises.fin@gmail.com"
                     className="flex items-center justify-center gap-2 rounded-xl bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 text-sm font-extrabold border border-white/10 transition"
                   >
                     <Mail size={16} />
@@ -542,11 +628,30 @@ export default function ServiceDetailTemplate({ service }) {
 
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black py-3 text-xs md:text-sm font-extrabold hover:bg-opacity-90 transition"
+                      disabled={isSubmitting}
+                      className={`w-full flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black py-3 text-xs md:text-sm font-extrabold hover:bg-opacity-90 transition ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
-                      <span>Submit Secure File</span>
-                      <ArrowRight size={16} />
+                      {isSubmitting ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Secure File</span>
+                          <ArrowRight size={16} />
+                        </>
+                      )}
                     </button>
+
+                    {submitError && (
+                      <p className="text-red-400 text-xs text-center mt-2">
+                        {submitError}
+                      </p>
+                    )}
 
                     <AnimatePresence>
                       {isSubmitted && (

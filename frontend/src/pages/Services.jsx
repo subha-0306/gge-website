@@ -82,7 +82,7 @@ function ServicesParticles({ light = false }) {
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {/* Grid overlay */}
       <div className={`absolute inset-0 ${light ? 'opacity-[0.015] bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)]' : 'opacity-[0.02] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)]'} bg-[size:50px_50px]`} />
-      
+
       {/* Moving ambient gradient orbs (no animate-pulse per request) */}
       <div className={`absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#BF953F] ${light ? 'opacity-[0.025]' : 'opacity-[0.04]'} rounded-full blur-[140px]`} />
       <div className={`absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-blue-600 ${light ? 'opacity-[0.015]' : 'opacity-[0.03]'} rounded-full blur-[160px]`} />
@@ -157,9 +157,9 @@ function InteractiveFundingCalculator() {
   return (
     <div className="rounded-[2.5rem] border border-gray-200 bg-white p-6 md:p-10 shadow-xl relative overflow-hidden">
       <div className="absolute top-0 right-0 w-32 h-32 bg-[#BF953F]/5 rounded-full blur-3xl pointer-events-none" />
-      
+
       <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        
+
         {/* Sliders Input */}
         <div className="lg:col-span-7 space-y-6">
           <div className="flex items-center gap-3 mb-2">
@@ -172,67 +172,62 @@ function InteractiveFundingCalculator() {
             </div>
           </div>
 
-          {/* Amount Slider */}
+          {/* Amount Input */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-700 font-medium">Target Capital Requirement</span>
-              <span className="font-bold text-[#BF953F]">{formatCurrency(amount)}</span>
+              <span className="text-gray-700 font-medium">Target Capital Requirement (₹)</span>
+              <span className="font-bold text-[#BF953F]">{amount ? formatCurrency(amount) : "₹ 0"}</span>
             </div>
             <input
-              type="range"
-              min="10000"
-              max="100000000"
-              step="10000"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#BF953F]"
+              type="number"
+              value={amount === 0 ? "" : amount}
+              onChange={(e) => {
+                const val = e.target.value;
+                setAmount(val === "" ? "" : Number(val));
+              }}
+              className="w-full rounded-xl bg-gray-50/50 border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition shadow-sm"
+              placeholder="e.g. 25000000"
+              min="0"
             />
-            <div className="flex justify-between text-[10px] text-gray-400">
-              <span>₹ 10,000</span>
-              <span>₹ 10 Crores</span>
-            </div>
           </div>
 
-          {/* Tenure Slider */}
+          {/* Tenure Input */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-700 font-medium">Preferred Tenure</span>
-              <span className="font-bold text-[#BF953F]">{months} Months</span>
+              <span className="text-gray-700 font-medium">Preferred Tenure (Months)</span>
+              <span className="font-bold text-[#BF953F]">{months ? `${months} Months` : ""}</span>
             </div>
             <input
-              type="range"
-              min="3"
-              max="60"
-              step="1"
-              value={months}
-              onChange={(e) => setMonths(Number(e.target.value))}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#BF953F]"
+              type="number"
+              value={months === 0 ? "" : months}
+              onChange={(e) => {
+                const val = e.target.value;
+                setMonths(val === "" ? "" : Number(val));
+              }}
+              className="w-full rounded-xl bg-gray-50/50 border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition shadow-sm"
+              placeholder="e.g. 12"
+              min="1"
             />
-            <div className="flex justify-between text-[10px] text-gray-400">
-              <span>3 Months</span>
-              <span>60 Months</span>
-            </div>
           </div>
 
-          {/* Rate Slider */}
+          {/* Rate Input */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-700 font-medium">Indicative Interest Rate</span>
-              <span className="font-bold text-[#BF953F]">{rate}% p.a.</span>
+              <span className="text-gray-700 font-medium">Indicative Interest Rate (% p.a.)</span>
+              <span className="font-bold text-[#BF953F]">{rate ? `${rate}% p.a.` : ""}</span>
             </div>
             <input
-              type="range"
-              min="8"
-              max="24"
-              step="0.5"
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#BF953F]"
+              type="number"
+              step="0.1"
+              value={rate === 0 ? "" : rate}
+              onChange={(e) => {
+                const val = e.target.value;
+                setRate(val === "" ? "" : Number(val));
+              }}
+              className="w-full rounded-xl bg-gray-50/50 border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition shadow-sm"
+              placeholder="e.g. 12.5"
+              min="0"
             />
-            <div className="flex justify-between text-[10px] text-gray-400">
-              <span>8% p.a.</span>
-              <span>24% p.a.</span>
-            </div>
           </div>
         </div>
 
@@ -259,12 +254,12 @@ function InteractiveFundingCalculator() {
           {/* Visual ratio bar */}
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-gray-500">
-              <span>Principal: {((P / totalPayment) * 100).toFixed(0)}%</span>
-              <span>Interest: {((totalInterest / totalPayment) * 100).toFixed(0)}%</span>
+              <span>Principal: {totalPayment > 0 ? ((P / totalPayment) * 100).toFixed(0) : 0}%</span>
+              <span>Interest: {totalPayment > 0 ? ((totalInterest / totalPayment) * 100).toFixed(0) : 0}%</span>
             </div>
             <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden flex">
-              <div className="bg-[#BF953F]" style={{ width: `${(P / totalPayment) * 100}%` }} />
-              <div className="bg-[#BF953F]/40" style={{ width: `${(totalInterest / totalPayment) * 100}%` }} />
+              <div className="bg-[#BF953F]" style={{ width: `${totalPayment > 0 ? (P / totalPayment) * 100 : 0}%` }} />
+              <div className="bg-[#BF953F]/40" style={{ width: `${totalPayment > 0 ? (totalInterest / totalPayment) * 100 : 0}%` }} />
             </div>
           </div>
 
@@ -285,20 +280,61 @@ function Services() {
   const mousePos = useMouseTracking();
   const [leadState, setLeadState] = useState({ name: "", phone: "", email: "", notes: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
+  const [hoveredSlug, setHoveredSlug] = useState(null);
 
   const handleEnquire = () => {
     const el = document.getElementById("cta-enquire");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleSubmitLead = (e) => {
+  const handleSubmitLead = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setLeadState({ name: "", phone: "", email: "", notes: "" });
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: leadState.name,
+          phoneNumber: leadState.phone,
+          email: leadState.email,
+          message: leadState.notes,
+          source: "Services Page",
+        }),
+      });
+
+      let data = {};
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json().catch(() => ({}));
+      } else {
+        const text = await res.text().catch(() => "");
+        data = { message: text || `Server error (${res.status})` };
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          data.errors?.map((err) => err.message).join(", ") ||
+          data.message ||
+          "Something went wrong. Please try again."
+        );
+      }
+
+      setIsSubmitted(true);
+      setLeadState({ name: "", phone: "", email: "", notes: "" });
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Other services data mapping to dedicated details pages
@@ -312,8 +348,8 @@ function Services() {
         highlight: "Collaborations with 20+ Lenders",
       },
       {
-        slug: "check-based-finance",
-        title: "Check Based Finance",
+        slug: "cheque-based-finance",
+        title: "Cheque Based Finance",
         desc: "Secure short-term operating capital against clearing cycles, purchase orders, and merchant transactions.",
         icon: CreditCard,
         highlight: "Clearance-led approvals",
@@ -388,10 +424,10 @@ function Services() {
 
   return (
     <div className="services-page font-sans bg-white selection:bg-[#BF953F] selection:text-black overflow-x-hidden">
-      
+
       {/* ══ HERO (DO NOT MODIFY structure/positioning) ══ */}
       <section className="relative min-h-[350px] flex items-end overflow-hidden bg-gray-100">
-        
+
         <img
           src="/services-bg.jpeg"
           alt=""
@@ -401,7 +437,7 @@ function Services() {
             transition: 'transform 0.3s ease-out'
           }}
         />
-        
+
         {/* Subtle geometric pattern (No Gradient Overlay) */}
         <div
           className="absolute inset-0 opacity-10 mix-blend-multiply z-20"
@@ -422,10 +458,8 @@ function Services() {
           </span>
           <h1
             className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4 drop-shadow-md"
-            style={{ 
-              fontFamily: "'Playfair Display', Georgia, serif",
-              transform: `translateX(${mousePos.x * 10}px) translateY(${mousePos.y * 10}px)`,
-              transition: 'transform 0.3s ease-out'
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif"
             }}
           >
             Strategic <br />
@@ -435,11 +469,9 @@ function Services() {
           </h1>
           <p
             className="mt-2 text-sm md:text-base text-gray-200 max-w-2xl leading-relaxed font-medium drop-shadow-md"
-            style={{ 
+            style={{
               fontFamily: "'Inter', 'Montserrat', sans-serif",
-              lineHeight: '1.7',
-              transform: `translateX(${mousePos.x * 5}px) translateY(${mousePos.y * 5}px)`,
-              transition: 'transform 0.3s ease-out'
+              lineHeight: '1.7'
             }}
           >
             Tailored funding solutions designed to empower businesses at every stage of growth.
@@ -448,33 +480,23 @@ function Services() {
       </section>
 
       {/* ══ REDESIGNED AREA START (CONTRAST LIGHT THEME & LAYERED LAYOUTS) ══ */}
-      
+
       {/* SECTION 1: STATS & OVERVIEW PANEL */}
-      <section className="py-20 md:py-28 bg-white relative">
+      <section className="py-10 md:py-14 bg-white relative group/statssec hover:bg-[#FDFBF5] transition-colors duration-500" style={{ boxShadow: 'inset 0 0 0 0 rgba(191,149,63,0)' }} onMouseEnter={e => e.currentTarget.style.boxShadow = 'inset 0 0 80px 0 rgba(191,149,63,0.07)'} onMouseLeave={e => e.currentTarget.style.boxShadow = 'inset 0 0 0 0 rgba(191,149,63,0)'}>
         <ServicesParticles light={true} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#BF953F]/10 border border-[#BF953F]/20 mb-4"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-              <span className="text-xs uppercase tracking-wider font-extrabold text-[#BF953F]">Institutional Credit Architecture</span>
-            </motion.div>
-            
+
+          <div className="max-w-3xl mx-auto text-center mb-8">
             <h2 className="text-3xl md:text-5xl font-extrabold font-serif text-[#111111] leading-tight">
-              Strategic Solutions Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] to-[#D4AF37]">Capital Momentum</span>
+              Building Momentum Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] to-[#D4AF37]">Smart Financing</span>
             </h2>
-            
-            <p className="text-base md:text-lg text-gray-600 mt-4 leading-relaxed font-light">
+
+            <p className="text-base md:text-lg text-gray-600 mt-3 leading-relaxed font-light">
               We structure corporate lending and private debt portfolios to bypass operational delays, allowing high-growth firms to proceed with certainty.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-4">
             {[
               { label: "Aggregate Placed Volume", val: 750, suffix: " Cr+" },
               { label: "Decisions within", val: 24, suffix: " Hours" },
@@ -502,121 +524,106 @@ function Services() {
       </section>
 
       {/* SECTION 2: FEATURED PRIVATE FINANCE (HERO SERVICE - BENTO GRID LAYOUT) */}
-      <section className="py-24 bg-[#f8f7f4] border-t border-gray-200/60 relative">
+      <section className="py-20 bg-[#f8f7f4] border-t border-gray-200/60 relative">
         <ServicesParticles light={true} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-[#BF953F]">Flagship Allocation</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-[#111111] mt-1 font-serif">
+
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-[11px] uppercase font-bold tracking-[0.2em] text-[#BF953F]">Flagship Service</span>
+            <h2 className="text-3xl md:text-[2.6rem] font-bold text-[#111111] mt-2 leading-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
               Private Finance
             </h2>
-            <p className="text-sm md:text-base text-gray-600 mt-3 leading-relaxed">
-              Our premier credit mechanism, engineered specifically for time-sensitive, high-liquidity situations without bureau dependencies.
+            <p className="text-base text-gray-500 mt-3 leading-loose font-light" style={{ fontFamily: "'Inter', sans-serif" }}>
+              GGE's premier credit solution for time-sensitive, high-liquidity requirements — structured without bureau dependencies.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-8 items-stretch">
-            
-            {/* Bento Grid: Main Showcase (8 cols) - STAYS DARK for luxury contrast */}
-            <div className="lg:col-span-7 flex flex-col justify-between rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#111111] via-[#0d0d0d] to-[#0a0a0a] p-8 md:p-12 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-44 h-44 bg-[#BF953F]/10 rounded-full blur-[80px] pointer-events-none" />
-              
-              <div className="relative z-10 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#BF953F]/10 border border-[#BF953F]/20 text-xs font-bold text-[#BF953F] uppercase tracking-wider">
-                  <Sparkles size={14} />
-                  Private Debt Allocation
+
+            {/* Main Dark Card */}
+            <div className="lg:col-span-7 flex flex-col rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#111111] via-[#0d0d0d] to-[#0a0a0a] p-10 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-56 h-56 bg-[#BF953F]/10 rounded-full blur-[100px] pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col gap-6 flex-grow">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#BF953F]/10 border border-[#BF953F]/20 text-[11px] font-bold text-[#BF953F] uppercase tracking-widest w-fit">
+                  <Sparkles size={13} />
+                  Private Debt · GGE Direct
                 </div>
 
-                <h3 className="text-2xl md:text-3xl font-extrabold font-serif text-white">
-                  High-Value Bridge Funding & Short-Term Liquidity
+                <h3 className="text-[1.75rem] md:text-[2.1rem] font-bold text-white leading-snug" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                  Rapid Capital Access for<br />High-Growth Businesses
                 </h3>
 
-                <p className="text-sm md:text-base text-gray-300 leading-relaxed font-light">
-                  Our private finance architecture is inspired by premier platforms like **JP Finance** and **ESGM Private Finance**, completely tailored to fulfill immediate cash flow gaps. We assess collateral asset security and transaction viability to fast-track files without waiting for typical banking approvals.
+                <p className="text-[15px] text-gray-300 leading-loose font-light" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  GGE's private finance desk evaluates collateral strength, business cash flows, and transaction viability to fast-track disbursals — entirely independent of standard bureau timelines. Designed for promoters, MSMEs, and corporates who need capital now.
                 </p>
 
-                <div className="grid sm:grid-cols-2 gap-4 pt-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-                      Emergency Funding
-                    </h4>
-                    <p className="text-xs text-gray-400 leading-relaxed">Secure operational runway during sudden cash flow contractions.</p>
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-                      Bridge Financing
-                    </h4>
-                    <p className="text-xs text-gray-400 leading-relaxed">Smooth out acquisition transactions before long-term facilities close.</p>
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-                      Business Cash Demands
-                    </h4>
-                    <p className="text-xs text-gray-400 leading-relaxed">Procure raw materials at steep cash discounts from suppliers.</p>
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
-                      Asset Opportunities
-                    </h4>
-                    <p className="text-xs text-gray-400 leading-relaxed">Leverage real estate or equipment equity to fund growth ventures.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span className="text-xs text-gray-400">Direct underwriter evaluation</span>
-                <Link
-                  to="/services/private-finance"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black px-6 py-3 text-sm font-extrabold hover:bg-opacity-95 transition"
-                >
-                  Review Details
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
-
-            {/* Bento Grid: Prominent Parameters (5 cols) - WHITE glass panel */}
-            <div className="lg:col-span-5 flex flex-col justify-between rounded-[2.5rem] border border-gray-200/80 bg-white p-8 relative overflow-hidden shadow-xl">
-              <div>
-                <h4 className="text-lg font-bold font-serif text-gray-900 mb-6">Key Allocations</h4>
-                <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 pt-2">
                   {[
-                    "No CIBIL Score Required",
-                    "Approval within 24–48 Hours",
-                    "Tenure from 3 Months to 15 Months",
-                    "Fast Non-Bureau Processing",
-                    "Flexible Repayment Frameworks",
-                    "Quick Operational Disbursal",
-                    "Simplified Documentation Audit",
-                  ].map((item, idx) => (
-                    <motion.div
-                      key={item}
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: idx * 0.05 }}
-                      className="flex items-center gap-3 p-3 rounded-2xl bg-[#f8f7f4]/60 border border-gray-100"
-                    >
-                      <div className="w-7 h-7 rounded-lg bg-[#BF953F]/15 flex items-center justify-center text-[#BF953F] shrink-0">
-                        <Check size={16} />
-                      </div>
-                      <span className="text-sm font-bold text-gray-800">{item}</span>
-                    </motion.div>
+                    { title: "Emergency Funding", desc: "Immediate liquidity to sustain operations during critical cash flow gaps." },
+                    { title: "Bridge Financing", desc: "Short-term capital to bridge acquisitions before long-term facilities activate." },
+                    { title: "Trade & Procurement", desc: "Finance bulk purchases and inventory at favorable cash terms." },
+                    { title: "Asset-Backed Capital", desc: "Unlock funds against real estate or business assets, swiftly processed." },
+                  ].map((item) => (
+                    <div key={item.title} className="rounded-xl bg-white/[0.05] border border-white/[0.07] p-4 space-y-2">
+                      <h4 className="text-[13px] font-semibold text-white flex items-center gap-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F] shrink-0" />
+                        {item.title}
+                      </h4>
+                      <p className="text-[12px] text-gray-400 leading-relaxed pl-3.5 font-light">{item.desc}</p>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div className="mt-8 rounded-2xl bg-[#BF953F]/10 border border-[#BF953F]/20 p-4 text-center">
-                <div className="text-xs font-bold text-[#BF953F]">Need Rapid Capital?</div>
-                <p className="text-[10px] text-gray-600 mt-1 leading-normal">Our private underwriting desk reviews submissions within 2 hours of receipt.</p>
+              <div className="mt-8 pt-5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span className="text-[12px] text-gray-500 font-light">GGE Underwriting Desk · Direct Evaluation</span>
+                <Link
+                  to="/services/private-finance"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black px-6 py-3 text-sm font-bold hover:bg-opacity-90 transition"
+                >
+                  Explore Private Finance
+                  <ArrowRight size={15} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Feature Card */}
+            <div className="lg:col-span-5 flex flex-col gap-5 rounded-[2rem] border border-gray-200/80 bg-white p-8 shadow-xl">
+              <h4 className="text-lg font-semibold text-gray-900" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Why Businesses Choose GGE</h4>
+
+              <div className="flex flex-col gap-2.5">
+                {[
+                  "No CIBIL Score Dependency",
+                  "Approval Decision in 24–48 Hours",
+                  "Tenure: 3 to 15 Months",
+                  "Non-Bureau Processing Route",
+                  "Flexible Repayment Structures",
+                  "Same-Week Operational Disbursal",
+                  "Minimal Documentation Required",
+                ].map((item, idx) => (
+                  <motion.div
+                    key={item}
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: idx * 0.04 }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#faf9f6] border border-gray-100"
+                  >
+                    <div className="w-6 h-6 rounded-lg bg-[#BF953F]/15 flex items-center justify-center text-[#BF953F] shrink-0">
+                      <Check size={13} />
+                    </div>
+                    <span className="text-[13.5px] text-gray-700 font-normal leading-snug" style={{ fontFamily: "'Inter', sans-serif" }}>{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="mt-auto rounded-xl bg-[#BF953F]/10 border border-[#BF953F]/20 p-5 text-center">
+                <div className="text-sm font-semibold text-[#BF953F]">Need Capital Urgently?</div>
+                <p className="text-[12px] text-gray-500 mt-1.5 leading-relaxed font-light">Our desk reviews your submission within 2 hours and responds with a structured proposal.</p>
                 <button
                   onClick={handleEnquire}
-                  className="mt-3 w-full py-2 text-xs font-bold bg-[#BF953F] hover:bg-opacity-90 transition rounded-lg text-black"
+                  className="mt-4 w-full py-2.5 text-sm font-bold bg-[#BF953F] hover:bg-opacity-90 transition rounded-lg text-black"
                 >
                   Initiate Secure Request
                 </button>
@@ -631,7 +638,7 @@ function Services() {
       <section className="py-24 bg-white relative">
         <ServicesParticles light={true} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs uppercase font-extrabold tracking-widest text-[#BF953F]">Solutions Showcase</span>
             <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mt-1 font-serif">
@@ -642,42 +649,97 @@ function Services() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {otherServicesList.map((service, idx) => {
               const Icon = service.icon;
               return (
                 <motion.div
                   key={service.slug}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  className="group flex flex-col justify-between h-full rounded-3xl border border-gray-200/80 bg-white hover:bg-[#FAF8F3]/40 hover:border-[#BF953F] p-6 md:p-8 transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(191,149,63,0.08)]"
+                  transition={{
+                    duration: 0.5,
+                    delay: (idx % 3) * 0.075,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="group flex flex-col justify-between rounded-2xl border bg-white p-6 relative overflow-hidden"
+                  style={{
+                    boxShadow: "0 4px 24px rgba(180,140,30,0.08), 0 1px 4px rgba(0,0,0,0.04)",
+                    borderColor: "rgba(212,175,55,0.2)",
+                    transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.3s",
+                  }}
+                  onMouseEnter={e => {
+                    setHoveredSlug(service.slug);
+                    e.currentTarget.style.transform = "translateY(-8px)";
+                    e.currentTarget.style.boxShadow = "0 20px 50px rgba(180,140,30,0.18), 0 2px 8px rgba(0,0,0,0.06)";
+                    e.currentTarget.style.borderColor = "rgba(212,175,55,0.5)";
+                  }}
+                  onMouseLeave={e => {
+                    setHoveredSlug(null);
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "0 4px 24px rgba(180,140,30,0.08), 0 1px 4px rgba(0,0,0,0.04)";
+                    e.currentTarget.style.borderColor = "rgba(212,175,55,0.2)";
+                  }}
                 >
-                  {/* Giant Watermark Icon instead of corner sticker */}
-                  <div className="absolute -right-4 -top-4 w-28 h-28 text-[#BF953F] opacity-[0.02] pointer-events-none z-0 transform translate-x-3 -translate-y-3 group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-500">
-                    <Icon size={112} strokeWidth={0.5} />
+                  {/* Top Bar Gradient Animation */}
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#AA771C] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-20" />
+
+                  {/* Gold Sweep Animation */}
+                  <div 
+                    className="absolute pointer-events-none top-[-60%] left-[-60%] w-1/2 h-[220%] bg-gradient-to-r from-transparent via-[#d4af37]/12 to-transparent transition-transform duration-[600ms] ease-out z-20"
+                    style={{
+                      transform: hoveredSlug === service.slug 
+                        ? 'rotate(25deg) translateX(350%)' 
+                        : 'rotate(25deg) translateX(-100%)',
+                    }}
+                  />
+
+                  {/* Giant per-card watermark icon — ultra-muted */}
+                  <div className="absolute -right-3 -top-3 pointer-events-none z-0 text-[#BF953F] opacity-[0.025] group-hover:opacity-[0.05] group-hover:scale-110 transition-all duration-500">
+                    <Icon size={110} strokeWidth={0.4} />
                   </div>
-                  
-                  <div className="space-y-4 relative z-10 flex-grow">
-                    <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-gray-200/60 flex items-center justify-center text-gray-700 group-hover:text-[#BF953F] group-hover:border-[#BF953F]/30 transition-colors shadow-sm">
-                      <Icon size={24} />
+
+                  {/* ── Top block: icon + title + desc ── */}
+                  <div className="relative z-10 space-y-3">
+                    <div 
+                      className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300"
+                      style={{
+                        background: hoveredSlug === service.slug 
+                          ? "linear-gradient(135deg, rgba(212,175,55,0.22), rgba(212,175,55,0.1))"
+                          : "linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.06))",
+                        border: "1px solid rgba(212,175,55,0.2)",
+                        transform: hoveredSlug === service.slug ? "scale(1.1) rotate(4deg)" : "none",
+                        color: hoveredSlug === service.slug ? "#BF953F" : "#4B5563"
+                      }}
+                    >
+                      <Icon size={22} />
                     </div>
-                    
-                    <h3 className="text-lg font-bold font-serif text-[#111111] tracking-wide">
+
+                    <h3
+                      className="text-[18px] font-bold text-[#111111] leading-snug"
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
+                    >
                       {service.title}
                     </h3>
-                    
-                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed font-light">
+
+                    <p 
+                      className="text-[14.5px] text-gray-600 leading-[1.6] font-normal"
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
+                    >
                       {service.desc}
                     </p>
 
-                    {/* Specific bullets for selected services */}
+                    {/* Optional bullets */}
                     {service.bullets && (
-                      <div className="space-y-1.5 pt-2">
+                      <div className="space-y-1.5 pt-1">
                         {service.bullets.map((b) => (
-                          <div key={b} className="flex items-center gap-2 text-xs text-gray-700 font-medium">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F]" />
+                          <div 
+                            key={b} 
+                            className="flex items-center gap-2 text-[13.5px] text-gray-600 font-medium"
+                            style={{ fontFamily: "'Outfit', sans-serif" }}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#BF953F] shrink-0" />
                             {b}
                           </div>
                         ))}
@@ -685,16 +747,28 @@ function Services() {
                     )}
                   </div>
 
-                  <div className="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between relative z-10">
-                    <span className="text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#BF953F]/80 group-hover:text-[#BF953F] transition-colors">
+                  {/* ── Bottom block: eyebrow + link — always anchored to bottom ── */}
+                  <div className="relative z-10 mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <span
+                      className="text-[10px] uppercase font-bold text-[#BF953F]/70 group-hover:text-[#BF953F] transition-colors duration-300"
+                      style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: "0.15em" }}
+                    >
                       {service.highlight}
                     </span>
                     <Link
                       to={`/services/${service.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-800 hover:text-[#BF953F] transition-colors"
+                      className="inline-flex items-center gap-1.5 text-[13px] font-bold text-gray-700 group-hover:text-[#BF953F] transition-colors duration-300"
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
                     >
                       Learn More
-                      <ArrowRight size={14} className="transform group-hover:translate-x-1.5 transition-transform duration-300" />
+                      <ArrowRight
+                        size={13}
+                        className="transition-transform duration-300"
+                        style={{ 
+                          transform: hoveredSlug === service.slug ? "translateX(5px)" : "translateX(0)",
+                          color: hoveredSlug === service.slug ? "#BF953F" : "inherit"
+                        }}
+                      />
                     </Link>
                   </div>
                 </motion.div>
@@ -702,48 +776,38 @@ function Services() {
             })}
           </div>
 
+
         </div>
       </section>
 
       {/* SECTION 4: FUNDING JOURNEY (TIMELINE JOURNEY) - STAYS DARK FOR DRAMATIC CONTRAST */}
-      <section className="py-24 bg-[#111111] relative">
+      <section className="py-16 bg-[#111111] relative">
         <ServicesParticles light={false} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-[#BF953F]">Execution Flow</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-white mt-1 font-serif">
+
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <span 
+              className="text-[11px] uppercase font-bold tracking-[0.2em] text-[#BF953F]"
+              style={{ fontFamily: "'Outfit', sans-serif" }}
+            >
+              Execution Flow
+            </span>
+            <h2 
+              className="text-2xl md:text-3xl font-bold text-white mt-1.5"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
               Structured Path to Funding
             </h2>
-            <p className="text-sm md:text-base text-gray-400 mt-3">
+            <p 
+              className="text-[14px] text-gray-400 mt-2.5 max-w-2xl mx-auto leading-relaxed"
+              style={{ fontFamily: "'Outfit', sans-serif" }}
+            >
               We minimize coordination loops to ensure your file transitions efficiently from audit to disbursal.
             </p>
           </div>
 
           <div className="relative">
-            {/* Connecting Pipeline SVG */}
-            <div className="hidden lg:block absolute top-[44px] left-[10%] right-[10%] h-1 pointer-events-none z-0">
-              <svg className="w-full h-full overflow-visible">
-                <line x1="0%" y1="2" x2="100%" y2="2" stroke="rgba(255,255,255,0.08)" strokeWidth="2" />
-                <motion.line 
-                  x1="0%" y1="2" x2="100%" y2="2" 
-                  stroke="url(#timelineGoldGradient)" 
-                  strokeWidth="2"
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                />
-                <defs>
-                  <linearGradient id="timelineGoldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#BF953F" />
-                    <stop offset="100%" stopColor="#D4AF37" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 relative z-10">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
               {[
                 { step: 1, title: "Consultation", desc: "Evaluate credit capacity, verify asset parameters, and match with the optimal lending mechanism." },
                 { step: 2, title: "Documentation", desc: "Compile tax returns, bank statements, and credentials without unnecessary bureau forms." },
@@ -760,28 +824,45 @@ function Services() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.08 }}
                     onMouseEnter={() => setActiveStep(idx)}
-                    className={`relative rounded-2xl border p-6 transition-all cursor-pointer z-10 ${
-                      isActive 
-                        ? "border-[#BF953F]/60 shadow-[0_10px_30px_rgba(191,149,63,0.08)] opacity-100" 
+                    className={`relative rounded-2xl border p-5 transition-all cursor-pointer z-10 ${isActive
+                        ? "border-[#BF953F]/60 shadow-[0_10px_30px_rgba(191,149,63,0.08)] opacity-100"
                         : "border-white/5 opacity-60 hover:opacity-100"
-                    }`}
+                      }`}
                     style={{
-                      background: isActive 
-                        ? "radial-gradient(circle at center, rgba(191,149,63,0.08) 0%, rgba(17,17,17,0.95) 100%)" 
+                      background: isActive
+                        ? "radial-gradient(circle at center, rgba(191,149,63,0.08) 0%, rgba(17,17,17,0.95) 100%)"
                         : "rgba(255,255,255,0.01)",
                       transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
                       transitionDuration: "500ms"
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <span className={`w-10 h-10 rounded-xl bg-[#BF953F]/10 border border-[#BF953F]/20 flex items-center justify-center text-sm font-bold text-[#BF953F] font-serif transform transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}>
+                      <span 
+                        className={`w-10 h-10 rounded-xl bg-[#BF953F]/10 border border-[#BF953F]/20 flex items-center justify-center text-sm font-bold text-[#BF953F] transform transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
+                      >
                         0{step.step}
                       </span>
-                      <span className="text-[10px] tracking-widest uppercase font-extrabold text-gray-500">Stage</span>
+                      <span 
+                        className="text-[10px] tracking-widest uppercase font-bold text-gray-500"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
+                      >
+                        Stage
+                      </span>
                     </div>
-                    
-                    <h3 className="text-base md:text-lg font-bold text-white mb-2">{step.title}</h3>
-                    <p className="text-xs md:text-sm text-gray-400 leading-relaxed font-light">{step.desc}</p>
+
+                    <h3 
+                      className="text-[17px] font-semibold text-white mb-2"
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p 
+                      className="text-[13px] text-gray-400 leading-relaxed font-normal"
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
+                    >
+                      {step.desc}
+                    </p>
                   </motion.div>
                 );
               })}
@@ -809,122 +890,64 @@ function Services() {
         </div>
       </section>
 
-      {/* SECTION 6: WHY CLIENTS CHOOSE US (BENTO GRID) */}
-      <section className="py-24 bg-white relative">
-        <ServicesParticles light={true} />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-[#BF953F]">Core Principles</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mt-1 font-serif">
-              Why Clients Choose GGE
-            </h2>
-            <p className="text-sm md:text-base text-gray-600 mt-3">
-              Our framework ensures rapid capital deployment, custom interest structures, and absolute alignment with borrower needs.
-            </p>
-          </div>
 
-          <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-            
-            {/* Bento Grid: 1st Card (6 cols) */}
-            <div className="lg:col-span-6 rounded-3xl border border-gray-200 bg-white p-8 space-y-4 hover:border-[#BF953F]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-center text-[#BF953F] shadow-sm">
-                <Zap size={20} />
-              </div>
-              <h3 className="text-lg font-bold font-serif text-gray-900">Rapid Financial Processing</h3>
-              <p className="text-sm text-gray-600 leading-relaxed font-light">
-                By maintaining pre-aligned syndication limits and custom assessment software, we cut audit cycles by 70%. Decisions are delivered in 24-48 hours.
-              </p>
-            </div>
-
-            {/* Bento Grid: 2nd Card (6 cols) - DARK FOR CONTRAST ACCENT */}
-            <div className="lg:col-span-6 rounded-3xl border border-[#BF953F]/20 bg-gradient-to-br from-[#111111] via-[#0d0d0d] to-[#0a0a0a] p-8 space-y-4 hover:border-[#BF953F]/40 hover:shadow-2xl transition-all duration-300 relative overflow-hidden shadow-lg">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-[#BF953F]/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#BF953F] relative z-10">
-                <Network size={20} />
-              </div>
-              <h3 className="text-lg font-bold font-serif text-white relative z-10">Strong Lender Network</h3>
-              <p className="text-sm text-gray-300 leading-relaxed font-light relative z-10">
-                Our operations integrate directly with 20+ nationalized public banks, private commercial lenders, and premier boutique NBFC debt funds.
-              </p>
-            </div>
-
-            {/* Bento Grid: 3rd Card (4 cols) */}
-            <div className="lg:col-span-4 rounded-3xl border border-gray-200 bg-white p-8 space-y-4 hover:border-[#BF953F]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-center text-[#BF953F] shadow-sm">
-                <Scale size={20} />
-              </div>
-              <h3 className="text-lg font-bold font-serif text-gray-900">Customized Solutions</h3>
-              <p className="text-xs text-gray-600 leading-relaxed font-light">
-                We reject boilerplate lending. Every loan is mapped specifically to match debtor cycle realities, capital expenditure projections, and cash flow timings.
-              </p>
-            </div>
-
-            {/* Bento Grid: 4th Card (4 cols) */}
-            <div className="lg:col-span-4 rounded-3xl border border-gray-200 bg-white p-8 space-y-4 hover:border-[#BF953F]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-center text-[#BF953F] shadow-sm">
-                <Lightbulb size={20} />
-              </div>
-              <h3 className="text-lg font-bold font-serif text-gray-900">Funding Expertise</h3>
-              <p className="text-xs text-gray-600 leading-relaxed font-light">
-                Our credit desks are managed by seasoned corporate finance directors with decade-long experience in infrastructure project bidding and structured debt.
-              </p>
-            </div>
-
-            {/* Bento Grid: 5th Card (4 cols) */}
-            <div className="lg:col-span-4 rounded-3xl border border-gray-200 bg-white p-8 space-y-4 hover:border-[#BF953F]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-center text-[#BF953F] shadow-sm">
-                <ShieldCheck size={20} />
-              </div>
-              <h3 className="text-lg font-bold font-serif text-gray-900">Transparent Progress</h3>
-              <p className="text-xs text-gray-600 leading-relaxed font-light">
-                No hidden commissions, processing traps, or undisclosed rate revisions. Every sanction matches the exact parameters listed in our initial term-sheet.
-              </p>
-            </div>
-
-          </div>
-
+      {/* SECTION 7: ELEGANT SINGLE CTA STRATEGY - LIGHT THEME WITH BACKGROUND IMAGE */}
+      <section id="cta-enquire" className="py-24 relative overflow-hidden bg-white">
+        {/* Background image & light blur overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/blog3.jpeg" 
+            alt="Advisory Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         </div>
-      </section>
 
-      {/* SECTION 7: ELEGANT SINGLE CTA STRATEGY - STAYS DARK FOR PREMIUM CONTRAST */}
-      <section id="cta-enquire" className="py-24 bg-[#0a0a0a] relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#BF953F] opacity-[0.03] rounded-full blur-[100px] pointer-events-none" />
-        
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="rounded-[2.5rem] border border-white/10 bg-gradient-to-r from-[#111111] via-[#0a0a0a] to-[#111111] p-8 md:p-12 lg:p-16 shadow-2xl relative overflow-hidden">
-            
-            {/* Background geometric design */}
-            <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full border border-white/5 pointer-events-none" />
-            <div className="absolute -right-12 -bottom-12 w-72 h-72 rounded-full border border-[#BF953F]/5 pointer-events-none" />
+          <div className="rounded-[2.5rem] border border-gray-200/80 bg-white/75 p-8 md:p-12 lg:p-16 shadow-2xl relative overflow-hidden backdrop-blur-md">
+
+            {/* Background geometric design - lightened */}
+            <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full border border-gray-900/5 pointer-events-none" />
+            <div className="absolute -right-12 -bottom-12 w-72 h-72 rounded-full border border-[#BF953F]/10 pointer-events-none" />
 
             <div className="grid lg:grid-cols-12 gap-10 items-center">
-              
+
               {/* Left Column: Context */}
               <div className="lg:col-span-7 space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#BF953F]/10 border border-[#BF953F]/20 text-xs font-bold text-[#BF953F] uppercase tracking-wider">
+                <div 
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#BF953F]/15 border border-[#BF953F]/35 text-xs font-bold text-[#B38728] uppercase tracking-wider"
+                  style={{ fontFamily: "'Outfit', sans-serif" }}
+                >
                   <ShieldCheck size={14} className="mt-0.5" />
                   Premium Advisory Panel
                 </div>
-                
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight font-serif">
+
+                <h2 
+                  className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight font-serif"
+                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                >
                   Discuss Your Credit Portfolio
                 </h2>
-                
-                <p className="text-sm md:text-base text-gray-300 leading-relaxed font-light">
+
+                <p 
+                  className="text-sm md:text-base text-gray-600 leading-relaxed font-normal"
+                  style={{ fontFamily: "'Outfit', sans-serif" }}
+                >
                   Speak directly with an expert credit director to evaluate transaction sizes, balance sheet parameters, or private debt allocations. We ensure speed, confidentiality, and structured execution.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
                   <a
-                    href="tel:+919999999999"
+                    href="tel:+919843693697"
                     className="flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black px-6 py-3.5 text-sm font-extrabold hover:bg-opacity-95 shadow-[0_12px_24px_rgba(191,149,63,0.15)] transition"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Call Advisory Desk
                   </a>
                   <a
-                    href="mailto:partner@ggefinance.com"
-                    className="flex items-center justify-center gap-2 rounded-xl bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 text-sm font-extrabold border border-white/10 transition"
+                    href="mailto:ggenterprises.fin@gmail.com"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-white/80 hover:bg-gray-100 text-gray-900 px-6 py-3.5 text-sm font-extrabold border border-gray-300 shadow-sm transition"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
                   >
                     Email Business Proposal
                   </a>
@@ -933,16 +956,29 @@ function Services() {
 
               {/* Right Column: Secure Form */}
               <div className="lg:col-span-5">
-                <div className="rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-6 md:p-8 backdrop-blur shadow-xl relative">
-                  
-                  <h3 className="text-lg font-bold text-white mb-2 font-serif">Secure Inquiry</h3>
-                  <p className="text-xs text-gray-400 mb-5">
+                <div className="rounded-3xl border border-gray-200/80 bg-white/95 p-6 md:p-8 shadow-xl relative backdrop-blur-sm">
+
+                  <h3 
+                    className="text-lg font-bold text-gray-900 mb-2 font-serif"
+                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                  >
+                    Secure Inquiry
+                  </h3>
+                  <p 
+                    className="text-xs text-gray-500 mb-5"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                  >
                     Submit secure details for direct underwriting response.
                   </p>
 
                   <form onSubmit={handleSubmitLead} className="space-y-4">
                     <div>
-                      <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1.5 tracking-wider">FullName</label>
+                      <label 
+                        className="block text-[10px] uppercase font-bold text-gray-500 mb-1.5 tracking-wider"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
+                      >
+                        FullName
+                      </label>
                       <input
                         type="text"
                         name="name"
@@ -950,13 +986,19 @@ function Services() {
                         value={leadState.name}
                         onChange={(e) => setLeadState((s) => ({ ...s, name: e.target.value }))}
                         placeholder="John Doe"
-                        className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                        className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
                       />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1.5 tracking-wider">Phone</label>
+                        <label 
+                          className="block text-[10px] uppercase font-bold text-gray-500 mb-1.5 tracking-wider"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                          Phone
+                        </label>
                         <input
                           type="tel"
                           name="phone"
@@ -964,11 +1006,17 @@ function Services() {
                           value={leadState.phone}
                           onChange={(e) => setLeadState((s) => ({ ...s, phone: e.target.value }))}
                           placeholder="+91 99999 99999"
-                          className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                          className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1.5 tracking-wider">Email</label>
+                        <label 
+                          className="block text-[10px] uppercase font-bold text-gray-500 mb-1.5 tracking-wider"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                          Email
+                        </label>
                         <input
                           type="email"
                           name="email"
@@ -976,30 +1024,57 @@ function Services() {
                           value={leadState.email}
                           onChange={(e) => setLeadState((s) => ({ ...s, email: e.target.value }))}
                           placeholder="partner@company.com"
-                          className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                          className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1.5 tracking-wider">Inquiry Notes</label>
+                      <label 
+                        className="block text-[10px] uppercase font-bold text-gray-500 mb-1.5 tracking-wider"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
+                      >
+                        Inquiry Notes
+                      </label>
                       <textarea
                         name="notes"
                         rows="3"
                         value={leadState.notes}
                         onChange={(e) => setLeadState((s) => ({ ...s, notes: e.target.value }))}
                         placeholder="Detail your requirements here..."
-                        className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition resize-none"
+                        className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition resize-none"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black py-3 text-xs md:text-sm font-extrabold hover:bg-opacity-90 transition"
+                      disabled={isSubmitting}
+                      className={`w-full flex items-center justify-center gap-2 rounded-xl bg-[#BF953F] text-black py-3 text-xs md:text-sm font-extrabold hover:bg-opacity-90 shadow-[0_4px_12px_rgba(191,149,63,0.15)] transition ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      style={{ fontFamily: "'Outfit', sans-serif" }}
                     >
-                      <span>Transmit Request File</span>
-                      <ArrowRight size={16} />
+                      {isSubmitting ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Transmit Request File</span>
+                          <ArrowRight size={16} />
+                        </>
+                      )}
                     </button>
+
+                    {submitError && (
+                      <p className="text-red-500 text-xs text-center mt-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                        {submitError}
+                      </p>
+                    )}
 
                     <AnimatePresence>
                       {isSubmitted && (
@@ -1007,11 +1082,19 @@ function Services() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          className="absolute inset-0 bg-[#0B1423] rounded-3xl flex flex-col items-center justify-center p-6 text-center border border-[#BF953F]/30"
+                          className="absolute inset-0 bg-white/95 rounded-3xl flex flex-col items-center justify-center p-6 text-center border border-[#BF953F]/35 z-20 shadow-lg"
                         >
                           <CheckCircle2 size={40} className="text-[#BF953F] mb-3" />
-                          <h4 className="text-base font-bold text-white">Transmission Completed</h4>
-                          <p className="text-xs text-gray-400 mt-2 max-w-xs leading-relaxed">
+                          <h4 
+                            className="text-base font-bold text-gray-900"
+                            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                          >
+                            Transmission Completed
+                          </h4>
+                          <p 
+                            className="text-xs text-gray-500 mt-2 max-w-xs leading-relaxed"
+                            style={{ fontFamily: "'Outfit', sans-serif" }}
+                          >
                             Your secure inquiry has been logged. Our corporate relationship director will call you shortly.
                           </p>
                         </motion.div>

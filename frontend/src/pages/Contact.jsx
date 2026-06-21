@@ -39,11 +39,11 @@ function useReveal() {
 }
 
 /* ── Data ── */
-const PHONE_PRIMARY = { display: "+91 75500 14333", tel: "+917550014333" };
+const PHONE_PRIMARY = { display: "+91 98436 93697", tel: "+919843693697" };
 const PHONE_SECONDARY = { display: "+91 98410 98167", tel: "+919841098167" };
-const EMAIL_PRIMARY = "tridentcapitalservices@gmail.com";
-const EMAIL_SECONDARY = "naliniprabhu2017@gmail.com";
-const WHATSAPP_NUM = "917550014333";
+const EMAIL_PRIMARY = "ggenterprises.fin@gmail.com";
+const EMAIL_SECONDARY = "tridentcapitalservices@gmail.com";
+const WHATSAPP_NUM = "919843693697";
 
 const INFO_CARDS = [
   {
@@ -54,7 +54,7 @@ const INFO_CARDS = [
       { text: PHONE_PRIMARY.display, href: `tel:${PHONE_PRIMARY.tel}`, tag: "Primary" },
       { text: PHONE_SECONDARY.display, href: `tel:${PHONE_SECONDARY.tel}`, tag: "Support" },
     ],
-    note: "Mon – Fri  9 AM – 7 PM  ·  Sat 9 AM – 2 PM",
+    note: "Mon – Sat  9 AM – 7 PM",
     action: { label: "Tap to Call", href: `tel:${PHONE_PRIMARY.tel}` },
   },
   {
@@ -73,9 +73,26 @@ const INFO_CARDS = [
     label: "Visit Us",
     accentColor: "#c9a227",
     items: [
-      { text: "No 6/7, Near CSI Ewart School," },
-      { text: "Santham Colony, Anna Nagar West Extension," },
-      { text: "Chennai – 600101, Tamil Nadu" },
+      {
+        text: (
+          <>
+            <span style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: "#BF953F", marginBottom: "4px" }}>Office 1 (Registered)</span>
+            No 6/7, Near CSI Ewart School,<br />
+            Santham Colony, Anna Nagar West Ext.,<br />
+            Chennai – 600101, Tamil Nadu
+          </>
+        )
+      },
+      {
+        text: (
+          <>
+            <span style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: "#BF953F", marginTop: "12px", marginBottom: "4px" }}>Office 2 (Branch)</span>
+            138, Avvai St, Tiruvalleeswarar Nagar,<br />
+            Thirumangalam, Anna Nagar West Ext.,<br />
+            Chennai – 600040, Tamil Nadu
+          </>
+        )
+      }
     ],
     note: "By prior appointment only",
     action: {
@@ -89,8 +106,7 @@ const INFO_CARDS = [
     label: "Business Hours",
     accentColor: "#a07828",
     items: [
-      { text: "Monday – Friday  ·  9:00 AM – 7:00 PM" },
-      { text: "Saturday  ·  9:00 AM – 2:00 PM" },
+      { text: "Monday – Saturday  ·  9:00 AM – 7:00 PM" },
       { text: "Sunday  ·  Closed" },
     ],
     note: "Also closed on public holidays",
@@ -104,7 +120,7 @@ const SCHEDULE = [
   { day: "Wednesday", short: "Wed", time: "9:00 AM – 7:00 PM", open: true },
   { day: "Thursday", short: "Thu", time: "9:00 AM – 7:00 PM", open: true },
   { day: "Friday", short: "Fri", time: "9:00 AM – 7:00 PM", open: true },
-  { day: "Saturday", short: "Sat", time: "9:00 AM – 2:00 PM", open: true },
+  { day: "Saturday", short: "Sat", time: "9:00 AM – 7:00 PM", open: true },
   { day: "Sunday", short: "Sun", time: "Closed", open: false },
 ];
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -123,8 +139,8 @@ function getCurrentStatus(today) {
   const currentTimeInMinutes = hours * 60 + minutes;
 
   const openTime = 9 * 60; // 9:00 AM
-  const closeTime = (currentDayName === "Saturday") ? 14 * 60 : 19 * 60; // 2:00 PM or 7:00 PM
-  const closeDisplay = (currentDayName === "Saturday") ? "2:00 PM" : "7:00 PM";
+  const closeTime = 19 * 60; // 7:00 PM
+  const closeDisplay = "7:00 PM";
 
   if (currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime) {
     return { text: "Open Now", isColorGreen: true, details: `Closes at ${closeDisplay}` };
@@ -151,6 +167,17 @@ export default function Contact() {
 
   useEffect(() => {
     document.title = "Contact Us | Golden Globe Enterprises — Private Finance & Business Loans";
+    
+    // Auto-scroll to form section if focus query is present
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("focus") === "form") {
+      setTimeout(() => {
+        const formEl = document.querySelector(".form-section");
+        if (formEl) {
+          formEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 300);
+    }
   }, []);
 
   const validate = () => {
@@ -196,14 +223,55 @@ export default function Contact() {
   };
   const prev = () => { if (step > 1) setStep(step - 1); };
 
-  const submit = () => {
+  const submit = async () => {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: form.name,
+          phoneNumber: form.phone,
+          email: form.email,
+          serviceType: form.service || "Other / General Enquiry",
+          message: form.message,
+          source: "Website"
+        }),
+      });
+
+      let data = {};
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json().catch(() => ({}));
+      } else {
+        const text = await response.text().catch(() => "");
+        data = { message: text || `Server error (${response.status})` };
+      }
+
+      if (!response.ok) {
+        if (data.errors && Array.isArray(data.errors)) {
+          const fieldErrors = {};
+          data.errors.forEach((err) => {
+            const field = err.field === "fullName" ? "name" : (err.field === "phoneNumber" ? "phone" : err.field);
+            fieldErrors[field] = err.message;
+          });
+          setErrors(fieldErrors);
+        } else {
+          setErrors({ submit: data.message || "Something went wrong. Please try again." });
+        }
+      } else {
+        setSubmitted(true);
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      setErrors({ submit: "Connection failed. Please check your network and try again." });
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-    }, 1200);
+    }
   };
 
   const set = (k, v) => {
@@ -262,8 +330,8 @@ export default function Contact() {
           <div className="contact-hero-pills">
             <a href={`https://wa.me/${WHATSAPP_NUM}?text=Hi%20Golden%20Globe%20team%2C%20I%20need%20help%20with%20funding.`}
               target="_blank" rel="noopener noreferrer" className="pill-wa">
-              <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor">
-                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.709 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
               WhatsApp Us
             </a>
@@ -383,7 +451,7 @@ export default function Contact() {
                 <p>Thank you for reaching out. A specialist will contact you within 2 hours on business days.</p>
                 <div className="form-success-actions">
                   <a href={`https://wa.me/${WHATSAPP_NUM}?text=Hi%20Golden%20Globe%2C%20I%20just%20submitted%20an%20enquiry.`} target="_blank" rel="noopener noreferrer" className="form-success-wa">
-                    <svg viewBox="0 0 32 32" width="15" height="15" fill="currentColor"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" /></svg>
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.709 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
                     Chat on WhatsApp Instead
                   </a>
                   <button onClick={() => { setSubmitted(false); setStep(1); setForm({ name: "", phone: "", email: "", service: "", message: "" }); setErrors({}); }} className="form-success-reset">
@@ -489,6 +557,12 @@ export default function Contact() {
                   </div>
                 )}
 
+                {errors.submit && (
+                  <p className="form-error submit-err" role="alert" style={{ marginBottom: "1.5rem", textAlign: "center", color: "#ef4444" }}>
+                    {errors.submit}
+                  </p>
+                )}
+
                 <div className="form-nav">
                   {step > 1 && (
                     <button onClick={prev} className="btn-prev" type="button">← Back</button>
@@ -549,8 +623,8 @@ export default function Contact() {
                   className="qc-link qc-wa"
                 >
                   <span className="qc-link-left">
-                    <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor">
-                      <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.709 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                     WhatsApp — Priority Support
                   </span>
@@ -697,8 +771,8 @@ export default function Contact() {
               rel="noopener noreferrer"
               className="cta-wa"
             >
-              <svg viewBox="0 0 32 32" width="15" height="15" fill="currentColor">
-                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.709 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
               WhatsApp
             </a>
@@ -717,8 +791,8 @@ export default function Contact() {
         className="wa-float"
         aria-label="Chat on WhatsApp"
       >
-        <svg viewBox="0 0 32 32" width="28" height="28" fill="#fff">
-          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.027 7.8L0 32l8.437-2.01A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm7.894 22.322c-.33.927-1.94 1.77-2.66 1.883-.68.108-1.54.153-2.486-.157a22.83 22.83 0 01-2.25-.832C13.1 21.8 10.64 19.1 10.3 18.67c-.34-.43-2.77-3.68-2.77-7.02 0-3.34 1.75-4.97 2.37-5.65.62-.68 1.35-.85 1.8-.85.45 0 .9.004 1.29.024.415.02.97-.158 1.52 1.16.57 1.35 1.94 4.69 2.11 5.03.17.34.28.74.055 1.19-.226.45-.34.73-.676 1.12-.337.4-.71.893-.676 1.35.34.453 1.52 2.01 3.26 3.26 2.24 1.58 4.13 2.07 4.72 2.3.59.227.93.19 1.27-.113.34-.3 1.46-1.7 1.85-2.29.39-.59.79-.49 1.33-.3.54.19 3.42 1.61 4.01 1.9.59.29.98.43 1.12.67.145.24.145 1.39-.183 2.32z" />
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.709 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
         </svg>
         <span className="wa-tooltip">Chat on WhatsApp</span>
       </a>

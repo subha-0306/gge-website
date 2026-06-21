@@ -1,9 +1,12 @@
 import { useEffect, useRef, useCallback, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ShieldCheck, Handshake, Briefcase, Clock,
   Building2, Factory, Landmark, HandCoins, FileCheck,
   ChevronDown, Phone, Mail, MapPin, ArrowRight,
   TrendingUp, CheckCircle2, Award, Zap, Globe2,
+  CarFront, Wallet,
 } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay, EffectFade, EffectCoverflow } from "swiper/modules";
@@ -52,7 +55,8 @@ const HERO_SLIDES = [
   },
   {
     isSlide3Custom: true,
-    bannerSrc: "/hero-bg-3-new.png"
+    bannerSrc: "/carousel-slide-3.png",
+    bannerSrcMobile: "/carousel-slide-3-mobile.png"
   },
 ];
 
@@ -67,35 +71,71 @@ const WHY_CARDS = [
 /* ─── Services ────────────────────────────────────────────── */
 const SERVICES = [
   {
-    icon: HandCoins, title: "Private Finance", featured: true,
-    desc: "Fast-track private funding with flexible structuring, confidential processing, and zero bureaucratic delays.",
-    points: ["Rapid approval & disbursement", "Flexible private structuring", "Confidential & professional"],
+    icon: HandCoins,
+    title: "Private Finance",
+    featured: true,
+    desc: "Fast-track private funding with flexible structuring for urgent business and personal capital requirements.",
+    points: [
+      "No CIBIL requirement",
+      "Cheque-based funding available",
+      "24–48 hour disbursement",
+      "Flexible tenure from 3–15 months"
+    ],
+    path: "/services/private-finance",
+    bottomTag: "PRIVATE & CONFIDENTIAL FUNDING"
   },
   {
-    icon: Building2, title: "Business Loans",
-    desc: "Structured business loans with competitive rates designed to fuel expansion and operational growth.",
-    points: ["Competitive interest rates", "Flexible repayment options", "Fast approval process"],
+    icon: Building2,
+    title: "Business Loans",
+    desc: "Structured funding solutions through leading banks and NBFC partners for business growth and expansion.",
+    points: [
+      "Competitive interest rates",
+      "Higher loan eligibility",
+      "Flexible repayment options",
+      "Expert documentation support"
+    ],
+    path: "/services/business-loans",
+    bottomTag: "BANK & NBFC NETWORK"
   },
   {
-    icon: FileCheck, title: "Cheque Based Finance",
-    desc: "Short-term liquidity solutions backed by cheque-based instruments with transparent documentation.",
-    points: ["Flexible structuring", "Short-term liquidity support", "Transparent documentation"],
+    icon: Briefcase,
+    title: "Professional Loans",
+    desc: "Dedicated financing solutions designed for doctors, chartered accountants, consultants, architects, and other professionals.",
+    points: [
+      "Unsecured funding options",
+      "Preferential interest rates",
+      "Higher eligibility limits",
+      "Quick approval process"
+    ],
+    path: "/services/professional-loans",
+    bottomTag: "PROFESSIONAL FINANCE SOLUTIONS"
   },
   {
-    icon: Landmark, title: "Loan Against Property",
-    desc: "Unlock the value of your assets with higher funding limits and competitive tenure options.",
-    points: ["Higher funding limits", "Asset-backed security", "Competitive tenure options"],
+    icon: CarFront,
+    title: "Car Refinance",
+    desc: "Unlock the value of your vehicle with rapid refinancing solutions and enhanced funding eligibility.",
+    points: [
+      "Up to 200% of IDV funding",
+      "Minimal documentation",
+      "Fast approval process",
+      "Funding within 48 hours"
+    ],
+    path: "/services/car-refinance",
+    bottomTag: "UP TO 200% IDV FUNDING"
   },
   {
-    icon: Factory, title: "Machinery Loans",
-    desc: "Equipment and machinery financing built around expansion timelines and industrial growth needs.",
-    points: ["Equipment financing support", "Expansion-driven structuring", "Quick processing timelines"],
-  },
-  {
-    icon: Briefcase, title: "Professional Loans",
-    desc: "Designed for doctors, CAs, architects, and other professionals requiring growth-oriented capital.",
-    points: ["Minimal documentation", "Growth-oriented funding", "Tailored for professionals"],
-  },
+    icon: Wallet,
+    title: "Working Capital Solutions",
+    desc: "Comprehensive working capital facilities designed to support daily operations, trade, and business expansion.",
+    points: [
+      "Overdraft (OD) facilities",
+      "Cash Credit (CC) limits",
+      "Bank Guarantees (BG)",
+      "Letter of Credit (LC) & Packing Credit"
+    ],
+    path: "/services/working-capital-solutions",
+    bottomTag: "OD • CC • BG • LC FACILITIES"
+  }
 ];
 
 /* ─── Process steps ───────────────────────────────────────── */
@@ -108,13 +148,16 @@ const STEPS = [
 
 /* ─── Testimonials ────────────────────────────────────────── */
 const TESTIMONIALS = [
-  { name: "Rajesh Kumar", role: "Manufacturing Business Owner", text: "Golden Globe structured the funding we needed to expand our manufacturing unit and secure a major supply contract. The process was seamless." },
-  { name: "Meera Sharma", role: "Retail Business Owner", text: "The team helped us secure funding quickly to expand retail operations across multiple locations. Highly professional throughout." },
-  { name: "Arjun Patel", role: "Construction Contractor", text: "Fast approval helped us secure equipment financing for our construction projects without a single delay. Exceptional service." },
-  { name: "Vikram Singh", role: "Logistics Entrepreneur", text: "Professional guidance and structured solutions helped us scale our logistics operations significantly within months." },
-  { name: "Karan Mehta", role: "Trading Company Owner", text: "Transparent communication and flexible financing options made a real difference to our trading business expansion." },
-  { name: "Dr. Ananya Rao", role: "Healthcare Entrepreneur", text: "Their financial team helped us secure capital quickly to expand our clinic operations. Reliable, professional, and efficient." },
+  { name: "S Kumar", role: "Manufacturing Business Owner", text: "Golden Globe Enterprises provided the funding support we needed at a critical stage of expansion. Their process was seamless, transparent, and highly efficient." },
+  { name: "Ashfaq", role: "Founder & Managing Director", text: "The team understood our requirements immediately and structured a financing solution that helped us scale operations without delays." },
+  { name: "Sathish", role: "Logistics Company Owner", text: "Their professional approach and quick turnaround enabled us to secure capital exactly when our business needed it most." },
+  { name: "Muthu Raman", role: "Industrial Entrepreneur", text: "From consultation to disbursement, the entire experience was smooth and dependable. A trusted financial partner for growing businesses." },
+  { name: "Ramanathan", role: "Business Founder", text: "Golden Globe Enterprises helped us unlock new growth opportunities through customized funding solutions tailored to our business goals." },
+  { name: "Ganesh", role: "Real Estate Developer", text: "Their expertise in structured financing allowed us to expand confidently while maintaining financial stability and operational momentum." },
+  { name: "David", role: "CEO & Business Owner", text: "What impressed us most was their commitment to understanding our business and delivering the right funding strategy at the right time." },
+  { name: "Jayabalan", role: "Trading Company Founder", text: "Reliable, responsive, and professional. Their support played a significant role in helping us achieve our expansion objectives." },
 ];
+
 
 /* ════════════════════════════════════════════════════════════ */
 /* ─── Why Choose Us Component ──────────────────────────────── */
@@ -208,7 +251,7 @@ function WhyChooseUs() {
   return (
     <section
       ref={sectionRef}
-      className="py-16 relative overflow-hidden"
+      className="py-10 relative overflow-hidden"
     >
       {/* ── Canvas gold-dust particles ── */}
       <canvas
@@ -229,15 +272,16 @@ function WhyChooseUs() {
       <div className="max-w-7xl mx-auto px-8 relative" style={{ zIndex: 3 }}>
 
         {/* ── Header ── */}
-        <div className="text-center mb-12 reveal">
+        <div className="text-center mb-8 reveal">
           <p
-            className="uppercase font-bold mb-4 tracking-[0.38em]"
+            className="uppercase font-bold mb-3 tracking-[0.42em]"
             style={{
-              fontFamily: "'Cormorant Garamond', 'Georgia', serif",
-              fontSize: "1.1rem",
-              letterSpacing: "0.38em",
-              color: "#997300", // Deeper gold
-              textShadow: "0px 1px 2px rgba(255,255,255,0.9)", // Crisp white separation
+              fontFamily: "'Playfair Display', 'Cormorant Garamond', 'Georgia', serif",
+              fontSize: "1.35rem",
+              fontWeight: 800,
+              letterSpacing: "0.42em",
+              color: "#a67c00", // Rich gold
+              textShadow: "0 0 15px rgba(212,175,55,0.65), 0 1px 2px rgba(255,255,255,1)", // Gorgeous gold glow
             }}
           >
             Why Golden Globe
@@ -248,9 +292,10 @@ function WhyChooseUs() {
               fontFamily: "'Playfair Display', 'Georgia', serif",
               fontSize: "clamp(2rem, 4vw, 3rem)",
               letterSpacing: "-0.025em",
+              marginTop: "0.5rem",
             }}
           >
-            Built on Trust.{" "}
+            Built on Trust{" "}
             <span style={{ filter: "drop-shadow(0px 1px 1px rgba(255,255,255,0.8))" }}>
               <span
                 style={{
@@ -260,12 +305,12 @@ function WhyChooseUs() {
                   backgroundClip: "text",
                 }}
               >
-                Driven by Results.
+                Driven by Results
               </span>
             </span>
           </h2>
           <p
-            className="mt-6 max-w-lg mx-auto leading-relaxed"
+            className="mt-4 max-w-lg mx-auto leading-relaxed"
             style={{
               fontSize: "1.05rem",
               fontFamily: "'Lato', 'Helvetica Neue', sans-serif",
@@ -305,15 +350,15 @@ function WhyChooseUs() {
                   ref={el => cardRefs.current[i] = el}
                   className="relative h-full cursor-default"
                   style={{
-                    background: card.featured ? "#0d0d0d" : "rgba(255,255,255,0.85)",
-                    backdropFilter: card.featured ? "none" : "blur(8px)",
+                    background: card.featured ? "#0d0d0d" : "rgba(255,255,255,0.92)",
+                    backdropFilter: card.featured ? "none" : "blur(12px)",
                     padding: "2.25rem",
                     transformStyle: "preserve-3d",
                     transition: "transform 0.22s cubic-bezier(0.23,1,0.32,1), box-shadow 0.22s ease",
                     willChange: "transform",
                     boxShadow: card.featured
-                      ? "0 12px 48px rgba(212,175,55,0.14), 0 4px 12px rgba(0,0,0,0.3)"
-                      : "0 6px 32px rgba(0,0,0,0.07)",
+                      ? "0 12px 48px rgba(212, 175, 55, 0.25), 0 0 20px rgba(212, 175, 55, 0.12)"
+                      : "0 8px 32px rgba(212, 175, 55, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04)",
                   }}
                   onMouseMove={e => handleMouseMove(e, i)}
                   onMouseLeave={() => handleMouseLeave(i)}
@@ -362,7 +407,8 @@ function WhyChooseUs() {
                     className={`font-bold mb-3 ${card.featured ? "text-white" : "text-gray-900"}`}
                     style={{
                       fontFamily: "'Playfair Display', 'Georgia', serif",
-                      fontSize: "1.3rem",
+                      fontSize: "1.45rem",
+                      fontWeight: 700,
                       letterSpacing: "-0.015em",
                     }}
                   >
@@ -373,19 +419,20 @@ function WhyChooseUs() {
                   <div
                     className="mb-5"
                     style={{
-                      width: 36,
-                      height: 1,
+                      width: 48,
+                      height: 1.5,
                       background: "linear-gradient(90deg, #d4af37 0%, transparent 100%)",
                     }}
                   />
 
                   {/* Desc */}
                   <p
-                    className={card.featured ? "text-gray-400" : "text-gray-500"}
+                    className={card.featured ? "text-gray-300" : "text-slate-700"}
                     style={{
-                      fontSize: "0.9rem",
-                      fontFamily: "'Lato', 'Helvetica Neue', sans-serif",
-                      lineHeight: "1.8",
+                      fontSize: "0.98rem",
+                      fontFamily: "'Outfit', 'Lato', sans-serif",
+                      fontWeight: 500,
+                      lineHeight: "1.75",
                     }}
                   >
                     {card.desc}
@@ -457,9 +504,9 @@ function Home() {
       const rect = processRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Calculate progress starting slightly lower and finishing much faster
-      const start = rect.top - windowHeight * 0.65;
-      const end = rect.height * 0.55;
+      // Spans the transition over a larger portion of the viewport/section scroll
+      const start = rect.top - windowHeight * 0.7;
+      const end = rect.height * 0.9;
       const progress = Math.max(0, Math.min(1, -start / end));
       setScrollProgress(progress);
 
@@ -509,202 +556,237 @@ function Home() {
         >
           {HERO_SLIDES.map((slide, i) => (
             <SwiperSlide key={i} className="relative h-full w-full">
-              {/* Background */}
-              <div className="absolute inset-0">
-                <img
-                  src={slide.isSlide3Custom ? slide.bannerSrc : slide.isLightBackground ? "/hero-bg-1-new.png" : `/hero-bg-${i + 1}.jpg`}
-                  alt=""
-                  className={`h-full w-full object-cover ${slide.isLightBackground ? "bg-[#fcfaf6]" : ""} ${i === 0 ? "opacity-100 object-[center_top]"
-                      : i === 1 ? "opacity-100 object-center"
-                        : "opacity-100 object-[center_top]"
-                    }`}
-                  onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = slide.isLightBackground ? "#fcfaf6" : "#0a0a0a"; }}
-                />
-                {/* Gradient overlay — tailored per slide */}
-                {slide.isLightBackground || slide.isSlide3Custom ? null : i === 0 ? (
-                  <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-                  </>
-                ) : i === 1 ? (
-                  <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/60 to-black/15" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
-                  </>
-                ) : (
-                  <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-black/20" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
-                  </>
-                )}
-              </div>
+              {slide.isSlide3Custom ? (
+                <div className="absolute inset-0 w-full h-full bg-[#fcfaf6] overflow-hidden">
+                  {/* Desktop Slide 3 Container */}
+                  <div className="hidden md:block absolute inset-0">
+                    <div
+                      className="absolute right-0 top-1/2"
+                      style={{
+                        aspectRatio: "1810/869",
+                        minWidth: "100%",
+                        minHeight: "100%",
+                        transform: "translateY(-51.2%) scale(0.985)",
+                      }}
+                    >
+                      <img
+                        src={slide.bannerSrc}
+                        alt="Golden Globe Private Finance"
+                        className="h-full w-full object-cover slide3-bg-img"
+                        onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#fcfaf6"; }}
+                      />
 
-              {/* Slide content */}
-              <div className="relative z-10 h-full max-w-7xl mx-auto px-8 flex flex-col justify-center">
-                {slide.isSlide3Custom ? (
-                  <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-[8%]">
-                    {/* The textual content aligned to the right half */}
-                    <div className="w-full flex justify-end pb-12 pt-8">
-                      <div className="max-w-[550px] flex flex-col items-end text-right relative">
-                        
-                        {/* Circle Badge */}
-                        <div className="absolute -top-12 -left-12 bg-black rounded-full border-4 border-[#d4af37] w-[90px] h-[90px] flex flex-col items-center justify-center text-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.4)] z-10">
-                          <span className="text-[1.3rem] font-bold leading-[1]">NO</span>
-                          <span className="text-[1.1rem] font-bold leading-[1]">CIBIL</span>
-                          <span className="text-[0.45rem] font-bold tracking-widest mt-1 text-white uppercase">Required</span>
-                        </div>
-
-                        {/* Speech Bubble / Banner */}
-                        <div className="bg-[#cca740] px-6 py-2.5 rounded text-black font-bold text-lg md:text-xl mb-6 shadow-md inline-block transform -skew-x-6 relative">
-                          <div className="transform skew-x-6">
-                            வளர்ச்சி தடைபடக் கூடாது,<br/>நிதி கைக்கு வரட்டும்!
-                          </div>
-                          {/* Triangle tail */}
-                          <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-[#cca740] transform rotate-45 skew-x-6"></div>
-                        </div>
-
-                        {/* English Text Content */}
-                        <div className="flex flex-col items-end w-full">
-                          <span className="text-gray-800 font-bold tracking-[0.15em] uppercase text-sm mb-1">Have a turnover of</span>
-                          
-                          <div className="flex items-center text-black font-black text-[3rem] md:text-[4rem] leading-none mb-3">
-                            <span className="text-[#cca740] mr-3 text-4xl md:text-5xl">₹</span> 25 LAKHS?
-                          </div>
-                          
-                          <span className="text-gray-800 font-bold text-xl md:text-2xl mt-2 mb-2">Get up to</span>
-                          
-                          <div className="flex items-baseline bg-[#151515] px-6 py-1.5 shadow-xl skew-x-[-8deg] mb-3">
-                            <span className="text-[#cca740] font-black text-3xl md:text-4xl mr-2 skew-x-[8deg]">₹</span>
-                            <span className="text-[#cca740] font-black text-[3rem] md:text-[4rem] leading-none skew-x-[8deg]">25 CRORES</span>
-                          </div>
-                          
-                          <span className="text-black font-bold text-2xl tracking-wide mb-6">Private Finance</span>
-                        </div>
-
-                        {/* Feature Box at Bottom Right */}
-                        <div className="border border-[#cca740]/40 bg-[#f8f6ee]/90 px-5 py-3 rounded-xl flex items-center gap-4 max-w-sm shadow-sm backdrop-blur-sm">
-                          <div className="bg-white rounded-full p-2 border border-gray-300 shadow-sm shrink-0">
-                            <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                          </div>
-                          <p className="text-[0.85rem] font-semibold text-gray-800 leading-snug text-left">
-                            From working capital to business expansion – <span className="text-[#cca740]">we finance it all.</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Apply Now Button Centered Bottom */}
-                    <div className="absolute left-1/2 bottom-[8%] -translate-x-1/2 z-20">
-                      <button className="bg-[#cca740] text-black font-bold text-sm md:text-base px-10 py-3.5 hover:bg-[#b59235] transition flex items-center gap-2 shadow-2xl rounded shadow-black/20 transform hover:-translate-y-1">
-                        APPLY NOW <span className="text-xl leading-none">→</span>
-                      </button>
-                    </div>
-                  </div>
-                ) : slide.isLightBackground ? (
-                  <div className="max-w-[650px] mt-2">
-                    {/* Tag */}
-                    {slide.tag && (
-                      <span className="inline-block text-[0.7rem] font-bold tracking-[0.15em] uppercase text-[#c19b2e] border border-[#c19b2e] bg-white/50 px-4 py-1 mb-4 hero-tag">
-                        {slide.tag}
-                      </span>
-                    )}
-
-                    {/* Main Tamil Heading */}
-                    <h1 className="text-[2.8rem] md:text-[3.2rem] leading-[1.05] font-bold tracking-tight text-gray-900 mb-4 font-sans hero-heading">
-                      வங்கிகளில் Loan<br />
-                      <span className="text-[#c19b2e]">கிடைக்கவில்லையா?</span>
-                    </h1>
-                    
-                    {/* Divider Line */}
-                    <div className="flex items-center mb-4">
-                      <div className="h-1 w-12 bg-gray-900"></div>
-                      <div className="h-1 w-12 bg-[#c19b2e]"></div>
-                    </div>
-
-                    {/* Sub Heading */}
-                    <h2 className="text-[2rem] md:text-[2.4rem] leading-[1.1] font-bold tracking-tight text-gray-900 mb-3 font-sans hero-heading" style={{ animationDelay: '100ms' }}>
-                      Private Finance<br />
-                      <span className="text-[#c19b2e]">That Works</span><br />
-                      When Banks <span className="text-[#c19b2e]">Don't.</span>
-                    </h2>
-
-                    {/* Body Text */}
-                    <p className="text-[1.05rem] font-bold text-gray-900 mb-1 hero-body" style={{ animationDelay: '200ms' }}>
-                      Flexible eligibility. Faster processing.
-                    </p>
-                    <p className="text-[0.95rem] text-gray-800 leading-relaxed max-w-md mb-6 hero-body" style={{ animationDelay: '300ms' }}>
-                      Designed to power your business without the delays of traditional banking methods.
-                    </p>
-
-                    {/* Icons Row */}
-                    <div className="flex flex-wrap gap-5 mb-8 hero-body" style={{ animationDelay: '400ms' }}>
-                      {/* Icon 1 */}
-                      <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-[#c19b2e] shadow-lg shrink-0">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        </div>
-                        <span className="text-[0.6rem] font-bold text-gray-900 uppercase leading-tight tracking-wider">Flexible<br/>Eligibility</span>
-                      </div>
-                      {/* Icon 2 */}
-                      <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-[#c19b2e] shadow-lg shrink-0">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <span className="text-[0.6rem] font-bold text-gray-900 uppercase leading-tight tracking-wider">Faster<br/>Processing</span>
-                      </div>
-                      {/* Icon 3 */}
-                      <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-[#c19b2e] shadow-lg shrink-0">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
-                        </div>
-                        <span className="text-[0.6rem] font-bold text-gray-900 uppercase leading-tight tracking-wider">Tailored<br/>Solutions</span>
-                      </div>
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="flex flex-wrap gap-4 hero-ctas" style={{ animationDelay: '500ms' }}>
-                      <button className="bg-[#cca740] text-black font-bold text-sm px-7 py-3 hover:bg-[#b59235] transition flex items-center gap-2 shadow-md">
-                        APPLY NOW <span className="text-lg leading-none">→</span>
-                      </button>
-                      <button className="bg-transparent border border-gray-900 text-gray-900 font-bold text-sm px-7 py-3 hover:bg-gray-900 hover:text-white transition flex items-center gap-2">
-                        TALK TO AN EXPERT <span className="text-lg leading-none">→</span>
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="max-w-2xl">
-                    {slide.tag && (
-                      <span
-                        className="inline-block text-xs font-bold tracking-[0.2em] uppercase border px-4 py-1.5 mb-6 hero-tag text-gold border-gold/40"
-                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}
+                      {/* Interactive buttons positioned precisely within the desktop image aspect ratio */}
+                      <div
+                        className="absolute flex flex-row pointer-events-auto"
+                        style={{
+                          bottom: "7.8%",
+                          left: "56.3%",
+                          width: "31.8%",
+                          height: "6.3%",
+                        }}
                       >
-                        {slide.tag}
-                      </span>
-                    )}
-                    <h1
-                      className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] hero-heading text-white"
-                      style={{ textShadow: "0 2px 18px rgba(0,0,0,0.6)" }}
-                    >
-                      {slide.heading}
-                      <span className="block mt-2 text-gold">{slide.sub}</span>
-                    </h1>
-                    <p
-                      className="mt-6 text-lg leading-relaxed max-w-xl hero-body text-gray-100"
-                      style={{ textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}
-                    >
-                      {slide.body}
-                    </p>
-                    <div className="mt-10 flex flex-wrap gap-4 hero-ctas">
-                      <button className="bg-gold text-black font-semibold px-8 py-3.5 hover:opacity-90 transition-all duration-200 hover:-translate-y-0.5 shadow-lg">
-                        {slide.cta1}
-                      </button>
-                      <button className="border font-semibold px-8 py-3.5 hover:border-gold hover:text-gold transition-all duration-200 backdrop-blur-sm border-white/40 text-white">
-                        {slide.cta2}
-                      </button>
+                        <Link
+                          to="/contact?focus=form"
+                          className="cursor-pointer transition-all duration-300 hover:bg-black/5 rounded-md"
+                          style={{
+                            width: "44.5%",
+                            height: "100%",
+                          }}
+                          aria-label="Apply Now"
+                        />
+                        <div style={{ width: "4.7%" }} /> {/* Spacer */}
+                        <Link
+                          to="/contact"
+                          className="cursor-pointer transition-all duration-300 hover:bg-black/5 rounded-md"
+                          style={{
+                            width: "50.8%",
+                            height: "100%",
+                          }}
+                          aria-label="Talk to an Expert"
+                        />
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
+
+                  {/* Mobile Slide 3 Container */}
+                  <div className="block md:hidden absolute inset-0">
+                    <div
+                      className="absolute left-1/2 top-1/2"
+                      style={{
+                        aspectRatio: "1080/1800",
+                        minWidth: "100%",
+                        minHeight: "100%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    >
+                      <img
+                        src={slide.bannerSrcMobile}
+                        alt="Golden Globe Private Finance"
+                        className="h-full w-full object-cover slide3-bg-img"
+                        onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#fcfaf6"; }}
+                      />
+
+                      {/* Interactive buttons positioned precisely within the mobile image aspect ratio */}
+                      <div
+                        className="absolute flex flex-row pointer-events-auto"
+                        style={{
+                          bottom: "9.8%",
+                          left: "14.5%",
+                          width: "69.6%",
+                          height: "3.8%",
+                        }}
+                      >
+                        <Link
+                          to="/contact?focus=form"
+                          className="cursor-pointer transition-all duration-300 hover:bg-black/5 rounded-md"
+                          style={{
+                            width: "47.4%",
+                            height: "100%",
+                          }}
+                          aria-label="Apply Now"
+                        />
+                        <div style={{ width: "4.5%" }} /> {/* Spacer */}
+                        <Link
+                          to="/contact"
+                          className="cursor-pointer transition-all duration-300 hover:bg-black/5 rounded-md"
+                          style={{
+                            width: "48.1%",
+                            height: "100%",
+                          }}
+                          aria-label="Talk to an Expert"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Background */}
+                  <div className="absolute inset-0">
+                    <img
+                      src={slide.isLightBackground ? "/hero-bg-1-new.png" : `/hero-bg-${i + 1}.jpg`}
+                      alt=""
+                      className={`h-full w-full object-cover ${slide.isLightBackground ? "bg-[#fcfaf6]" : ""} ${i === 0 ? "opacity-100 object-[right_25%]"
+                        : i === 1 ? "opacity-100 object-center" : "opacity-100 object-[right_25%]"
+                        }`}
+                      onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = slide.isLightBackground ? "#fcfaf6" : "#0a0a0a"; }}
+                    />
+                    {/* Gradient overlay — tailored per slide */}
+                    {slide.isLightBackground || slide.isSlide3Custom ? null : i === 0 ? (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                      </>
+                    ) : i === 1 ? (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/60 to-black/15" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-black/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+                      </>
+                    )}
+                  </div>
+
+                  {/* Slide content */}
+                  <div className={`relative z-10 h-full mx-auto flex flex-col justify-center max-w-7xl px-8`}>
+                    {slide.isLightBackground ? (
+                      <div className="max-w-[650px] mt-2 select-none animate-fade-in">
+                        {/* Main Tamil Heading */}
+                        <h1 className="text-[2.6rem] md:text-[3.2rem] lg:text-[3.8rem] leading-[1.15] font-extrabold tracking-tight text-[#0f172a] mb-5 hero-heading" style={{ fontFamily: "'Noto Sans Tamil', 'Inter', sans-serif" }}>
+                          வங்கிகளில் Loan <br />
+                          <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#b58916] via-[#d4af37] to-[#a07810] filter drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] font-black">
+                            கிடைக்கவில்லையா?
+                          </span>
+                        </h1>
+
+                        {/* Divider Line */}
+                        <div className="h-[2px] w-24 bg-gradient-to-r from-[#d4af37] to-transparent mb-6"></div>
+
+                        {/* Sub Heading */}
+                        <h2 className="text-xl md:text-[26px] lg:text-[29px] font-bold text-gray-800 tracking-wide mb-8 hero-heading leading-snug" style={{ animationDelay: '100ms', fontFamily: "'Outfit', sans-serif" }}>
+                          Private Finance <span className="bg-gradient-to-r from-[#b58916] to-[#d4af37] bg-clip-text text-transparent font-extrabold px-1">That Works</span> When Banks <span className="bg-gradient-to-r from-[#b58916] to-[#d4af37] bg-clip-text text-transparent font-extrabold px-1">Don't.</span>
+                        </h2>
+
+                        {/* Premium Glassmorphic Pills */}
+                        <div className="flex flex-wrap gap-4 mb-8 hero-body" style={{ animationDelay: '200ms' }}>
+                          {/* Pill 1 */}
+                          <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm border border-[#d4af37]/20 px-4 py-2 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:border-[#d4af37]/50 transition-all duration-300">
+                            <div className="w-8 h-8 rounded-lg bg-[#fdfaf2] border border-[#d4af37]/30 flex items-center justify-center text-[#b58916] shrink-0">
+                              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                              </svg>
+                            </div>
+                            <span className="text-[0.68rem] font-extrabold text-gray-800 uppercase leading-tight tracking-widest" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                              Flexible<br />Eligibility
+                            </span>
+                          </div>
+
+                          {/* Pill 2 */}
+                          <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm border border-[#d4af37]/20 px-4 py-2 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:border-[#d4af37]/50 transition-all duration-300">
+                            <div className="w-8 h-8 rounded-lg bg-[#fdfaf2] border border-[#d4af37]/30 flex items-center justify-center text-[#b58916] shrink-0">
+                              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                            </div>
+                            <span className="text-[0.68rem] font-extrabold text-gray-800 uppercase leading-tight tracking-widest" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                              Faster<br />Processing
+                            </span>
+                          </div>
+
+                          {/* Pill 3 */}
+                          <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm border border-[#d4af37]/20 px-4 py-2 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:border-[#d4af37]/50 transition-all duration-300">
+                            <div className="w-8 h-8 rounded-lg bg-[#fdfaf2] border border-[#d4af37]/30 flex items-center justify-center text-[#b58916] shrink-0">
+                              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                              </svg>
+                            </div>
+                            <span className="text-[0.68rem] font-extrabold text-gray-800 uppercase leading-tight tracking-widest" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                              Tailored<br />Funding
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-wrap gap-4 mt-8 hero-ctas" style={{ animationDelay: '300ms' }}>
+                          <Link to="/contact?focus=form" className="bg-[#cca740] hover:bg-[#b59235] text-black font-extrabold text-xs uppercase tracking-[0.18em] px-8 py-4 transition flex items-center gap-2 shadow-lg hover:-translate-y-0.5 duration-200">
+                            Apply Now <span className="text-sm">→</span>
+                          </Link>
+                          <Link to="/contact" className="bg-transparent border border-gray-900 text-gray-900 hover:bg-[#cca740] hover:border-[#cca740] font-extrabold text-xs uppercase tracking-[0.18em] px-8 py-4 transition flex items-center gap-2 hover:-translate-y-0.5 duration-200">
+                            Talk to an Expert <span className="text-sm">→</span>
+                          </Link>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="max-w-2xl animate-fade-in text-left">
+                        {slide.tag && (
+                          <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase border border-gold/40 px-4 py-1.5 mb-6 hero-tag text-gold bg-black/30 backdrop-blur-sm">
+                            {slide.tag}
+                          </span>
+                        )}
+                        <h1 className="text-[2.8rem] md:text-5xl lg:text-6xl font-bold leading-[1.1] hero-heading text-white font-serif" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                          {slide.heading}
+                          <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#f0d060] to-[#b88a00] filter drop-shadow-md font-bold">{slide.sub}</span>
+                        </h1>
+                        <p className="mt-6 text-base md:text-lg leading-relaxed max-w-xl hero-body text-gray-200" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                          {slide.body}
+                        </p>
+                        <div className="mt-8 flex flex-wrap gap-4 hero-ctas">
+                          <Link to="/contact?focus=form" className="bg-gold text-black font-bold text-xs uppercase tracking-[0.18em] px-8 py-4 hover:brightness-110 hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                            {slide.cta1}
+                          </Link>
+                          <Link to="/services" className="border font-bold text-xs uppercase tracking-[0.18em] px-8 py-4 border-white/30 text-white hover:bg-white hover:text-black hover:-translate-y-0.5 transition-all duration-300 backdrop-blur-sm">
+                            {slide.cta2}
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </SwiperSlide>
           ))}
         </Swiper>
@@ -779,13 +861,14 @@ function Home() {
             <div className="max-w-4xl mx-auto px-8 relative z-10">
               <div className="text-center mb-12 reveal">
                 <p
-                  className="uppercase font-bold mb-4 tracking-[0.38em]"
+                  className="uppercase font-bold mb-4 tracking-[0.42em]"
                   style={{
-                    fontFamily: "'Cormorant Garamond', 'Georgia', serif",
-                    fontSize: "1.1rem",
-                    letterSpacing: "0.38em",
-                    color: "#997300",
-                    textShadow: "0px 1px 2px rgba(255,255,255,0.9)",
+                    fontFamily: "'Playfair Display', 'Cormorant Garamond', 'Georgia', serif",
+                    fontSize: "1.35rem",
+                    fontWeight: 800,
+                    letterSpacing: "0.42em",
+                    color: "#a67c00",
+                    textShadow: "0 0 15px rgba(212,175,55,0.65), 0 1px 2px rgba(255,255,255,1)",
                   }}
                 >
                   Our Services
@@ -827,78 +910,95 @@ function Home() {
               </div>
 
               <ScrollStack useWindowScroll={true} itemStackDistance={20} blurAmount={2} itemScale={0.02} itemDistance={20}>
-                {SERVICES.map((svc, i) => (
-                  <ScrollStackItem key={i}>
-                    <div
-                      className={`group relative py-7 px-8 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] cursor-default rounded-3xl w-full
-                        ${svc.featured
-                          ? "bg-[#0f0f0f] text-white border border-gold/40 shadow-xl"
-                          : "bg-white/95 backdrop-blur-sm border border-white/50 shadow-lg hover:border-gold/30"}`}
-                    >
-                      {svc.featured && (
-                        <span className="absolute top-5 right-6 text-[10px] font-bold tracking-widest uppercase bg-gold text-black px-4 py-1.5 rounded-full">
-                          Private Finance
-                        </span>
-                      )}
+                {SERVICES.map((svc, i) => {
+                  const Icon = svc.icon;
+                  return (
+                    <ScrollStackItem key={i}>
+                      <div
+                        className={`group relative py-7 px-8 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] cursor-default rounded-3xl w-full
+                          ${svc.featured
+                            ? "bg-[#0f0f0f] text-white border border-gold/40 shadow-xl"
+                            : "bg-white/95 backdrop-blur-sm border border-white/50 shadow-lg hover:border-gold/30"}`}
+                      >
+                        {svc.featured && (
+                          <span className="absolute top-5 right-6 text-[10px] font-bold tracking-widest uppercase bg-gold text-black px-4 py-1.5 rounded-full">
+                            Private Finance
+                          </span>
+                        )}
 
-                      {/* Icon wrapper for gradient hover effect */}
-                      <div className="relative w-10 h-10 mb-5 group/icon">
-                        {/* Flat gold icon (Default) */}
-                        <svc.icon className={`absolute inset-0 w-8 h-8 transition-all duration-500 group-hover:opacity-0 group-hover:scale-90 ${svc.featured ? "text-gold" : "text-[#d4af37]"}`} strokeWidth={1.5} />
-                        {/* Vibrant glowing gradient icon (Hover) */}
-                        <svc.icon
-                          className="absolute inset-0 w-8 h-8 opacity-0 scale-90 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
-                          strokeWidth={1.5}
-                          style={{ stroke: 'url(#vibrantGold)', filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.8))' }}
-                        />
+                        {/* Icon wrapper for gradient hover effect */}
+                        <div className="relative w-10 h-10 mb-5 group/icon">
+                          {/* Flat gold icon (Default) */}
+                          <Icon className={`absolute inset-0 w-8 h-8 transition-all duration-500 group-hover:opacity-0 group-hover:scale-90 ${svc.featured ? "text-gold" : "text-[#d4af37]"}`} strokeWidth={1.5} />
+                          {/* Vibrant glowing gradient icon (Hover) */}
+                          <Icon
+                            className="absolute inset-0 w-8 h-8 opacity-0 scale-90 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
+                            strokeWidth={1.5}
+                            style={{ stroke: 'url(#vibrantGold)', filter: 'drop-shadow(0 0 10px rgba(255,215,0,0.8))' }}
+                          />
+                        </div>
+
+                        <h3
+                          className={`font-bold mb-3 ${svc.featured ? "text-white" : "text-gray-900"}`}
+                          style={{
+                            fontFamily: "'Playfair Display', 'Georgia', serif",
+                            fontSize: "1.4rem",
+                            letterSpacing: "-0.015em",
+                          }}
+                        >
+                          {svc.title}
+                        </h3>
+                        <p
+                          className={`mb-5 ${svc.featured ? "text-gray-400" : "text-gray-600"}`}
+                          style={{
+                            fontSize: "0.95rem",
+                            fontFamily: "'Lato', 'Helvetica Neue', sans-serif",
+                            lineHeight: "1.6",
+                          }}
+                        >
+                          {svc.desc}
+                        </p>
+
+                        <ul
+                          className={`space-y-2 mb-6 ${svc.featured ? "text-gray-300" : "text-gray-700"}`}
+                          style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.95rem" }}
+                        >
+                          {svc.points.map((pt, j) => (
+                            <li key={j} className="flex items-center gap-3">
+                              <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block flex-shrink-0" />
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Card Footer with Bottom Tag and Learn More */}
+                        <div className={`mt-6 pt-4 border-t flex items-center justify-between ${svc.featured ? "border-white/10" : "border-gray-100"}`}>
+                          <span
+                            className={`text-[10px] uppercase font-bold tracking-[0.15em] ${svc.featured ? "text-gold/80" : "text-gold"}`}
+                            style={{ fontFamily: "'Outfit', 'Lato', sans-serif" }}
+                          >
+                            {svc.bottomTag}
+                          </span>
+                          <Link
+                            to={svc.path}
+                            className={`flex items-center gap-2 text-sm font-bold transition-colors group/btn ${svc.featured ? "text-gold hover:text-white" : "text-gold hover:text-gray-900"}`}
+                          >
+                            Learn More <ArrowRight size={16} className="transition-transform duration-300 ease-out group-hover/btn:translate-x-2" />
+                          </Link>
+                        </div>
                       </div>
-
-                      <h3
-                        className={`font-bold mb-3 ${svc.featured ? "text-white" : "text-gray-900"}`}
-                        style={{
-                          fontFamily: "'Playfair Display', 'Georgia', serif",
-                          fontSize: "1.4rem",
-                          letterSpacing: "-0.015em",
-                        }}
-                      >
-                        {svc.title}
-                      </h3>
-                      <p
-                        className={`mb-5 ${svc.featured ? "text-gray-400" : "text-gray-600"}`}
-                        style={{
-                          fontSize: "0.95rem",
-                          fontFamily: "'Lato', 'Helvetica Neue', sans-serif",
-                          lineHeight: "1.6",
-                        }}
-                      >
-                        {svc.desc}
-                      </p>
-
-                      <ul
-                        className={`space-y-2 mb-6 ${svc.featured ? "text-gray-300" : "text-gray-700"}`}
-                        style={{ fontFamily: "'Lato', sans-serif", fontSize: "0.95rem" }}
-                      >
-                        {svc.points.map((pt, j) => (
-                          <li key={j} className="flex items-center gap-3">
-                            <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block flex-shrink-0" />
-                            {pt}
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Learn More button with sliding arrow */}
-                      <button className={`flex items-center gap-2 text-sm font-bold transition-colors group/btn ${svc.featured ? "text-gold hover:text-white" : "text-gold hover:text-gray-900"}`}>
-                        Learn More <ArrowRight size={16} className="transition-transform duration-300 ease-out group-hover/btn:translate-x-2" />
-                      </button>
-                    </div>
-                  </ScrollStackItem>
-                ))}
+                    </ScrollStackItem>
+                  );
+                })}
               </ScrollStack>
 
               <div className="text-center mt-16 reveal">
-                <button className="bg-[#0f0f0f] text-white px-8 py-3.5 text-sm font-semibold hover:bg-gold hover:text-black transition-all duration-300">
+                <Link
+                  to="/contact"
+                  className="inline-block bg-[#0f0f0f] text-white px-8 py-3.5 text-sm font-semibold hover:bg-gold hover:text-black transition-all duration-300"
+                >
                   Not sure which suits your business? Enquire Now
-                </button>
+                </Link>
               </div>
             </div>
           </section>
@@ -908,7 +1008,7 @@ function Home() {
       {/* ══════════════════════════════════════════════════════
           PROCESS — dark bg, timeline
       ══════════════════════════════════════════════════════ */}
-      <section ref={processRef} className="relative py-16 text-white overflow-hidden">
+      <section ref={processRef} className="relative py-10 text-white overflow-hidden">
         {/* Parallax Background */}
         <div className="absolute inset-0">
           <div
@@ -924,25 +1024,25 @@ function Home() {
         </div>
 
         <div className="relative max-w-6xl mx-auto px-8 z-10">
-          <div className="text-center mb-16 reveal">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold mb-4">How It Works</p>
-            <h2 className="text-4xl md:text-5xl font-bold font-sans tracking-tight">
-              Simple. Structured. <span className="text-gold" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", paddingLeft: "0.25rem" }}>Reliable.</span>
+          <div className="text-center mb-10 reveal">
+            <p className="text-[11px] font-bold tracking-[0.25em] uppercase text-gold mb-3" style={{ fontFamily: "'Outfit', 'Inter', sans-serif" }}>How It Works</p>
+            <h2 className="text-3xl md:text-4xl lg:text-[2.65rem] font-bold tracking-tight text-white leading-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+              Simple. Structured. <span className="text-gold" style={{ fontStyle: "italic", paddingLeft: "0.2rem" }}>Reliable.</span>
             </h2>
-            <p className="mt-5 text-gray-400 max-w-xl mx-auto text-[1.05rem] leading-relaxed font-sans">
+            <p className="mt-4 text-gray-400 max-w-lg mx-auto text-[0.95rem] md:text-[1rem] leading-relaxed" style={{ fontFamily: "'Inter', sans-serif", opacity: 0.9 }}>
               A transparent four-step approach delivering clarity, confidence, and timely execution at every stage.
             </p>
           </div>
 
           {/* Timeline */}
-          <div className="relative grid md:grid-cols-4 gap-8 mt-12">
+          <div className="relative grid md:grid-cols-4 gap-6 mt-8">
             {/* Liquid Connecting Line - positioned to hit circle centers */}
-            <div className="hidden md:block absolute top-[3.5rem] left-[12.5%] right-[12.5%] h-[2px] bg-white/5 z-0 rounded-full overflow-hidden">
+            <div className="hidden md:block absolute left-[12.5%] right-[12.5%] h-[2px] bg-white/5 z-0 rounded-full overflow-hidden" style={{ top: '51px' }}>
               <div
-                className="absolute top-0 left-0 h-full bg-gradient-to-r from-gold via-[#ffeb73] to-gold shadow-[0_0_15px_rgba(212,175,55,0.8)]"
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-gold via-[#ffeb73] to-gold shadow-[0_0_20px_rgba(212,175,55,0.9),_0_0_8px_rgba(212,175,55,0.6)]"
                 style={{
                   width: `${scrollProgress * 100}%`,
-                  transition: 'width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'
+                  transition: 'width 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)'
                 }}
               />
             </div>
@@ -953,29 +1053,30 @@ function Home() {
               return (
                 <div
                   key={i}
-                  className="reveal flex flex-col items-center text-center z-10"
+                  className="relative reveal flex flex-col items-center text-center z-10"
                   style={{ transitionDelay: `${i * 80}ms` }}
                 >
-                  <span className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-3 transition-colors duration-500
-                    ${isPast ? 'text-gold' : 'text-gray-500'}`}>
+                  <span className={`text-[11px] font-bold tracking-[0.22em] uppercase mb-2 transition-colors duration-500
+                    ${isPast ? 'text-gold' : 'text-gray-500'}`} style={{ fontFamily: "'Outfit', 'Inter', sans-serif" }}>
                     STEP {step.num}
                   </span>
 
                   <div
-                    className={`relative w-16 h-16 rounded-full flex items-center justify-center mb-6 transition-all duration-500 border cursor-default bg-[#0a0a0a]
+                    className={`relative w-14 h-14 rounded-full flex items-center justify-center mb-4 cursor-default transition-all duration-700 ease-out border
                       ${isPast
-                        ? 'border-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                        : 'border-white/20'}`}
+                        ? 'border-gold/80 shadow-[0_0_25px_rgba(212,175,55,0.45),_inset_0_0_12px_rgba(212,175,55,0.25)] bg-[#16130b]'
+                        : 'border-white/15 bg-[#0d0d0d]'}`}
                   >
                     <step.icon
-                      className={`w-6 h-6 transition-colors duration-500 ${isPast ? 'text-gold' : 'text-gray-500'}`}
+                      className={`w-5 h-5 transition-all duration-500 ${isPast ? 'text-gold' : 'text-gray-500'}`}
                       strokeWidth={1.5}
+                      style={{ filter: isPast ? 'drop-shadow(0 0 8px rgba(212,175,55,0.75))' : 'none' }}
                     />
                   </div>
-                  <h3 className={`text-[1.1rem] font-bold mb-3 transition-colors duration-500 ${isPast ? 'text-white' : 'text-gray-400'}`}>
+                  <h3 className={`text-[1.15rem] font-bold mb-2.5 transition-colors duration-500 ${isPast ? 'text-white' : 'text-gray-400'}`} style={{ fontFamily: "'Outfit', 'Inter', sans-serif", letterSpacing: "-0.01em" }}>
                     {step.title}
                   </h3>
-                  <p className="text-gray-400 text-[0.95rem] leading-relaxed max-w-[200px] font-sans">
+                  <p className="text-[#94a3b8] text-[0.9rem] leading-relaxed max-w-[210px]" style={{ fontFamily: "'Inter', sans-serif", opacity: 0.85 }}>
                     {step.desc}
                   </p>
                 </div>
@@ -983,11 +1084,11 @@ function Home() {
             })}
           </div>
 
-          <div className="text-center mt-16">
-            <button className="relative group border border-gold text-gold font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] overflow-hidden transition-colors hover:text-black">
+          <div className="text-center mt-10">
+            <Link to="/contact?focus=form" className="relative inline-block group border border-gold text-gold font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] overflow-hidden transition-colors hover:text-black">
               <span className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out z-0" />
               <span className="relative z-10">Start with Step 01 — Submit Enquiry</span>
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -995,25 +1096,31 @@ function Home() {
       {/* ══════════════════════════════════════════════════════
           TESTIMONIALS (3D Cylindrical Gallery)
       ══════════════════════════════════════════════════════ */}
-      <section className="py-12 bg-[#030303] relative overflow-hidden">
+      <section className="py-10 bg-white relative overflow-hidden">
         {/* Ambient Light & Floor Reflection */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(212,175,55,0.08),transparent_70%)]" />
-          <div className="absolute top-0 right-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.08),transparent_70%)]" />
+          <div className="absolute top-0 left-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(191,149,63,0.04),transparent_70%)]" />
+          <div className="absolute top-0 right-0 w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(191,149,63,0.04),transparent_70%)]" />
           {/* Reflective floor */}
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-gold/5 via-black/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-gold/5 via-white/40 to-transparent" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-          <div className="text-center mb-16 reveal">
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center mb-6"
+          >
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold mb-3">Client Stories</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-white font-sans tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#111111] font-sans tracking-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
               Trusted by Businesses
             </h2>
-            <p className="mt-5 text-gray-400 max-w-xl mx-auto text-sm leading-relaxed">
+            <p className="mt-4 text-gray-600 max-w-xl mx-auto text-sm leading-relaxed" style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
               From manufacturing to healthcare — businesses rely on Golden Globe Enterprises for structured funding and reliable financial guidance.
             </p>
-          </div>
+          </motion.div>
 
           <style>{`
             .testi-cylinder { padding: 0px 0 40px 0; perspective: 1200px; }
@@ -1115,9 +1222,10 @@ function Home() {
       ══════════════════════════════════════════════════════ */}
       <section className="bg-[#0f0f0f] relative py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/cta-bg.png" alt="" className="w-full h-full object-cover opacity-70" />
-          {/* Subtle radial dark overlay to ensure text is legible without completely hiding the image */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,5,5,0.7)_0%,rgba(5,5,5,0.9)_100%)]" />
+          <img src="/cta-about-bg.jpg" alt="" className="w-full h-full object-cover" />
+          {/* Dark overlays from About page — keeps text highly legible */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
         </div>
 
         <div className="max-w-5xl mx-auto px-8 text-center reveal relative z-10">
@@ -1129,7 +1237,7 @@ function Home() {
               </span>
             ))}
           </h2>
-          <p className="mt-8 text-gray-400 max-w-2xl mx-auto text-[1.05rem] leading-relaxed font-sans">
+          <p className="mt-8 text-gray-300 max-w-2xl mx-auto text-[1.05rem] leading-relaxed font-sans">
             Connect with our financial specialists to explore the right funding solution tailored to your business — from private finance to structured business loans.
           </p>
           <div className="mt-12 flex flex-col sm:flex-row gap-5 justify-center items-center">
@@ -1139,14 +1247,14 @@ function Home() {
               onMouseLeave={handleMagneticLeave}
               className="transition-transform duration-100 ease-out inline-block"
             >
-              <button className="bg-gold text-black font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] hover:scale-105 hover:brightness-110 transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.4)] relative">
+              <Link to="/contact" className="bg-gold text-black font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] hover:scale-105 hover:brightness-110 transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.4)] relative inline-block text-center">
                 Speak to a Funding Specialist
-              </button>
+              </Link>
             </div>
-            <button className="border-[1.5px] border-gold text-gold font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] hover:bg-gold hover:text-black transition-all duration-300 relative group overflow-hidden">
+            <Link to="/contact?focus=form" className="border-[1.5px] border-gold text-gold font-semibold px-10 py-4 text-xs uppercase tracking-[0.15em] hover:bg-gold hover:text-black transition-all duration-300 relative group overflow-hidden inline-block text-center">
               <span className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0" />
               <span className="relative z-10">Submit an Enquiry</span>
-            </button>
+            </Link>
           </div>
         </div>
       </section>

@@ -356,7 +356,7 @@ function Services() {
       },
       {
         key: "cheque",
-        title: "Check Based Finance",
+        title: "Cheque Based Finance",
         desc: "Funding against banking transactions and cheque flows to support cash continuity.",
         icon: CreditCard,
       },

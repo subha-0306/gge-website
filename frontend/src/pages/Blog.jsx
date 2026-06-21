@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Clock, Tag, ChevronRight, Search } from "lucide-react";
 import { ARTICLES } from "./blogData";
 
-function useReveal() {
+function useReveal(dep1, dep2) {
   useEffect(() => {
     const els = document.querySelectorAll(".rv");
     const io = new IntersectionObserver(
@@ -15,12 +15,13 @@ function useReveal() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dep1, dep2]);
 }
 
 function useMouseTracking() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
@@ -28,11 +29,11 @@ function useMouseTracking() {
       const y = (clientY / window.innerHeight - 0.5) * 2;
       setMousePos({ x, y });
     };
-    
+
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-  
+
   return mousePos;
 }
 
@@ -44,12 +45,13 @@ const rest = ARTICLES.filter((a) => !a.featured);
 
 /* ════════════════════════════════════════════════════════════ */
 function Blog() {
-  useReveal();
-  const mousePos = useMouseTracking();
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  useReveal(activeCategory, searchQuery);
+  const mousePos = useMouseTracking();
 
-  const filtered = rest.filter((a) => {
+  const sourceArticles = (activeCategory === "All" && !searchQuery) ? rest : ARTICLES;
+  const filtered = sourceArticles.filter((a) => {
     const matchCat = activeCategory === "All" || a.category === activeCategory;
     const matchSearch =
       a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -61,7 +63,7 @@ function Blog() {
     <>
       {/* ══ HERO ══ */}
       <section className="relative min-h-[350px] flex items-end overflow-hidden bg-[#0a0a0a]">
-               
+
         <img
           src="/blog-bg.jpeg"
           alt=""
@@ -74,7 +76,7 @@ function Blog() {
 
         {/* Dark Overlay for Readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-[#0a0a0a]/40 md:bg-gradient-to-r md:from-[#0a0a0a] md:via-[#0a0a0a]/80 md:to-transparent z-20" />
-        
+
         {/* Subtle geometric pattern */}
         <div
           className="absolute inset-0 opacity-10 mix-blend-screen z-20"
@@ -95,7 +97,7 @@ function Blog() {
           </span>
           <h1
             className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4"
-            style={{ 
+            style={{
               fontFamily: "'Playfair Display', Georgia, serif",
               transform: `translateX(${mousePos.x * 10}px) translateY(${mousePos.y * 10}px)`,
               transition: 'transform 0.3s ease-out'
@@ -103,12 +105,12 @@ function Blog() {
           >
             Financial Insights for<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d4af37] to-[#f0d060]">
-              Growing Businesses.
+              Growing Businesses
             </span>
           </h1>
           <p
             className="mt-2 text-sm md:text-base text-gray-400 max-w-2xl leading-relaxed font-medium"
-            style={{ 
+            style={{
               fontFamily: "'Lato', Helvetica, sans-serif",
               transform: `translateX(${mousePos.x * 5}px) translateY(${mousePos.y * 5}px)`,
               transition: 'transform 0.3s ease-out'
@@ -238,22 +240,14 @@ function Blog() {
                     <img
                       src={article.coverPlaceholder}
                       alt={article.title}
-                      className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-600"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
                       onError={(e) => (e.target.style.display = "none")}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                     {/* Category chip */}
                     <span className="absolute bottom-4 left-4 text-[9px] font-bold uppercase tracking-widest text-black bg-gold px-3 py-1">
                       {article.category}
                     </span>
-                    {/* Placeholder art */}
-                    <div className="text-white/15 pointer-events-none">
-                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                        <rect x="3" y="3" width="18" height="18" rx="1" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <path d="M21 15l-5-5L5 21" />
-                      </svg>
-                    </div>
                   </div>
 
                   {/* Body */}

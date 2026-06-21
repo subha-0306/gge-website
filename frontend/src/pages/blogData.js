@@ -102,7 +102,7 @@ export const ARTICLES = [
         title: "Why Private Finance Approves What Banks Reject",
         excerpt:
             "A strong business and a bank rejection are not mutually exclusive. Here's why private finance evaluates businesses differently — and why that matters.",
-        coverPlaceholder: "/blog/cover-2.jpg",
+        coverPlaceholder: "/anyy.jpeg",
         content: [
             {
                 type: "intro",
@@ -160,7 +160,7 @@ export const ARTICLES = [
         title: "5 Signs Your Business Needs Private Finance Right Now",
         excerpt:
             "Cash flow stress, a missed opportunity, or a bank rejection — these aren't dead ends. They're signals. Here's how to read them.",
-        coverPlaceholder: "/blog/cover-3.jpg",
+        coverPlaceholder: "/forth.jpeg",
         content: [
             {
                 type: "intro",
@@ -217,7 +217,7 @@ export const ARTICLES = [
         title: "Cheque-Based Finance Explained: How It Works for Small Businesses",
         excerpt:
             "Cheque-based finance is one of the least understood but most practical short-term funding tools available to Indian SMEs. Here's a clear breakdown.",
-        coverPlaceholder: "/blog/cover-4.jpg",
+        coverPlaceholder: "/third.jpeg",
         content: [
             {
                 type: "intro",
@@ -284,7 +284,7 @@ export const ARTICLES = [
         title: "Loan Against Property vs. Private Finance: Which Is Right for Your Business?",
         excerpt:
             "Both unlock capital for your business — but they serve different needs, timelines, and risk profiles. A structured comparison to help you decide.",
-        coverPlaceholder: "/blog/cover-5.jpg",
+        coverPlaceholder: "/loan.jpeg",
         content: [
             {
                 type: "intro",
@@ -345,7 +345,7 @@ export const ARTICLES = [
         title: "Industrial Machinery Loans: How Manufacturers Can Scale Without Straining Cash Flow",
         excerpt:
             "The right equipment can double your capacity — but only if you can finance it without hollowing out your working capital. Here's the smarter approach.",
-        coverPlaceholder: "/blog/cover-6.jpg",
+        coverPlaceholder: "/second.jpeg",
         content: [
             {
                 type: "intro",
@@ -400,7 +400,7 @@ export const ARTICLES = [
         title: "Professional Loans: A Financial Guide for Doctors, CAs, and Architects",
         excerpt:
             "Professionals have unique capital needs that standard business loans rarely address well. Professional finance is structured specifically around how you earn, bill, and grow.",
-        coverPlaceholder: "/blog/cover-7.jpg",
+        coverPlaceholder: "/professional.png",
         content: [
             {
                 type: "intro",
@@ -469,7 +469,7 @@ export const ARTICLES = [
         title: "Understanding Your CIBIL Score and Its Role in Private Finance Eligibility",
         excerpt:
             "A low CIBIL score doesn't close every door. Understanding what it means — and how private finance evaluates beyond it — can reopen your path to capital.",
-        coverPlaceholder: "/blog/cover-8.jpg",
+        coverPlaceholder: "/cibil.jpeg",
         content: [
             {
                 type: "intro",
@@ -526,6 +526,127 @@ export const ARTICLES = [
                     "Avoid multiple loan enquiries simultaneously — each enquiry reduces your score",
                     "If you have a settled loan, be prepared to explain the context clearly and factually",
                     "Work with an established private finance provider who conducts holistic assessment",
+                ],
+            },
+        ],
+    },
+    {
+        slug: "unsecured-corporate-debt-working-capital",
+        featured: false,
+        category: "Corporate Debt",
+        date: "May 12, 2026",
+        readTime: "6 min read",
+        title: "Leveraging Unsecured Corporate Debt: A Playbook for Working Capital Expansion",
+        excerpt:
+            "Unsecured corporate debt is more than emergency capital. When deployed strategically, it accelerates inventory cycles and unlocks bulk purchase margins.",
+        coverPlaceholder: "/corporate.png",
+        content: [
+            {
+                type: "intro",
+                text: "For high-growth Indian enterprises, capital is the ultimate accelerator. While traditional advice warns against high-speed, unsecured debt, sophisticated promoters view it differently: as a tactical tool to exploit transient market opportunities. Understanding when and how to leverage unsecured corporate debt can unlock significant bottom-line growth.",
+            },
+            {
+                type: "h2",
+                text: "The Strategic ROI of High-Speed Capital",
+            },
+            {
+                type: "p",
+                text: "When a supplier offers a 5% discount on bulk raw material purchases if paid within 24 hours, waiting 6 weeks for a bank loan decision is a losing play. Even if the interest rate on a short-term private finance facility is higher, the absolute margin gained from the discount can easily exceed the cost of capital. In this scenario, unsecured debt generates a positive net return.",
+            },
+            {
+                type: "h2",
+                text: "Comparing Debt Structures: Tactical vs. Long-Term",
+            },
+            {
+                type: "table",
+                headers: ["Feature", "Secured Bank Term Loan", "Unsecured Corporate Debt"],
+                rows: [
+                    ["Deployment Time", "30 to 45 Days", "24 to 48 Hours"],
+                    ["Primary Security", "Property / Fixed Assets", "None Required (Profile-based)"],
+                    ["Tenure Focus", "3 to 7 Years (Long-Term)", "3 to 18 Months (Tactical)"],
+                    ["Optimal Use Case", "Factory Construction / Capex", "Inventory procurement / Bridge cash flow"],
+                    ["Impact on Balance Sheet", "Increases leverage indicators", "High turnover offset; clean encumbrance"],
+                ],
+            },
+            {
+                type: "h2",
+                text: "Three Scenarios Where Unsecured Debt Makes Sense",
+            },
+            {
+                type: "ul",
+                items: [
+                    "Bridging Invoice Receipts: Fund immediate operational payroll and overheads while awaiting customer invoice settlements from Tier-1 clients.",
+                    "Exploiting Volume Discounts: Purchase raw materials in bulk at steep cash-discounted prices that outweigh interest costs.",
+                    "Fulfilling Sudden Contract Milestones: Secure mobilization funds for major public or private tenders before official mobilization advances are released.",
+                ],
+            },
+            {
+                type: "h2",
+                text: "Key Risk Mitigation Steps",
+            },
+            {
+                type: "p",
+                text: "Before drawing down unsecured facilities, ensure your cash inflow forecast is highly predictable within the tenure. Align the repayment structure (whether monthly EMIs or bullet clearances) directly with your receivables schedule to maintain perfect liquidity.",
+            },
+        ],
+    },
+    {
+        slug: "letters-of-credit-bank-guarantees-guide",
+        featured: false,
+        category: "Trade Finance",
+        date: "May 25, 2026",
+        readTime: "7 min read",
+        title: "Demystifying Letters of Credit (LC) and Bank Guarantees (BG): A Trade Finance Primer",
+        excerpt:
+            "Negotiating global or domestic supply contracts requires financial trust. Learn how sight LCs, usance LCs, and performance BGs protect and scale your operations.",
+        coverPlaceholder: "/trade.png",
+        content: [
+            {
+                type: "intro",
+                text: "In domestic and international trade, trust is the primary currency. However, transacting with new suppliers or bidding on large infrastructure contracts requires institutional backing. Letters of Credit (LC) and Bank Guarantees (BG) provide the financial framework to execute high-volume contracts with complete security.",
+            },
+            {
+                type: "h2",
+                text: "Understanding Letters of Credit (LC)",
+            },
+            {
+                type: "p",
+                text: "A Letter of Credit is a binding financial commitment issued by a bank or financial institution on behalf of a buyer, guaranteeing that payment will be made to a seller provided the exact terms of shipment and documentation are met. It transfers the payment credit risk from the buyer to the issuing institution.",
+            },
+            {
+                type: "ul",
+                items: [
+                    "Sight LC: Payment is released immediately to the seller's bank upon presentation of compliant shipping documents.",
+                    "Usance LC: Allows the buyer a deferred payment window (e.g., 90 or 180 days) after receiving the documents, enabling them to sell the goods before payment is due.",
+                ],
+            },
+            {
+                type: "h2",
+                text: "Understanding Bank Guarantees (BG)",
+            },
+            {
+                type: "p",
+                text: "Unlike an LC which is a primary payment mechanism, a Bank Guarantee is a secondary payment mechanism. The issuing institution promises to pay a specified amount to a beneficiary only if the applicant fails to perform contractual obligations or defaults on payments.",
+            },
+            {
+                type: "ul",
+                items: [
+                    "Financial BG: Guarantees that payment will be made if the buyer defaults on debt or invoice payments.",
+                    "Performance BG: Guarantees that contractual work (e.g., building construction, software delivery) will be completed according to the tender specifications, protecting the buyer from project failure.",
+                ],
+            },
+            {
+                type: "h2",
+                text: "Understanding Trade Guarantee Structures",
+            },
+            {
+                type: "table",
+                headers: ["Metric", "Letter of Credit (LC)", "Bank Guarantee (BG)"],
+                rows: [
+                    ["Primary Focus", "Payment security for goods transaction", "Contract performance or default protection"],
+                    ["Nature of Obligation", "Primary (triggered by compliant document submission)", "Secondary (triggered by default or non-performance)"],
+                    ["Common Context", "Import, export, and domestic supply cycles", "Government tenders, construction, bidding stages"],
+                    ["Parties Benefitted", "Protects the seller/exporter", "Protects the buyer/project owner"],
                 ],
             },
         ],

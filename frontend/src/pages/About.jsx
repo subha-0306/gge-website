@@ -49,30 +49,32 @@ const fadeRight = {
 
 /* ─── Data ────────────────────────────────────────────────── */
 const TESTIMONIALS = [
-  { name: "Rajesh Kumar",  role: "Manufacturing Business Owner", text: "Golden Globe structured the funding we needed to expand our manufacturing unit and secure a major supply contract. The process was seamless." },
-  { name: "Meera Sharma",  role: "Retail Business Owner",        text: "The team helped us secure funding quickly to expand retail operations across multiple locations. Highly professional throughout." },
-  { name: "Arjun Patel",   role: "Construction Contractor",      text: "Fast approval helped us secure equipment financing for our construction projects without a single delay. Exceptional service." },
-  { name: "Vikram Singh",  role: "Logistics Entrepreneur",       text: "Professional guidance and structured solutions helped us scale our logistics operations significantly within months." },
-  { name: "Karan Mehta",   role: "Trading Company Owner",        text: "Transparent communication and flexible financing options made a real difference to our trading business expansion." },
-  { name: "Dr. Ananya Rao",role: "Healthcare Entrepreneur",      text: "Their financial team helped us secure capital quickly to expand our clinic. Reliable, professional, and efficient." },
+  { name: "S Kumar", role: "Manufacturing Business Owner", text: "Golden Globe Enterprises provided the funding support we needed at a critical stage of expansion. Their process was seamless, transparent, and highly efficient." },
+  { name: "Ashfaq", role: "Founder & Managing Director", text: "The team understood our requirements immediately and structured a financing solution that helped us scale operations without delays." },
+  { name: "Sathish", role: "Logistics Company Owner", text: "Their professional approach and quick turnaround enabled us to secure capital exactly when our business needed it most." },
+  { name: "Muthu Raman", role: "Industrial Entrepreneur", text: "From consultation to disbursement, the entire experience was smooth and dependable. A trusted financial partner for growing businesses." },
+  { name: "Ramanathan", role: "Business Founder", text: "Golden Globe Enterprises helped us unlock new growth opportunities through customized funding solutions tailored to our business goals." },
+  { name: "Ganesh", role: "Real Estate Developer", text: "Their expertise in structured financing allowed us to expand confidently while maintaining financial stability and operational momentum." },
+  { name: "David", role: "CEO & Business Owner", text: "What impressed us most was their commitment to understanding our business and delivering the right funding strategy at the right time." },
+  { name: "Jayabalan", role: "Trading Company Founder", text: "Reliable, responsive, and professional. Their support played a significant role in helping us achieve our expansion objectives." },
 ];
 
 
 const TRUST_STATS = [
-  { val: 20,   suffix: "+",    label: "Years of Combined Expertise", prefix: "" },
-  { val: 2000, suffix: "+",    label: "Businesses Funded",           prefix: "" },
-  { val: 2000, suffix: "+ Cr", label: "Total Disbursements",         prefix: "₹" },
-  { val: 99,   suffix: "%",    label: "Client Satisfaction",         prefix: "" },
+  { val: 20, suffix: "+", label: "Years of Combined Expertise", prefix: "" },
+  { val: 2000, suffix: "+", label: "Businesses Funded", prefix: "" },
+  { val: 2000, suffix: "+ Cr", label: "Total Disbursements", prefix: "₹" },
+  { val: 99, suffix: "%", label: "Client Satisfaction", prefix: "" },
 ];
 
 /* Bento cards — spans drive the asymmetric layout */
 const WHY_CARDS = [
-  { icon: Briefcase,   title: "Industry Expertise",       desc: "Two decades of hands-on experience in finance, banking, and business management — offering clients genuine industry insight that goes beyond textbook knowledge.", watermark: "20+",  wide: true  },
-  { icon: Users,       title: "Client-First Approach",    desc: "Personalised strategies tailored to your business realities — never a one-size-fits-all template.",                                                                 watermark: "1st",  wide: false },
-  { icon: ShieldCheck, title: "Integrity & Transparency", desc: "No hidden terms, no surprises. Every structure is fully explained before you commit to anything.",                                                                    watermark: "#1",   wide: false },
-  { icon: Award,       title: "Proven Leadership",        desc: "Our leadership's deep financial knowledge empowers clients to make confident, well-informed decisions — from the very first consultation to final disbursement.",      watermark: "★",    wide: true  },
-  { icon: TrendingUp,  title: "Long-Term Partnerships",   desc: "Lasting relationships built on trust, reliability, and consistent results — not one-off transactions.",                                                              watermark: "∞",    wide: false },
-  { icon: Star,        title: "Commitment to Excellence", desc: "Quality, innovation, and continuous improvement guide every aspect of our work — ensuring premium outcomes for every client, every time.",                             watermark: "99%",  wide: true  },
+  { icon: Briefcase, title: "Industry Expertise", desc: "Two decades of hands-on experience in finance, banking, and business management — offering clients genuine industry insight that goes beyond textbook knowledge.", watermark: "20+", wide: true },
+  { icon: Users, title: "Client-First Approach", desc: "Personalised strategies tailored to your business realities — never a one-size-fits-all template.", watermark: "1st", wide: false },
+  { icon: ShieldCheck, title: "Integrity & Transparency", desc: "No hidden terms, no surprises. Every structure is fully explained before you commit to anything.", watermark: "#1", wide: false },
+  { icon: Award, title: "Proven Leadership", desc: "Our leadership's deep financial knowledge empowers clients to make confident, well-informed decisions — from the very first consultation to final disbursement.", watermark: "★", wide: true },
+  { icon: TrendingUp, title: "Long-Term Partnerships", desc: "Lasting relationships built on trust, reliability, and consistent results — not one-off transactions.", watermark: "∞", wide: false },
+  { icon: Star, title: "Commitment to Excellence", desc: "Quality, innovation, and continuous improvement guide every aspect of our work — ensuring premium outcomes for every client, every time.", watermark: "99%", wide: true },
 ];
 
 /* ════════════════════════════════════════════════════════════ */
@@ -218,7 +220,7 @@ function About() {
               <p className="text-base text-gray-600 leading-[1.85] mb-5"
                 style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
                 Since 2011, <strong className="text-gray-900 font-semibold">Golden Globe Enterprises</strong> has worked closely
-                with entrepreneurs, professionals, and growing enterprises across Tamil Nadu — structuring funding solutions
+                with entrepreneurs, professionals, and growing enterprises across Tamil Nadu, Kerala, Puducherry, Banglore ,Hyderabad — structuring funding solutions
                 that match operational realities and expansion goals.
               </p>
               <p className="text-base text-gray-600 leading-[1.85] mb-8"
@@ -232,7 +234,7 @@ function About() {
                 {[
                   { icon: CheckCircle2, text: "Expert financial structuring for every business stage" },
                   { icon: CheckCircle2, text: "2000+ businesses funded — ₹2000+ Crore disbursed" },
-                  { icon: CheckCircle2, text: "Transparent terms with 24–48 hour disbursement" },
+                  { icon: CheckCircle2, text: "Transparent terms with 24–48 hours disbursement" },
                 ].map((pt, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <pt.icon size={18} className="text-gold mt-0.5 flex-shrink-0" strokeWidth={2} />
@@ -323,7 +325,7 @@ function About() {
                 {/* Asymmetric bottom-left glow */}
                 <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full pointer-events-none opacity-20 transition-opacity duration-500 group-hover:opacity-35"
                   style={{ background: "radial-gradient(circle, rgba(212,175,55,0.4) 0%, transparent 70%)", filter: "blur(20px)" }} />
-                
+
                 {/* Watermark "M" */}
                 <div className="absolute -bottom-10 -right-4 font-serif text-[160px] font-extrabold text-[#d4af37]/[0.03] select-none pointer-events-none leading-none z-0">
                   M
@@ -333,15 +335,15 @@ function About() {
                 <div className="w-14 h-14 rounded-full border border-[#d4af37]/40 flex items-center justify-center mb-7 relative z-10 transition-colors duration-300 group-hover:border-[#d4af37]">
                   <Target size={24} className="text-[#d4af37]" strokeWidth={1.5} />
                 </div>
-                
+
                 <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#d4af37] mb-4 relative z-10">Our Mission</p>
                 <h3 className="text-2xl font-bold text-white mb-4 relative z-10" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                   Empowering Business Growth Through Capital
                 </h3>
-                
+
                 {/* Underline transitions width */}
                 <div className="w-10 h-0.5 bg-[#d4af37] mb-5 transition-all duration-500 group-hover:w-24 relative z-10" />
-                
+
                 <p className="text-gray-400 text-base leading-[1.9] relative z-10" style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
                   <span className="text-[18px] text-[#e5c158] font-semibold block mb-2 leading-relaxed">
                     To empower businesses with innovative, reliable, and result-oriented financial solutions.
@@ -357,7 +359,7 @@ function About() {
                 {/* Asymmetric bottom-right glow */}
                 <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full pointer-events-none opacity-20 transition-opacity duration-500 group-hover:opacity-35"
                   style={{ background: "radial-gradient(circle, rgba(212,175,55,0.4) 0%, transparent 70%)", filter: "blur(20px)" }} />
-                
+
                 {/* Watermark "V" */}
                 <div className="absolute -bottom-10 -left-4 font-serif text-[160px] font-extrabold text-[#d4af37]/[0.03] select-none pointer-events-none leading-none z-0">
                   V
@@ -367,15 +369,15 @@ function About() {
                 <div className="w-14 h-14 rounded-full border border-[#d4af37]/40 flex items-center justify-center mb-7 relative z-10 transition-colors duration-300 group-hover:border-[#d4af37]">
                   <Eye size={24} className="text-[#d4af37]" strokeWidth={1.5} />
                 </div>
-                
+
                 <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#d4af37] mb-4 relative z-10">Our Vision</p>
                 <h3 className="text-2xl font-bold text-white mb-4 relative z-10" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                   A Trusted Partner for Every Business
                 </h3>
-                
+
                 {/* Underline transitions width */}
                 <div className="w-10 h-0.5 bg-[#d4af37] mb-5 transition-all duration-500 group-hover:w-24 relative z-10" />
-                
+
                 <p className="text-gray-400 text-base leading-[1.9] relative z-10" style={{ fontFamily: "'Lato', Helvetica, sans-serif" }}>
                   <span className="text-[18px] text-[#e5c158] font-semibold block mb-2 leading-relaxed">
                     To be a globally recognised business partner known for excellence, integrity, and innovation.
@@ -398,58 +400,58 @@ function About() {
         <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.065, zIndex: 0 }}>
           <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
             {/* Primary hub: centre of heading ~(720,120) */}
-            <line x1="720" y1="120" x2="550" y2="180" stroke="#BF953F" strokeWidth="1.2"/>
-            <line x1="720" y1="120" x2="890" y2="180" stroke="#BF953F" strokeWidth="1.2"/>
-            <line x1="720" y1="120" x2="720" y2="260" stroke="#BF953F" strokeWidth="1.2"/>
-            <line x1="720" y1="120" x2="610" y2="70" stroke="#BF953F" strokeWidth="1"/>
-            <line x1="720" y1="120" x2="830" y2="70" stroke="#BF953F" strokeWidth="1"/>
+            <line x1="720" y1="120" x2="550" y2="180" stroke="#BF953F" strokeWidth="1.2" />
+            <line x1="720" y1="120" x2="890" y2="180" stroke="#BF953F" strokeWidth="1.2" />
+            <line x1="720" y1="120" x2="720" y2="260" stroke="#BF953F" strokeWidth="1.2" />
+            <line x1="720" y1="120" x2="610" y2="70" stroke="#BF953F" strokeWidth="1" />
+            <line x1="720" y1="120" x2="830" y2="70" stroke="#BF953F" strokeWidth="1" />
             {/* Secondary nodes — left branch */}
-            <line x1="550" y1="180" x2="380" y2="360" stroke="#BF953F" strokeWidth="1"/>
-            <line x1="550" y1="180" x2="310" y2="560" stroke="#BF953F" strokeWidth="0.9"/>
-            <line x1="380" y1="360" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="310" y1="560" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="220" y1="500" x2="180" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
-            <line x1="180" y1="680" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="550" y1="180" x2="380" y2="360" stroke="#BF953F" strokeWidth="1" />
+            <line x1="550" y1="180" x2="310" y2="560" stroke="#BF953F" strokeWidth="0.9" />
+            <line x1="380" y1="360" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="310" y1="560" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="220" y1="500" x2="180" y2="680" stroke="#BF953F" strokeWidth="0.7" />
+            <line x1="180" y1="680" x2="430" y2="680" stroke="#BF953F" strokeWidth="0.7" />
             {/* Secondary nodes — right branch */}
-            <line x1="890" y1="180" x2="1060" y2="360" stroke="#BF953F" strokeWidth="1"/>
-            <line x1="890" y1="180" x2="1130" y2="560" stroke="#BF953F" strokeWidth="0.9"/>
-            <line x1="1060" y1="360" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="1130" y1="560" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="1220" y1="500" x2="1260" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
-            <line x1="1260" y1="680" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="890" y1="180" x2="1060" y2="360" stroke="#BF953F" strokeWidth="1" />
+            <line x1="890" y1="180" x2="1130" y2="560" stroke="#BF953F" strokeWidth="0.9" />
+            <line x1="1060" y1="360" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="1130" y1="560" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="1220" y1="500" x2="1260" y2="680" stroke="#BF953F" strokeWidth="0.7" />
+            <line x1="1260" y1="680" x2="1010" y2="680" stroke="#BF953F" strokeWidth="0.7" />
             {/* Secondary nodes — centre branch */}
-            <line x1="720" y1="260" x2="580" y2="460" stroke="#BF953F" strokeWidth="0.9"/>
-            <line x1="720" y1="260" x2="860" y2="460" stroke="#BF953F" strokeWidth="0.9"/>
-            <line x1="580" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="860" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8"/>
+            <line x1="720" y1="260" x2="580" y2="460" stroke="#BF953F" strokeWidth="0.9" />
+            <line x1="720" y1="260" x2="860" y2="460" stroke="#BF953F" strokeWidth="0.9" />
+            <line x1="580" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="860" y1="460" x2="720" y2="680" stroke="#BF953F" strokeWidth="0.8" />
             {/* Far edges */}
-            <line x1="610" y1="70" x2="140" y2="300" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="830" y1="70" x2="1300" y2="300" stroke="#BF953F" strokeWidth="0.8"/>
-            <line x1="140" y1="300" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.7"/>
-            <line x1="1300" y1="300" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.7"/>
+            <line x1="610" y1="70" x2="140" y2="300" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="830" y1="70" x2="1300" y2="300" stroke="#BF953F" strokeWidth="0.8" />
+            <line x1="140" y1="300" x2="220" y2="500" stroke="#BF953F" strokeWidth="0.7" />
+            <line x1="1300" y1="300" x2="1220" y2="500" stroke="#BF953F" strokeWidth="0.7" />
             {/* Nodes */}
-            <circle cx="720" cy="120" r="7" fill="#BF953F"/>
-            <circle cx="720" cy="120" r="14" fill="none" stroke="#BF953F" strokeWidth="1" strokeDasharray="3 3"/>
-            <circle cx="550" cy="180" r="4.5" fill="#BF953F"/>
-            <circle cx="890" cy="180" r="4.5" fill="#BF953F"/>
-            <circle cx="720" cy="260" r="4.5" fill="#BF953F"/>
-            <circle cx="610" cy="70" r="3.5" fill="#BF953F"/>
-            <circle cx="830" cy="70" r="3.5" fill="#BF953F"/>
-            <circle cx="380" cy="360" r="4" fill="#BF953F"/>
-            <circle cx="310" cy="560" r="3.5" fill="#BF953F"/>
-            <circle cx="220" cy="500" r="4" fill="#BF953F"/>
-            <circle cx="180" cy="680" r="3.5" fill="#BF953F"/>
-            <circle cx="430" cy="680" r="3.5" fill="#BF953F"/>
-            <circle cx="1060" cy="360" r="4" fill="#BF953F"/>
-            <circle cx="1130" cy="560" r="3.5" fill="#BF953F"/>
-            <circle cx="1220" cy="500" r="4" fill="#BF953F"/>
-            <circle cx="1260" cy="680" r="3.5" fill="#BF953F"/>
-            <circle cx="1010" cy="680" r="3.5" fill="#BF953F"/>
-            <circle cx="580" cy="460" r="4" fill="#BF953F"/>
-            <circle cx="860" cy="460" r="4" fill="#BF953F"/>
-            <circle cx="720" cy="680" r="4.5" fill="#BF953F"/>
-            <circle cx="140" cy="300" r="3.5" fill="#BF953F"/>
-            <circle cx="1300" cy="300" r="3.5" fill="#BF953F"/>
+            <circle cx="720" cy="120" r="7" fill="#BF953F" />
+            <circle cx="720" cy="120" r="14" fill="none" stroke="#BF953F" strokeWidth="1" strokeDasharray="3 3" />
+            <circle cx="550" cy="180" r="4.5" fill="#BF953F" />
+            <circle cx="890" cy="180" r="4.5" fill="#BF953F" />
+            <circle cx="720" cy="260" r="4.5" fill="#BF953F" />
+            <circle cx="610" cy="70" r="3.5" fill="#BF953F" />
+            <circle cx="830" cy="70" r="3.5" fill="#BF953F" />
+            <circle cx="380" cy="360" r="4" fill="#BF953F" />
+            <circle cx="310" cy="560" r="3.5" fill="#BF953F" />
+            <circle cx="220" cy="500" r="4" fill="#BF953F" />
+            <circle cx="180" cy="680" r="3.5" fill="#BF953F" />
+            <circle cx="430" cy="680" r="3.5" fill="#BF953F" />
+            <circle cx="1060" cy="360" r="4" fill="#BF953F" />
+            <circle cx="1130" cy="560" r="3.5" fill="#BF953F" />
+            <circle cx="1220" cy="500" r="4" fill="#BF953F" />
+            <circle cx="1260" cy="680" r="3.5" fill="#BF953F" />
+            <circle cx="1010" cy="680" r="3.5" fill="#BF953F" />
+            <circle cx="580" cy="460" r="4" fill="#BF953F" />
+            <circle cx="860" cy="460" r="4" fill="#BF953F" />
+            <circle cx="720" cy="680" r="4.5" fill="#BF953F" />
+            <circle cx="140" cy="300" r="3.5" fill="#BF953F" />
+            <circle cx="1300" cy="300" r="3.5" fill="#BF953F" />
           </svg>
         </div>
 
@@ -532,7 +534,7 @@ function About() {
         <div className="max-w-7xl mx-auto px-8 relative z-10">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
             className="text-center mb-14">
-            <p className="text-[10px] font-bold tracking-[0.35em] uppercase text-gold mb-3">The People Behind the Mission</p>
+            <p className="text-[10px] font-bold tracking-[0.35em] uppercase text-gold mb-3">The Person Behind</p>
             <h2 className="about-heading-white">Leadership</h2>
           </motion.div>
 
@@ -546,12 +548,12 @@ function About() {
               {/* Wireframe globe bg */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: 0.07 }}>
                 <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" className="w-[260px] h-[260px]">
-                  <circle cx="130" cy="130" r="120" fill="none" stroke="#d4af37" strokeWidth="0.7"/>
-                  <circle cx="130" cy="130" r="80"  fill="none" stroke="#d4af37" strokeWidth="0.5"/>
-                  <ellipse cx="130" cy="130" rx="120" ry="48" fill="none" stroke="#d4af37" strokeWidth="0.5"/>
-                  <ellipse cx="130" cy="130" rx="120" ry="90" fill="none" stroke="#d4af37" strokeWidth="0.4"/>
-                  <line x1="10"  y1="130" x2="250" y2="130" stroke="#d4af37" strokeWidth="0.5"/>
-                  <line x1="130" y1="10"  x2="130" y2="250" stroke="#d4af37" strokeWidth="0.5"/>
+                  <circle cx="130" cy="130" r="120" fill="none" stroke="#d4af37" strokeWidth="0.7" />
+                  <circle cx="130" cy="130" r="80" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                  <ellipse cx="130" cy="130" rx="120" ry="48" fill="none" stroke="#d4af37" strokeWidth="0.5" />
+                  <ellipse cx="130" cy="130" rx="120" ry="90" fill="none" stroke="#d4af37" strokeWidth="0.4" />
+                  <line x1="10" y1="130" x2="250" y2="130" stroke="#d4af37" strokeWidth="0.5" />
+                  <line x1="130" y1="10" x2="130" y2="250" stroke="#d4af37" strokeWidth="0.5" />
                 </svg>
               </div>
 
@@ -660,9 +662,9 @@ function About() {
                 {/* Borderless skill badges */}
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { icon: Building2,    text: "Banking sector professional since 2001" },
-                    { icon: Briefcase,    text: "Credit assessment & risk management" },
-                    { icon: TrendingUp,   text: "Strategic financial structuring" },
+                    { icon: Building2, text: "Banking sector professional since 2001" },
+                    { icon: Briefcase, text: "Credit assessment & risk management" },
+                    { icon: TrendingUp, text: "Strategic financial structuring" },
                     { icon: CheckCircle2, text: "Client-centric leadership philosophy" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-3 py-3 pr-3">
@@ -688,7 +690,7 @@ function About() {
           }}
         />
         <div className="max-w-7xl mx-auto px-8 relative z-10">
-          
+
           {/* Section Header (Centered directly above) */}
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
             className="text-center mb-16 relative z-10">
@@ -702,53 +704,53 @@ function About() {
 
           {/* Hub & Orbits Layout Container */}
           <div ref={containerRef} className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_200px_1fr] gap-12 lg:gap-8 items-center">
-            
+
             {/* SVG Connecting Lines (desktop only) */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block" style={{ zIndex: 0 }}>
               {/* Lines from Left Column to Center Hub */}
-              <line 
-                x1={coords?.icons[0]?.x ?? "calc(50% - 100px)"} 
-                y1={coords?.icons[0]?.y ?? "7%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[0]?.x ?? "calc(50% - 100px)"}
+                y1={coords?.icons[0]?.y ?? "7%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
-              <line 
-                x1={coords?.icons[1]?.x ?? "calc(50% - 100px)"} 
-                y1={coords?.icons[1]?.y ?? "43%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[1]?.x ?? "calc(50% - 100px)"}
+                y1={coords?.icons[1]?.y ?? "43%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
-              <line 
-                x1={coords?.icons[2]?.x ?? "calc(50% - 100px)"} 
-                y1={coords?.icons[2]?.y ?? "79%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[2]?.x ?? "calc(50% - 100px)"}
+                y1={coords?.icons[2]?.y ?? "79%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
 
               {/* Lines from Right Column to Center Hub */}
-              <line 
-                x1={coords?.icons[3]?.x ?? "calc(50% + 100px)"} 
-                y1={coords?.icons[3]?.y ?? "7%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[3]?.x ?? "calc(50% + 100px)"}
+                y1={coords?.icons[3]?.y ?? "7%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
-              <line 
-                x1={coords?.icons[4]?.x ?? "calc(50% + 100px)"} 
-                y1={coords?.icons[4]?.y ?? "43%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[4]?.x ?? "calc(50% + 100px)"}
+                y1={coords?.icons[4]?.y ?? "43%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
-              <line 
-                x1={coords?.icons[5]?.x ?? "calc(50% + 100px)"} 
-                y1={coords?.icons[5]?.y ?? "79%"} 
-                x2={coords?.hub?.x ?? "50%"} 
-                y2={coords?.hub?.y ?? "50%"} 
-                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" 
+              <line
+                x1={coords?.icons[5]?.x ?? "calc(50% + 100px)"}
+                y1={coords?.icons[5]?.y ?? "79%"}
+                x2={coords?.hub?.x ?? "50%"}
+                y2={coords?.hub?.y ?? "50%"}
+                stroke="rgba(191, 149, 63, 0.15)" strokeWidth="1.5" strokeDasharray="4 4"
               />
             </svg>
 
@@ -759,7 +761,7 @@ function About() {
                 { icon: BadgeCheck, title: "Commitment", desc: "Long-term partnership invested in your success from application to final closure." },
                 { icon: Star, title: "Reliability", desc: "Consistent, dependable service backed by structured and proven processes." }
               ].map((val, idx) => (
-                <motion.div 
+                <motion.div
                   key={val.title}
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -769,7 +771,7 @@ function About() {
                 >
                   <div className="flex flex-row-reverse items-start gap-4">
                     {/* Icon directly next to title */}
-                    <div 
+                    <div
                       ref={el => iconRefs.current[idx] = el}
                       className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
                       <val.icon size={18} className="text-gold" strokeWidth={1.5} />
@@ -789,7 +791,7 @@ function About() {
 
             {/* CENTER COLUMN: Hub */}
             <div className="flex flex-col justify-center items-center relative z-10 h-72">
-              <motion.div 
+              <motion.div
                 ref={hubRef}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -799,12 +801,12 @@ function About() {
                 {/* Outer pulsing glow */}
                 <div className="absolute inset-0 rounded-full animate-ping bg-gold/10 opacity-75 pointer-events-none" />
                 <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-gold/5 to-gold/15 blur-md pointer-events-none" />
-                
+
                 {/* Logo Image */}
-                <img 
-                  src="/logo-icon.png" 
-                  alt="GGE Logo" 
-                  className="w-20 h-20 object-contain relative z-10 drop-shadow-[0_4px_12px_rgba(212,175,55,0.3)]" 
+                <img
+                  src="/logo-icon.png"
+                  alt="GGE Logo"
+                  className="w-20 h-20 object-contain relative z-10 drop-shadow-[0_4px_12px_rgba(212,175,55,0.3)]"
                 />
               </motion.div>
             </div>
@@ -816,7 +818,7 @@ function About() {
                 { icon: Heart, title: "Customer Focus", desc: "Your business goals define our strategy and our absolute measure of success." },
                 { icon: Zap, title: "Speed of Service", desc: "Capital delivered within 24–48 hours for eligible facilities to match your business demands." }
               ].map((val, idx) => (
-                <motion.div 
+                <motion.div
                   key={val.title}
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -826,7 +828,7 @@ function About() {
                 >
                   <div className="flex items-start gap-4">
                     {/* Icon directly next to title */}
-                    <div 
+                    <div
                       ref={el => iconRefs.current[idx + 3] = el}
                       className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors duration-300">
                       <val.icon size={18} className="text-gold" strokeWidth={1.5} />
@@ -871,8 +873,8 @@ function About() {
               <motion.div key={i} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
                 className="group border border-white/8 p-8 text-center hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-300">
                 <div className="text-4xl md:text-5xl font-bold text-gold mb-3 whitespace-nowrap"
-                  style={{ 
-                    fontFamily: "'Playfair Display', Georgia, serif", 
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, serif",
                     fontVariantNumeric: "tabular-nums",
                     fontFeatureSettings: "'tnum'"
                   }}>
@@ -887,9 +889,9 @@ function About() {
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
             className="mt-12 grid sm:grid-cols-3 gap-5">
             {[
-              { icon: Clock,        title: "24–48 Hr Disbursement",       desc: "Capital when your business needs it — for eligible private finance and loan facilities." },
-              { icon: Lightbulb,    title: "Expert Financial Guidance",    desc: "Every client receives personalised consultation — not a generic product pitch." },
-              { icon: CheckCircle2, title: "Transparent Terms Always",     desc: "No hidden charges, no surprises. Every term disclosed before you commit." },
+              { icon: Clock, title: "24–48 Hr Disbursement", desc: "Capital when your business needs it — for eligible private finance and loan facilities." },
+              { icon: Lightbulb, title: "Expert Financial Guidance", desc: "Every client receives personalised consultation — not a generic product pitch." },
+              { icon: CheckCircle2, title: "Transparent Terms Always", desc: "No hidden charges, no surprises. Every term disclosed before you commit." },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-4 border border-white/8 p-6 hover:border-gold/20 transition-colors duration-300">
                 <div className="w-10 h-10 bg-gold/10 flex items-center justify-center flex-shrink-0">
