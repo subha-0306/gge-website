@@ -55,29 +55,55 @@ function ContentBlock({ block }) {
             );
         case "table":
             return (
-                <div className="overflow-x-auto mb-10 border border-gray-150">
-                    <table className="w-full min-w-[600px] text-sm">
-                        <thead>
-                            <tr className="bg-[#0f0f0f]">
-                                {block.headers.map((h, i) => (
-                                    <th key={i} className="text-left text-xs font-bold uppercase tracking-widest text-gold px-6 py-4 whitespace-nowrap">
-                                        {h}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {block.rows.map((row, i) => (
-                                <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-[#faf9f5]"}>
-                                    {row.map((cell, j) => (
-                                        <td key={j} className={`px-6 py-4 text-xs md:text-sm leading-relaxed border-t border-gray-150 ${j === 0 ? "font-semibold text-gray-800" : "text-gray-500"}`}>
-                                            {cell}
-                                        </td>
+                <div className="mb-10">
+                    {/* Mobile View */}
+                    <div className="block md:hidden space-y-4">
+                        {block.rows.map((row, i) => (
+                            <div key={i} className="bg-white border border-gray-150 p-5 shadow-sm">
+                                <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-100 pb-2">
+                                    {block.headers[0]}: <span className="text-gold">{row[0]}</span>
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {row.slice(1).map((cell, j) => (
+                                        <div key={j}>
+                                            <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold block mb-1">
+                                                {block.headers[j + 1]}
+                                            </span>
+                                            <span className="text-xs text-gray-600 leading-relaxed font-medium">
+                                                {cell}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop View */}
+                    <div className="hidden md:block overflow-x-auto border border-gray-150">
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="bg-[#0f0f0f]">
+                                    {block.headers.map((h, i) => (
+                                        <th key={i} className="text-left text-xs font-bold uppercase tracking-widest text-gold px-6 py-4 whitespace-nowrap">
+                                            {h}
+                                        </th>
                                     ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {block.rows.map((row, i) => (
+                                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-[#faf9f5]"}>
+                                        {row.map((cell, j) => (
+                                            <td key={j} className={`px-6 py-4 text-xs md:text-sm leading-relaxed border-t border-gray-150 ${j === 0 ? "font-semibold text-gray-800" : "text-gray-500"}`}>
+                                                {cell}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
         default:
