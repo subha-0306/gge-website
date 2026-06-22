@@ -56,7 +56,7 @@ function ContentBlock({ block }) {
         case "table":
             return (
                 <div className="overflow-x-auto mb-10 border border-gray-150">
-                    <table className="w-full text-sm">
+                    <table className="w-full min-w-[600px] text-sm">
                         <thead>
                             <tr className="bg-[#0f0f0f]">
                                 {block.headers.map((h, i) => (
