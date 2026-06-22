@@ -296,7 +296,7 @@ function Services() {
     setSubmitError("");
 
     try {
-      const res = await fetch("/api/enquiries", {
+      const res = await fetch("https://gge-oisn.onrender.com/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

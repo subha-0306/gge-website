@@ -228,7 +228,7 @@ export default function Contact() {
     if (Object.keys(e).length) { setErrors(e); return; }
     setLoading(true);
     try {
-      const response = await fetch("/api/enquiries", {
+      const response = await fetch("https://gge-oisn.onrender.com/api/enquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

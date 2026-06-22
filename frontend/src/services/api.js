@@ -1,6 +1,8 @@
 // API client using fetch
 // Automatically handles JWT token authorization headers and 401 Unauthorized responses (token expiration)
 
+const API_URL = "https://gge-oisn.onrender.com/api";
+
 const getHeaders = () => {
   const headers = {
     "Content-Type": "application/json",
@@ -41,7 +43,7 @@ const handleResponse = async (response) => {
 
 // ── Public Endpoints ──
 export const submitEnquiry = async (formData) => {
-  const res = await fetch("/api/enquiries", {
+  const res = await fetch(`${API_URL}/enquiries`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(formData),
@@ -50,7 +52,7 @@ export const submitEnquiry = async (formData) => {
 };
 
 export const adminLogin = async (credentials) => {
-  const res = await fetch("/api/admin/login", {
+  const res = await fetch(`${API_URL}/admin/login`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(credentials),
@@ -67,7 +69,7 @@ export const getEnquiries = async (params = {}) => {
     }
   });
 
-  const res = await fetch(`/api/enquiries?${query.toString()}`, {
+  const res = await fetch(`${API_URL}/enquiries?${query.toString()}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -75,7 +77,7 @@ export const getEnquiries = async (params = {}) => {
 };
 
 export const getEnquiry = async (id) => {
-  const res = await fetch(`/api/enquiries/${id}`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -83,7 +85,7 @@ export const getEnquiry = async (id) => {
 };
 
 export const updateStatus = async (id, status) => {
-  const res = await fetch(`/api/enquiries/${id}/status`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/status`, {
     method: "PATCH",
     headers: getHeaders(),
     body: JSON.stringify({ status }),
@@ -92,7 +94,7 @@ export const updateStatus = async (id, status) => {
 };
 
 export const updatePriority = async (id, priority) => {
-  const res = await fetch(`/api/enquiries/${id}/priority`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/priority`, {
     method: "PATCH",
     headers: getHeaders(),
     body: JSON.stringify({ priority }),
@@ -101,7 +103,7 @@ export const updatePriority = async (id, priority) => {
 };
 
 export const addNote = async (id, text) => {
-  const res = await fetch(`/api/enquiries/${id}/notes`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/notes`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify({ text }),
@@ -110,7 +112,7 @@ export const addNote = async (id, text) => {
 };
 
 export const editNote = async (id, noteId, text) => {
-  const res = await fetch(`/api/enquiries/${id}/notes/${noteId}`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/notes/${noteId}`, {
     method: "PUT",
     headers: getHeaders(),
     body: JSON.stringify({ text }),
@@ -119,7 +121,7 @@ export const editNote = async (id, noteId, text) => {
 };
 
 export const deleteNote = async (id, noteId) => {
-  const res = await fetch(`/api/enquiries/${id}/notes/${noteId}`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/notes/${noteId}`, {
     method: "DELETE",
     headers: getHeaders(),
   });
@@ -127,7 +129,7 @@ export const deleteNote = async (id, noteId) => {
 };
 
 export const updateFollowUp = async (id, data) => {
-  const res = await fetch(`/api/enquiries/${id}/followup`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}/followup`, {
     method: "PATCH",
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -136,7 +138,7 @@ export const updateFollowUp = async (id, data) => {
 };
 
 export const deleteEnquiry = async (id) => {
-  const res = await fetch(`/api/enquiries/${id}`, {
+  const res = await fetch(`${API_URL}/enquiries/${id}`, {
     method: "DELETE",
     headers: getHeaders(),
   });
@@ -151,7 +153,7 @@ export const getStats = async (params = {}) => {
       query.append(key, params[key]);
     }
   });
-  const res = await fetch(`/api/analytics?${query.toString()}`, {
+  const res = await fetch(`${API_URL}/analytics?${query.toString()}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -165,7 +167,7 @@ export const getMonthlyLeads = async (params = {}) => {
       query.append(key, params[key]);
     }
   });
-  const res = await fetch(`/api/analytics/monthly?${query.toString()}`, {
+  const res = await fetch(`${API_URL}/analytics/monthly?${query.toString()}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -179,7 +181,7 @@ export const getServiceLeads = async (params = {}) => {
       query.append(key, params[key]);
     }
   });
-  const res = await fetch(`/api/analytics/services?${query.toString()}`, {
+  const res = await fetch(`${API_URL}/analytics/services?${query.toString()}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -195,7 +197,7 @@ export const exportCSV = async (params = {}) => {
     }
   });
 
-  const response = await fetch(`/api/export/csv?${query.toString()}`, {
+  const response = await fetch(`${API_URL}/export/csv?${query.toString()}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -223,7 +225,7 @@ export const exportCSV = async (params = {}) => {
 
 // ── Admin Notifications ──
 export const getNotifications = async () => {
-  const res = await fetch("/api/notifications", {
+  const res = await fetch(`${API_URL}/notifications`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -231,7 +233,7 @@ export const getNotifications = async () => {
 };
 
 export const markAsRead = async (id) => {
-  const res = await fetch(`/api/notifications/${id}/read`, {
+  const res = await fetch(`${API_URL}/notifications/${id}/read`, {
     method: "PATCH",
     headers: getHeaders(),
   });
@@ -239,7 +241,7 @@ export const markAsRead = async (id) => {
 };
 
 export const markAllAsRead = async () => {
-  const res = await fetch("/api/notifications/read-all", {
+  const res = await fetch(`${API_URL}/notifications/read-all`, {
     method: "PATCH",
     headers: getHeaders(),
   });
