@@ -37,15 +37,10 @@ function useReveal() {
 /* ─── Hero slides data ────────────────────────────────────── */
 const HERO_SLIDES = [
   {
-    tag: "NO CIBIL REQUIRED",
-    heading: "வங்கிகளில் Loan",
-    sub: "கிடைக்கவில்லையா?",
-    body: "Private Finance That Works When Banks Don't. Flexible eligibility, faster processing, and tailored solutions to power your business without the delays of traditional banking.",
-    cta1: "Apply Now \u2192",
-    cta2: "Talk to an Expert",
-    isLightBackground: true,
-    mobileBannerSrc: "/carousel-slide-1-mobile.png",
-    mobileBannerLink: "/contact"
+    isClickableBanner: true,
+    bannerSrc: "/carousel-slide-1-desktop-new.png",
+    bannerSrcMobile: "/carousel-slide-1-mobile-new.png",
+    bannerLink: "/contact"
   },
   {
     tag: "Business Loans",
@@ -558,7 +553,28 @@ function Home() {
         >
           {HERO_SLIDES.map((slide, i) => (
             <SwiperSlide key={i} className="relative h-full w-full">
-              {slide.isSlide3Custom ? (
+              {slide.isClickableBanner ? (
+                <div className="absolute inset-0 w-full h-full bg-[#fcfaf6]">
+                  {/* Desktop Banner */}
+                  <Link to={slide.bannerLink || "/contact"} className="hidden md:block absolute inset-0 w-full h-full">
+                    <img
+                      src={slide.bannerSrc}
+                      alt="Golden Globe Private Finance"
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#fcfaf6"; }}
+                    />
+                  </Link>
+                  {/* Mobile Banner */}
+                  <Link to={slide.bannerLink || "/contact"} className="block md:hidden absolute inset-0 w-full h-full">
+                    <img
+                      src={slide.bannerSrcMobile}
+                      alt="Golden Globe Private Finance"
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = "none"; e.target.parentElement.style.background = "#fcfaf6"; }}
+                    />
+                  </Link>
+                </div>
+              ) : slide.isSlide3Custom ? (
                 <div className="absolute inset-0 w-full h-full bg-[#fcfaf6] overflow-hidden">
                   {/* Desktop Slide 3 Container */}
                   <div className="hidden md:block absolute inset-0">
@@ -665,7 +681,7 @@ function Home() {
               ) : (
                 <>
                   {/* Background */}
-                  <div className={`absolute inset-0 ${slide.mobileBannerSrc ? "hidden md:block" : ""}`}>
+                  <div className="absolute inset-0">
                     <img
                       src={slide.isLightBackground ? "/hero-bg-1-new.png" : `/hero-bg-${i + 1}.jpg`}
                       alt=""
@@ -693,21 +709,8 @@ function Home() {
                     )}
                   </div>
 
-                  {/* Mobile custom banner */}
-                  {slide.mobileBannerSrc && (
-                    <div className="block md:hidden absolute inset-0 z-20 bg-[#fcfaf6]">
-                      <Link to={slide.mobileBannerLink || "/contact"} className="block w-full h-full relative cursor-pointer">
-                        <img
-                          src={slide.mobileBannerSrc}
-                          alt={slide.heading || "Slide"}
-                          className="h-full w-full object-cover"
-                        />
-                      </Link>
-                    </div>
-                  )}
-
                   {/* Slide content */}
-                  <div className={`relative z-10 h-full mx-auto flex flex-col justify-center max-w-7xl px-8 ${slide.mobileBannerSrc ? "hidden md:flex" : ""}`}>
+                  <div className={`relative z-10 h-full mx-auto flex flex-col justify-center max-w-7xl px-8`}>
                     {slide.isLightBackground ? (
                       <div className="max-w-[650px] mt-2 select-none animate-fade-in">
                         {/* Main Tamil Heading */}
