@@ -1,7 +1,7 @@
 // API client using fetch
 // Automatically handles JWT token authorization headers and 401 Unauthorized responses (token expiration)
 
-const API_URL = "https://gge-oisn.onrender.com/api";
+const API_URL = import.meta.env.VITE_API_URL || "https://gge-oisn.onrender.com/api";
 
 const getHeaders = () => {
   const headers = {
