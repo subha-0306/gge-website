@@ -296,7 +296,10 @@ function Services() {
     setSubmitError("");
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "https://gge-oisn.onrender.com/api"}/enquiries`, {
+      const rawBase = import.meta.env.VITE_API_URL || "https://gge-oisn.onrender.com/api";
+      const baseUrl = rawBase.replace(/\/+$/, "");
+      const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
+      const res = await fetch(`${apiUrl}/enquiries`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

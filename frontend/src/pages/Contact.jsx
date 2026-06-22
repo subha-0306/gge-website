@@ -228,7 +228,10 @@ export default function Contact() {
     if (Object.keys(e).length) { setErrors(e); return; }
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "https://gge-oisn.onrender.com/api"}/enquiries`, {
+      const rawBase = import.meta.env.VITE_API_URL || "https://gge-oisn.onrender.com/api";
+      const baseUrl = rawBase.replace(/\/+$/, "");
+      const apiUrl = baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
+      const response = await fetch(`${apiUrl}/enquiries`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
