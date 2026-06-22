@@ -60,6 +60,8 @@ app.use(helmet());
 
 // CORS — allow requests from the React frontend
 const allowedOrigins = [
+  "https://ggefinance.com",
+  "https://www.ggefinance.com",
   "https://gge-website-eosin.vercel.app",
   "http://localhost:5173"
 ];
