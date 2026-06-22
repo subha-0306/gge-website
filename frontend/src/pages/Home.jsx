@@ -39,7 +39,7 @@ const HERO_SLIDES = [
   {
     isClickableBanner: true,
     bannerSrc: "/carousel-slide-1-desktop-new.png",
-    bannerSrcMobile: "/carousel-slide-1-mobile-new.png",
+    bannerSrcMobile: "/carousel-slide-1-mobile-v2.png",
     bannerLink: "/contact"
   },
   {
