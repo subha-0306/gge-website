@@ -11,9 +11,7 @@ export const initSocket = () => {
     return socket;
   }
 
-  // Connect to the host using absolute origin (in development, Vite proxies /socket.io)
-  // We can pass token in authorization header/auth object for security
-  socket = io(window.location.origin, {
+  socket = io("https://gge-oisn.onrender.com", {
     auth: {
       token,
     },
