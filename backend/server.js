@@ -30,6 +30,7 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 // ── Initialize Express & HTTP Server ──
 const app = express();
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 // ── Initialize Socket.IO ──
