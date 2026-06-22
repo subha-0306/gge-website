@@ -44,6 +44,8 @@ const HERO_SLIDES = [
     cta1: "Apply Now \u2192",
     cta2: "Talk to an Expert",
     isLightBackground: true,
+    mobileBannerSrc: "/carousel-slide-1-mobile.png",
+    mobileBannerLink: "/contact"
   },
   {
     tag: "Business Loans",
@@ -663,7 +665,7 @@ function Home() {
               ) : (
                 <>
                   {/* Background */}
-                  <div className="absolute inset-0">
+                  <div className={`absolute inset-0 ${slide.mobileBannerSrc ? "hidden md:block" : ""}`}>
                     <img
                       src={slide.isLightBackground ? "/hero-bg-1-new.png" : `/hero-bg-${i + 1}.jpg`}
                       alt=""
@@ -691,8 +693,21 @@ function Home() {
                     )}
                   </div>
 
+                  {/* Mobile custom banner */}
+                  {slide.mobileBannerSrc && (
+                    <div className="block md:hidden absolute inset-0 z-20 bg-[#fcfaf6]">
+                      <Link to={slide.mobileBannerLink || "/contact"} className="block w-full h-full relative cursor-pointer">
+                        <img
+                          src={slide.mobileBannerSrc}
+                          alt={slide.heading || "Slide"}
+                          className="h-full w-full object-cover"
+                        />
+                      </Link>
+                    </div>
+                  )}
+
                   {/* Slide content */}
-                  <div className={`relative z-10 h-full mx-auto flex flex-col justify-center max-w-7xl px-8`}>
+                  <div className={`relative z-10 h-full mx-auto flex flex-col justify-center max-w-7xl px-8 ${slide.mobileBannerSrc ? "hidden md:flex" : ""}`}>
                     {slide.isLightBackground ? (
                       <div className="max-w-[650px] mt-2 select-none animate-fade-in">
                         {/* Main Tamil Heading */}
