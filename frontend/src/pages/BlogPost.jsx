@@ -60,7 +60,7 @@ function ContentBlock({ block }) {
                         <thead>
                             <tr className="bg-[#0f0f0f]">
                                 {block.headers.map((h, i) => (
-                                    <th key={i} className="text-left text-xs font-bold uppercase tracking-widest text-gold px-6 py-4">
+                                    <th key={i} className="text-left text-xs font-bold uppercase tracking-widest text-gold px-6 py-4 whitespace-nowrap">
                                         {h}
                                     </th>
                                 ))}

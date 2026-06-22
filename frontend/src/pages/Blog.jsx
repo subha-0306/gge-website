@@ -130,9 +130,9 @@ function Blog() {
             </p>
 
             <Link to={`/blog/${featured.slug}`} className="group block rv">
-              <div className="grid md:grid-cols-2 gap-0 border border-gray-200 overflow-hidden hover:border-gold/40 hover:shadow-2xl transition-all duration-500">
+              <div className="flex flex-col md:flex-row gap-0 border border-gray-200 overflow-hidden hover:border-gold/40 hover:shadow-2xl transition-all duration-500">
                 {/* Image */}
-                <div className="relative bg-[#0f0f0f] min-h-[360px] overflow-hidden flex items-center justify-center">
+                <div className="relative bg-[#0f0f0f] h-64 md:h-auto md:w-1/2 md:min-h-[360px] overflow-hidden flex items-center justify-center shrink-0">
                   <img
                     src={featured.coverPlaceholder}
                     alt={featured.title}
@@ -140,14 +140,14 @@ function Blog() {
                     onError={(e) => (e.target.style.display = "none")}
                   />
                   {/* Featured badge */}
-                  <div className="absolute top-6 left-6 bg-[#d4af37] text-black text-[10px] font-bold tracking-widest uppercase px-4 py-1.5 shadow-md">
+                  <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-[#d4af37] text-black text-[10px] font-bold tracking-widest uppercase px-4 py-1.5 shadow-md">
                     Featured
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="bg-white p-10 md:p-12 flex flex-col justify-center">
-                  <div className="flex items-center gap-4 mb-5">
+                <div className="bg-white p-6 sm:p-8 md:p-12 flex flex-col justify-center md:w-1/2">
+                  <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-4 md:mb-5">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gold border border-gold/30 px-3 py-1">
                       {featured.category}
                     </span>
@@ -158,15 +158,15 @@ function Blog() {
                   </div>
 
                   <h2
-                    className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight group-hover:text-gold transition-colors duration-300"
+                    className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 leading-snug md:leading-tight group-hover:text-gold transition-colors duration-300"
                     style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                   >
                     {featured.title}
                   </h2>
 
-                  <div className="w-10 h-0.5 bg-gold mt-5 mb-5" />
+                  <div className="w-10 h-0.5 bg-gold mt-4 mb-4 md:mt-5 md:mb-5" />
 
-                  <p className="text-gray-500 text-sm leading-relaxed mb-8">{featured.excerpt}</p>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-6 md:mb-8">{featured.excerpt}</p>
 
                   <div className="flex items-center gap-2 text-sm font-semibold text-gold group-hover:gap-3 transition-all duration-300">
                     Read Full Article <ArrowRight size={14} />
