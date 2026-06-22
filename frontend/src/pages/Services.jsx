@@ -988,7 +988,7 @@ function Services() {
                         required
                         value={leadState.name}
                         onChange={(e) => setLeadState((s) => ({ ...s, name: e.target.value }))}
-                        placeholder="John Doe"
+
                         className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                         style={{ fontFamily: "'Outfit', sans-serif" }}
                       />
@@ -1008,7 +1008,7 @@ function Services() {
                           required
                           value={leadState.phone}
                           onChange={(e) => setLeadState((s) => ({ ...s, phone: e.target.value }))}
-                          placeholder="+91 99999 99999"
+
                           className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                           style={{ fontFamily: "'Outfit', sans-serif" }}
                         />
@@ -1026,7 +1026,7 @@ function Services() {
                           required
                           value={leadState.email}
                           onChange={(e) => setLeadState((s) => ({ ...s, email: e.target.value }))}
-                          placeholder="partner@company.com"
+
                           className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                           style={{ fontFamily: "'Outfit', sans-serif" }}
                         />
@@ -1045,7 +1045,7 @@ function Services() {
                         rows="3"
                         value={leadState.notes}
                         onChange={(e) => setLeadState((s) => ({ ...s, notes: e.target.value }))}
-                        placeholder="Detail your requirements here..."
+
                         className="w-full rounded-xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition resize-none"
                         style={{ fontFamily: "'Outfit', sans-serif" }}
                       />

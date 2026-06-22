@@ -83,7 +83,7 @@ export default function AdminLogin() {
                 id="email"
                 type="email"
                 required
-                placeholder="admin@ggenterprises.com"
+
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white border border-[#E5E7EB] rounded-xl text-[#1A1A1A] placeholder-gray-400 text-sm focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 transition-all duration-200"
@@ -104,7 +104,7 @@ export default function AdminLogin() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 required
-                placeholder="••••••••••••"
+
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-12 pr-12 py-3 bg-white border border-[#E5E7EB] rounded-xl text-[#1A1A1A] placeholder-gray-400 text-sm focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 transition-all duration-200"

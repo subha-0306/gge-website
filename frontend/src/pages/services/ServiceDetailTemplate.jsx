@@ -585,7 +585,7 @@ export default function ServiceDetailTemplate({ service }) {
                         required
                         value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="John Doe"
+
                         className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                       />
                     </div>
@@ -599,7 +599,7 @@ export default function ServiceDetailTemplate({ service }) {
                           required
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
+
                           className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                         />
                       </div>
@@ -611,7 +611,7 @@ export default function ServiceDetailTemplate({ service }) {
                           required
                           value={formData.email}
                           onChange={handleInputChange}
-                          placeholder="name@company.com"
+
                           className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition"
                         />
                       </div>
@@ -624,7 +624,7 @@ export default function ServiceDetailTemplate({ service }) {
                         rows="3"
                         value={formData.notes}
                         onChange={handleInputChange}
-                        placeholder={`Details regarding your ${service.title} requirement...`}
+
                         className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 px-4 py-3 text-xs md:text-sm outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition resize-none"
                       />
                     </div>

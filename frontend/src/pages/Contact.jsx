@@ -474,7 +474,7 @@ export default function Contact() {
                         <input
                           id="inp-name"
                           type="text"
-                          placeholder="Your full name"
+
                           value={form.name}
                           onChange={(e) => set("name", e.target.value)}
                           className={`form-input ${errors.name ? "err" : ""}`}
@@ -487,7 +487,7 @@ export default function Contact() {
                         <input
                           id="inp-phone"
                           type="tel"
-                          placeholder="+91 00000 00000"
+
                           value={form.phone}
                           onChange={(e) => set("phone", e.target.value)}
                           className={`form-input ${errors.phone ? "err" : ""}`}
@@ -508,7 +508,7 @@ export default function Contact() {
                       <input
                         id="inp-email"
                         type="email"
-                        placeholder="your@email.com"
+
                         value={form.email}
                         onChange={(e) => set("email", e.target.value)}
                         className={`form-input ${errors.email ? "err" : ""}`}
@@ -550,7 +550,7 @@ export default function Contact() {
                         id="inp-message"
                         rows={5}
                         maxLength={500}
-                        placeholder="Briefly describe your business and funding requirement..."
+
                         value={form.message}
                         onChange={(e) => set("message", e.target.value)}
                         className={`form-input form-textarea ${errors.message ? "err" : ""}`}
