@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -52,6 +53,8 @@ function App() {
   }, []);
 
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       {/* Frontend Client-Facing Pages */}
       <Route element={<MainLayout />}>
@@ -90,6 +93,7 @@ function App() {
         </Route>
       </Route>
     </Routes>
+    </>  
   );
 }
 
