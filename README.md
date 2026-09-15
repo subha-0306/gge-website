@@ -248,18 +248,49 @@ gge-finance/
 | CORS policy | Restricted to production frontend origin in `NODE_ENV=production` |
 
 ---
+---
 
-## Screenshots
+## Product Screenshots
 
-| Page | Preview |
-|---|---|
-| Homepage Hero | ![Home](./screenshots/home.png) |
-| Services Grid | ![Services](./screenshots/services.png) |
-| Private Finance | ![Private Finance](./screenshots/private-finance.png) |
-| Blog Listing | ![Blog](./screenshots/blog.png) |
-| Admin CRM | ![CRM](./screenshots/crm.png) |
-| Analytics Dashboard | ![Analytics](./screenshots/analytics.png) |
+### Public Website
 
+<table>
+  <tr>
+    <td width="50%">
+      <h4>Homepage</h4>
+      <img src="./screenshots/home.png" alt="GGE Finance Homepage">
+    </td>
+    <td width="50%">
+      <h4>Financial Services</h4>
+      <img src="./screenshots/services.png" alt="GGE Finance Services">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>Private Finance</h4>
+      <img src="./screenshots/private-finance.png" alt="GGE Finance Private Finance">
+    </td>
+    <td width="50%">
+      <h4>Blog</h4>
+      <img src="./screenshots/blog.png" alt="GGE Finance Blog">
+    </td>
+  </tr>
+</table>
+
+### Admin CRM
+
+<table>
+  <tr>
+    <td width="50%">
+      <h4>CRM Dashboard</h4>
+      <img src="./screenshots/crm.png" alt="GGE Finance CRM Dashboard">
+    </td>
+    <td width="50%">
+      <h4>Analytics Dashboard</h4>
+      <img src="./screenshots/analytics.png" alt="GGE Finance Analytics Dashboard">
+    </td>
+  </tr>
+</table>
 ---
 
 ## Author
